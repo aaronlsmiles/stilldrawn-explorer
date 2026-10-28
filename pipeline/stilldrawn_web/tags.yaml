@@ -1,0 +1,47 @@
+# Failure-mode exemplars, transcribed by hand from the release's docs/TAXONOMY.md
+# (sections A–C, the "Exemplars" bullets only; "Adjacent" mentions are not tags).
+# Tags were assigned by the author from frame strips; they apply to the first
+# draw of each cell. tests/test_export.py checks every clip id appears in its
+# mode's section of TAXONOMY.md, so nothing here can be invented.
+modes:
+  A1:
+    name: Register enrichment
+    axis: register
+    definition: Keeps the subject and stays ink, but adds ink vocabulary the source never had, such as screentone, hatching or spot blacks.
+    clips: [cu-line-2_burst_h3, cu-line-2_burst_wan22]
+  A2:
+    name: Register transposition
+    axis: register
+    definition: Re-renders the whole panel in a different ink idiom; still monochrome ink to a human eye, a catastrophe to the metrics.
+    clips: [est-black-3_burst_gen4t, cu-line-2_burst_ltx23, act-black-3_burst_h3]
+  A3:
+    name: Register collapse (photoreal drift)
+    axis: register
+    definition: The drawn register departs toward photographic or painterly rendering (seen only in partial form in the matrix).
+    clips: [est-black-2_idle_h3, cu-tone-1_burst_wan22]
+  A4:
+    name: Monochrome break
+    axis: register
+    candidate: true
+    definition: A transient departure from monochrome mid-clip, with recovery. A candidate with one exemplar, not a named mode.
+    clips: [chain-est-cosmic-1_burst_ltx23]
+  B1:
+    name: Element insertion
+    axis: content
+    definition: New drawn content the panel never contained, rendered in-register. Metric-quiet.
+    clips: [chain-est-cosmic-1_campush_wan22, est-tone-1_burst_gen45, cu-line-2_burst_h3, est-black-2_idle_wan22]
+  B2:
+    name: Pseudo-text insertion
+    axis: content
+    definition: Hallucinated lettering, as if the model expects text on an ink panel and supplies gibberish.
+    clips: [cu-line-1_idle_h3, cu-black-3_burst_h3, est-black-1_campush_ltx23]
+  B3:
+    name: Content evacuation
+    axis: content
+    definition: The drawing leaves, fading to a solid field, or the subject exits and the panel empties.
+    clips: [est-tone-2_campush_h3, act-line-3_campush_gen45, act-tone-1_burst_gen45]
+  C1:
+    name: Framing escape
+    axis: framing
+    definition: The camera runs away with an unrequested zoom-out, a runaway push-in or a hard re-pose. Identity often survives; composition does not.
+    clips: [cu-line-2_burst_gen4t, est-black-1_campush_ltx23, act-tone-1_burst_gen45, act-line-3_campush_ltx23]

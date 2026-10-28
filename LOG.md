@@ -2,6 +2,13 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-28 — pipeline
+
+- The data contract builds from the public release alone: 373 clips in 2.2 MB of JSON, with per-frame series loaded per engine.
+- Every number the page will quote is reproduced from the paper's own outputs before anything is drawn: league medians, motion medians, the exact engine-level ρ = 0.9 (p = 1/12), the Pareto front, the matched-motion bands (8 overlap, 5 usable, 2 reverse), and the raters' agreement (α 0.209 and 0.478).
+- First result of the price-of-motion lens: Wan 2.2 leads until a doubling of motion is worth 1.23 px of line drift. LTX-2.3 then leads for a sliver, and from 1.27 px Gen-4.5 leads. Gen-4 Turbo sits on the Pareto front but never leads at any price: it lies off the front's convex hull.
+- Failure tags are transcribed by hand from the taxonomy, and a test checks each one against its source text, so none can be invented.
+
 ## 2026-10-28 — planning
 
 - Decided where the clips live: a bucket under the studio's own domain, all 373 served byte-exact. Re-encoding would have broken the C2PA signatures on 288 clips, and the release asks people not to. That also retired the card's "60–100 clip subset", which existed only to keep hosting costs down.

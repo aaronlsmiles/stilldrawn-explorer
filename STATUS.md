@@ -43,6 +43,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 | # | Date | What was tried | Result | Kept? | £ |
 |---|---|---|---|---|---|
 | 0 | 2026-10-28 | Planning session (brainstorming, then the master plan) | Approved | yes | 0 |
+| 1 | 2026-10-28 | Pipeline sub-plan A, tasks 1–6: loader, headlines, lenses, series, human check, export | 39 tests pass; reproduces the motion-confound outputs, α and the headline table exactly | yes | 0 |
 
 ## Spend: £0 of £20 · £ per keeper: n/a
 
@@ -50,4 +51,5 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- Phase 1 (sub-plan A): the pipeline, the data contract and the goldens. Media upload follows once G2 lands.
+- Phase 1, task 7 (media derivation and R2 upload): waits for G2.
+- Phase 2 (sub-plan B): the explorer views, starting with the design-taste-frontend direction.
