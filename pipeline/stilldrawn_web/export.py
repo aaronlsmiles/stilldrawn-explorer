@@ -250,7 +250,9 @@ def main(root: Path | None = None, web: Path = WEB) -> Path:
     _write(out / "taxonomy.json", tags)
     _write(out / "study" / "stilldrawn.json", study)
     _write(out / "paper.json", build_paper(summ, pareto(summ), pairs, segs, study, clips, mc))
-    _write(web / "src" / "lib" / "__fixtures__" / "lenses.json", build_fixtures(b, summ, pairs, segs))
+    fixtures = build_fixtures(b, summ, pairs, segs)
+    _write(out / "basis.json", fixtures["basis"])   # the lens basis at full precision (clips.json rounds)
+    _write(web / "src" / "lib" / "__fixtures__" / "lenses.json", fixtures)
     return out
 
 

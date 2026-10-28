@@ -127,3 +127,11 @@ def test_paper_carries_within_engine_and_pooled_rho(contract, confound):
     assert w["value"]["gen4.5"]["line"]["n"] == 33
     assert set(w["value"]) == {"gen4.5", "gen4_turbo", "h3-fal", "ltx23", "wan22"}
     assert paper["pooled_rho"]["value"]["line"]["n"] == 164
+
+
+def test_basis_ships_at_full_precision(contract):
+    out, web = contract
+    basis = _load(out / "basis.json")
+    fx = _load(web / "src/lib/__fixtures__/lenses.json")
+    assert basis == fx["basis"]
+    assert len(basis) == 164
