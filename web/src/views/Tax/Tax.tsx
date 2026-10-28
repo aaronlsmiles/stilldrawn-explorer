@@ -1,6 +1,8 @@
-// Stillness Tax: three ways for the reader to set the exchange rate between stability and motion
-// that the paper declines to set. EXPLORATORY (pre-registration amendment A6).
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+// Stillness Tax: the reader sets the exchange rate between stability and motion that the paper
+// declines to set. EXPLORATORY (pre-registration amendment A6). G4 (28 Oct): price of motion is the
+// default, the matched-motion band the alternate; the motion floor and the three-lens compare layout
+// are archived (tag g4-three-lenses).
+import { useEffect, useMemo, type ReactNode } from "react";
 import "./tax.css";
 import { useCore } from "../../data/core";
 import { useQuery } from "../../router";
@@ -9,7 +11,6 @@ import { onLowerHull, pareto } from "../../lib/pareto";
 import { fixed, norm, px } from "../../lib/format";
 import { ANALYSED } from "../../data/model";
 import { Segmented } from "../../ui/Segmented";
-import { Link } from "../../ui/Link";
 import { Leaderboard } from "./Leaderboard";
 import { ParetoChart, StripChart } from "./TaxCharts";
 import { LENSES, P_MAX, boardFor, motionScale, parseState, stateToQuery, type LensId, type LensState } from "./taxModel";
@@ -30,7 +31,6 @@ function useDerived(raw: { id: string; engine: string; motion: number; drift: nu
 
 const defaultFor = (lens: LensId, d: Derived): LensState =>
   lens === "price" ? { lens, p: 0 }
-  : lens === "floor" ? { lens, f: d.scale.min }
   : (() => { const k = "gen4_turbo|ltx23"; return { lens, lo: d.pairs[k].lo, hi: d.pairs[k].hi, preset: k }; })();
 
 function PriceControls({ s, d, set, name }: { s: Extract<LensState, { lens: "price" }>; d: Derived; set: (s: LensState) => void; name: (e: string) => string }) {
@@ -56,18 +56,6 @@ function PriceControls({ s, d, set, name }: { s: Extract<LensState, { lens: "pri
           );
         })}
       </ul>
-    </div>
-  );
-}
-
-function FloorControls({ s, d, set }: { s: Extract<LensState, { lens: "floor" }>; d: Derived; set: (s: LensState) => void }) {
-  return (
-    <div className="lens-controls">
-      <label className="slider">
-        <span className="field-label">Count clips that move at least <strong className="val">{norm(s.f)}</strong></span>
-        <input type="range" min={0} max={d.scale.steps} step={1} value={d.scale.toStep(s.f)} aria-label="Motion floor"
-          aria-valuetext={`motion at least ${norm(s.f)}`} onChange={(e) => set({ lens: "floor", f: d.scale.toValue(Number(e.target.value)) })} />
-      </label>
     </div>
   );
 }
@@ -132,38 +120,35 @@ function finding(s: LensState, d: Derived, rows: ReturnType<typeof boardFor>, na
     const never = d.neverLead.length ? ` ${d.neverLead.map(name).join(" and ")} never leads: it is on the Pareto front but above the line joining its neighbours.` : "";
     return `At ${fixed(s.p, 2)} px per doubling, ${name(lead.engine)} leads, as it does from ${fixed(g.p_from, 2)} to ${fixed(g.p_to, 2)} px.${never}`;
   }
-  const range = s.lens === "floor" ? `clips that move at least ${norm(s.f)}` : `clips with motion from ${norm(s.lo)} to ${norm(s.hi)}`;
+  const range = `clips with motion from ${norm(s.lo)} to ${norm(s.hi)}`;
   if (!lead?.ranked) return `No engine has five ${range}.`;
   return `Among ${range}, ${name(lead.engine)} has the lowest median line drift (${px(lead.score!)}, n = ${lead.n}).${thin ? ` ${thin} of ${rows.length} engines ${thin === 1 ? "has" : "have"} too few clips to rank.` : ""}`;
 }
 
-function LensPanel({ s, set, d, name, compact = false, paperCard }: {
-  s: LensState; set: (s: LensState) => void; d: Derived; name: (e: string) => string; compact?: boolean;
+function LensPanel({ s, set, d, name, paperCard }: {
+  s: LensState; set: (s: LensState) => void; d: Derived; name: (e: string) => string;
   paperCard: ReactNode;
 }) {
   const rows = useMemo(() => boardFor(d, s), [d, s]);
   const meta = LENSES.find((l) => l.id === s.lens)!;
   const pair = s.lens === "band" && s.preset ? s.preset.split("|") : null;
-  const hiEdge = s.lens === "floor" ? d.scale.max : s.lens === "band" ? s.hi : 0;
-  const loEdge = s.lens === "floor" ? s.f : s.lens === "band" ? s.lo : 0;
+
   return (
-    <section className={`lens-panel${compact ? " is-compact" : ""}`} data-testid="lens-panel" aria-label={meta.name}>
-      {compact && <h2>{meta.name}</h2>}
+    <section className="lens-panel" data-testid="lens-panel" aria-label={meta.name}>
       <p className="lens-sentence">{meta.sentence}</p>
       {s.lens === "price" && <PriceControls s={s} d={d} set={set} name={name} />}
-      {s.lens === "floor" && <FloorControls s={s} d={d} set={set} />}
       {s.lens === "band" && <BandControls s={s} d={d} set={set} name={name} />}
       <p className="lens-finding" aria-live="off">{finding(s, d, rows, name)}</p>
       <div className="lens-body">
         <div className="panel board-panel">
-          <Leaderboard rows={rows} name={name} scoreLabel={s.lens === "price" ? "Score" : "Median drift"} pair={pair} showDoublings={s.lens === "price" && !compact} />
+          <Leaderboard rows={rows} name={name} scoreLabel={s.lens === "price" ? "Score" : "Median drift"} pair={pair} showDoublings={s.lens === "price"} />
           {s.lens === "band" && s.preset && d.pairs[s.preset] && <BandResult k={s.preset} rec={d.pairs[s.preset]} d={d} name={name} />}
-          {s.lens === "band" && !compact && paperCard}
+          {s.lens === "band" && paperCard}
         </div>
         <div className="panel chart-panel">
           {s.lens === "price"
-            ? <ParetoChart summ={d.summ} front={d.front.frontier} dominatedBy={d.front.dominated_by} p={s.p} leader={rows[0].engine} name={name} compact={compact} />
-            : <StripChart basis={d.basis} engines={[...ANALYSED]} lo={loEdge} hi={hiEdge} name={name} scaleMin={d.scale.min} scaleMax={d.scale.max} compact={compact} />}
+            ? <ParetoChart summ={d.summ} front={d.front.frontier} dominatedBy={d.front.dominated_by} p={s.p} leader={rows[0].engine} name={name} />
+            : <StripChart basis={d.basis} engines={[...ANALYSED]} lo={s.lo} hi={s.hi} name={name} scaleMin={d.scale.min} scaleMax={d.scale.max} />}
         </div>
       </div>
     </section>
@@ -175,23 +160,12 @@ export default function Tax() {
   const [q, set] = useQuery();
   const d = useDerived(core.basis);
   const name = (e: string) => core.engine(e).name;
-  const compare = q.get("view") === "compare";
   const parsed = parseState(q);
   // A preset's band is the pair's exact IQR overlap, never a value read back from the URL.
   const s: LensState = parsed.lens === "band" && parsed.preset && d.pairs[parsed.preset]?.overlaps
     ? { ...parsed, lo: d.pairs[parsed.preset].lo, hi: d.pairs[parsed.preset].hi } : parsed;
   const pb = core.paper.pairwise_bands.value;
   const status = core.paper.status_motion.value;
-  // The compare layout keeps each lens's state locally; p, f and preset in the URL set where they start.
-  const [local, setLocal] = useState<Record<LensId, LensState>>(() => {
-    const p = Number(q.get("p")), f = Number(q.get("f")), k = q.get("preset");
-    const band = k && d.pairs[k]?.overlaps ? { lens: "band" as const, lo: d.pairs[k].lo, hi: d.pairs[k].hi, preset: k } : defaultFor("band", d);
-    return {
-      price: q.has("p") && Number.isFinite(p) ? { lens: "price", p: Math.max(0, Math.min(P_MAX, p)) } : defaultFor("price", d),
-      floor: q.has("f") && Number.isFinite(f) ? { lens: "floor", f } : defaultFor("floor", d),
-      band,
-    };
-  });
   useEffect(() => { document.title = "Stillness Tax · StillDrawn Explorer"; }, []);
   const paperCard = (
     <p className="paper-card" data-testid="paper-card">
@@ -200,33 +174,18 @@ export default function Tax() {
     </p>
   );
   return (
-    <main id="main" className={`page tax${compare ? " is-compare" : ""}`}>
+    <main id="main" className="page tax">
       <div className="title-row">
         <h1 tabIndex={-1}>Stillness Tax</h1>
         <span className="chip">{status.charAt(0).toUpperCase() + status.slice(1)}</span>
       </div>
       <p className="finding">The paper reports a Pareto front and declines to set an exchange rate between stability and motion. Set one here.
         Gen-4.5's rank changes because it moves more, not because it looks better.</p>
-      {compare ? (
-        <>
-          <p className="faint small">Review layout for choosing the default lens. <Link href="/tax">Back to one lens</Link>.</p>
-          <div className="lens-grid">
-            {LENSES.map((l) => (
-              <LensPanel key={l.id} s={local[l.id]} set={(v) => setLocal((cur) => ({ ...cur, [l.id]: v }))} d={d} name={name} compact paperCard={paperCard} />
-            ))}
-          </div>
-          {paperCard}
-        </>
-      ) : (
-        <>
-          <div className="lens-switch">
-            <Segmented label="Lens" value={s.lens} options={LENSES.map((l) => ({ value: l.id, label: l.name }))}
-              onChange={(lens) => set({ ...stateToQuery(defaultFor(lens, d)) })} />
-            <Link className="small" href="/tax?view=compare">See all three side by side</Link>
-          </div>
-          <LensPanel s={s} set={(v) => set(stateToQuery(v))} d={d} name={name} paperCard={paperCard} />
-        </>
-      )}
+      <div className="lens-switch">
+        <Segmented label="Lens" value={s.lens} options={LENSES.map((l) => ({ value: l.id, label: l.name }))}
+          onChange={(lens: LensId) => set({ ...stateToQuery(defaultFor(lens, d)) })} />
+      </div>
+      <LensPanel s={s} set={(v) => set(stateToQuery(v))} d={d} name={name} paperCard={paperCard} />
     </main>
   );
 }

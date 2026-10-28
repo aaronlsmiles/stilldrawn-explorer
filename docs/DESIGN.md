@@ -65,9 +65,9 @@ The mark: a 16 px square frame with a gold grease-pencil loop around it, drawn i
 ### Stillness Tax: "Who leads once motion is priced?"
 - **Title row:** h1 "Stillness Tax", then a grey chip "Exploratory (pre-registration amendment A6)" from `paper.status_motion`.
 - **Finding line:** the current leader and the range over which it leads, computed.
-- **Control row:** the lens (segmented: Price of motion · Motion floor · Matched-motion band) and that lens's slider, with its one-sentence explanation under it.
+- **Control row:** the lens (segmented: Price of motion, the default · Matched-motion band) and that lens's controls, with its one-sentence explanation above them. The motion floor was cut at G4 (28 Oct).
 - **1440:** the leaderboard (about 520 px) beside the Pareto chart. The leader's rank cell is a gold fill with an ink numeral. Under the price lens the chart draws the iso-score line in `--gold-line`.
-- **`?view=compare` (for G4):** three equal columns, one per lens, each with its sentence, control, board and a small chart. Stacked at 390.
+- The three-lens `?view=compare` layout served gate G4 and is archived (tag `g4-three-lenses`); old links land on the default lens.
 
 ## Checks this direction must pass
 - `inspect.mjs --app` 0 FAIL at 1440, 768, 390; colour share under 3%.

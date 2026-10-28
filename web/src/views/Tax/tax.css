@@ -50,18 +50,8 @@
 .tax-chart .dot { fill: var(--context); fill-opacity: .45; }
 .tax-chart .dot.in { fill: var(--text); fill-opacity: .85; }
 
-.lens-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
-.lens-panel.is-compact { background: var(--surface); border: 1px solid var(--border); padding: var(--pad); align-content: start; }
-.lens-panel.is-compact h2 { font-size: 16px; }
-.lens-panel.is-compact .lens-sentence { font-size: 14px; min-height: 4.3em; }
-.lens-panel.is-compact .lens-body { grid-template-columns: 1fr; }
-.lens-panel.is-compact .board-panel, .lens-panel.is-compact .chart-panel { padding: 0; border: 0; background: none; }
-.lens-panel.is-compact .band-controls { grid-template-columns: 1fr; }
-.lens-panel.is-compact .lens-finding { min-height: 4.3em; font-size: 13px; }
-
 @media (max-width: 1100px) {
   .lens-body { grid-template-columns: 1fr; }
-  .lens-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .band-controls, .band-sliders { grid-template-columns: 1fr; }

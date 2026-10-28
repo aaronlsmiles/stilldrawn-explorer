@@ -1,27 +1,25 @@
 // State and boards for the Stillness Tax lenses. EXPLORATORY (pre-registration amendment A6).
-import { bandRanking, floorRanking, priceRanking, summary, type BasisRow, type BoardRow } from "../../lib/lenses";
+// G4 (28 Oct): price of motion is the default, the matched-motion band the alternate. The motion floor
+// lens was cut; it is archived (tag g4-three-lenses) and floorRanking stays in lib/lenses.ts.
+import { bandRanking, priceRanking, summary, type BasisRow, type BoardRow } from "../../lib/lenses";
 import { ordinal } from "../../lib/format";
 
 export const P_MAX = 3;
-export type LensId = "price" | "floor" | "band";
+export type LensId = "price" | "band";
 export type LensState =
   | { lens: "price"; p: number }
-  | { lens: "floor"; f: number }
   | { lens: "band"; lo: number; hi: number; preset: string | null };
 export type LensData = { basis: BasisRow[] };
 
 export const LENSES: { id: LensId; name: string; sentence: string }[] = [
   { id: "price", name: "Price of motion",
     sentence: "How many pixels of drift would you accept for twice the motion? Each engine's score is its median drift minus that price for every doubling of motion over Wan 2.2." },
-  { id: "floor", name: "Motion floor",
-    sentence: "Count only the clips that move at least this much, then rank the engines by median drift." },
   { id: "band", name: "Matched-motion band",
     sentence: "Compare the engines only on clips whose motion falls inside the same band." },
 ];
 
 export function boardFor(data: LensData, s: LensState): BoardRow[] {
   if (s.lens === "price") return priceRanking(summary(data.basis), s.p);
-  if (s.lens === "floor") return floorRanking(data.basis, s.f);
   return bandRanking(data.basis, s.lo, s.hi);
 }
 
@@ -32,7 +30,6 @@ const num = (q: URLSearchParams, k: string) => {
 
 export function parseState(q: URLSearchParams): LensState {
   const lens = q.get("lens");
-  if (lens === "floor") return { lens, f: Math.max(0, num(q, "f") ?? 0) };
   if (lens === "band") {
     const a = num(q, "lo") ?? 0, b = num(q, "hi") ?? 1;
     return { lens, lo: Math.min(a, b), hi: Math.max(a, b), preset: q.get("preset") };
@@ -41,10 +38,9 @@ export function parseState(q: URLSearchParams): LensState {
 }
 
 export function stateToQuery(s: LensState): Record<string, string | null> {
-  const clear = { p: null, f: null, lo: null, hi: null, preset: null };
+  const clear = { p: null, f: null, lo: null, hi: null, preset: null, view: null };
   if (s.lens === "price") return { ...clear, lens: null, p: s.p ? String(+s.p.toFixed(2)) : null };
   // Exact values (shortest round-trip form): a rounded edge can drop the clip that sits on it.
-  if (s.lens === "floor") return { ...clear, lens: "floor", f: String(s.f) };
   if (s.preset) return { ...clear, lens: "band", preset: s.preset };   // edges come from the pair itself
   return { ...clear, lens: "band", lo: String(s.lo), hi: String(s.hi) };
 }

@@ -2,6 +2,10 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-28 — choosing the lens
+
+- Of the three ways to price motion, the slider that charges a price per doubling of motion became the default: it is the one a reader can explain after one go, and it carries the main finding (the leader changes as the price rises). The matched-motion band stays as the alternate because it reproduces the paper's own result, two pairs whose order flips once motion is matched. The motion floor was cut: it reshuffles a lot, but its rankings soon rest on six clips or fewer. Its code is archived, not deleted.
+
 ## 2026-10-28 — the views
 
 - The engines carry no colour. A colourblind-safety check on every five-colour palette we could find or search for (60,000 candidates) failed the moment all five engines share one scatter: at least one pair always sat too close even for full colour vision. So engines are named everywhere, data is ink, context is grey, and the one gold marks whatever the reader has selected. The constraint became the look: ink on paper, with a grease-pencil circle.

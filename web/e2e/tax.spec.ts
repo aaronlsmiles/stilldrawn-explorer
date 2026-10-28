@@ -40,27 +40,26 @@ test("band presets reproduce the two reversals", async ({ page }) => {
   await expect(page.getByTestId("paper-card")).toContainText("5 are usable");
 });
 
-test("floor marks thin engines as too few", async ({ page }) => {
-  await page.goto("/tax?lens=floor&f=0.01");
-  await expect(page.getByText(/too few \(n = \d\)/).first()).toBeVisible();
-});
-
-test("lens control switches lenses and keeps a deep link", async ({ page }) => {
+test("two lenses: price by default, the band as the alternate", async ({ page }) => {
   await page.goto("/tax");
-  await page.getByRole("radio", { name: "Motion floor" }).check();
-  await expect(page).toHaveURL(/lens=floor/);
+  await expect(page.getByRole("radio")).toHaveCount(2);
+  await expect(page.getByRole("radio", { name: "Price of motion" })).toBeChecked();
   await page.getByRole("radio", { name: "Matched-motion band" }).check();
   await expect(page).toHaveURL(/lens=band/);
+  await expect(page.getByTestId("band-result")).toHaveAttribute("data-winner", "ltx23");
 });
 
-test("G4 compare layout shows the three lenses side by side", async ({ page }) => {
-  await page.goto("/tax?view=compare");
-  await expect(page.getByTestId("lens-panel")).toHaveCount(3);
-  for (const p of await page.getByTestId("lens-panel").all()) await expect(p.getByTestId("board-row")).toHaveCount(5);
+test("old floor and compare links land on the default lens", async ({ page }) => {
+  for (const u of ["/tax?lens=floor&f=0.004", "/tax?view=compare"]) {
+    await page.goto(u);
+    await expect(page.getByTestId("lens-panel")).toHaveCount(1);
+    await expect(page.getByRole("radio", { name: "Price of motion" })).toBeChecked();
+    await expect(page.getByRole("radio", { name: "Motion floor" })).toHaveCount(0);
+  }
 });
 
 test("no horizontal page scroll on tax", async ({ page }) => {
-  for (const u of ["/tax", "/tax?lens=band&preset=gen4_turbo%7Cltx23", "/tax?view=compare"]) {
+  for (const u of ["/tax", "/tax?lens=band&preset=gen4_turbo%7Cltx23", "/tax?p=1.3"]) {
     await page.goto(u);
     await expect(page.getByTestId("board-row").first()).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), u).toBe(true);

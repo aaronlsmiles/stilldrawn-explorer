@@ -1,6 +1,6 @@
 import { it, expect } from "vitest";
 import fx from "../../lib/__fixtures__/lenses.json";
-import { boardFor, parseState, stateToQuery, motionScale, announce, type LensData } from "./taxModel";
+import { LENSES, boardFor, parseState, stateToQuery, motionScale, announce, type LensData } from "./taxModel";
 import type { BasisRow } from "../../lib/lenses";
 
 const data: LensData = { basis: fx.basis.map((r) => ({ ...r, drift: r.drift ?? NaN })) as BasisRow[] };
@@ -21,8 +21,8 @@ it("each reversal preset puts the pair's band winner first within the pair", () 
     expect(pair[0]).toBe(pw[k].winner_in_band);
   }
 });
-it("floor at 0 equals the league", () => {
-  expect(order({ lens: "floor", f: 0 })).toEqual(order({ lens: "price", p: 0 }));
+it("G4: price of motion is the default and the band the one alternate", () => {
+  expect(LENSES.map((l) => l.id)).toEqual(["price", "band"]);
 });
 it("the motion scale is monotone and spans the basis", () => {
   const s = motionScale(data.basis);
@@ -36,12 +36,14 @@ it("the motion scale is monotone and spans the basis", () => {
 it("query parsing defaults to price at 0 and clamps", () => {
   expect(parseState(new URLSearchParams())).toEqual({ lens: "price", p: 0 });
   expect(parseState(new URLSearchParams("lens=price&p=9"))).toEqual({ lens: "price", p: 3 });
-  expect(parseState(new URLSearchParams("lens=floor&f=0.002"))).toEqual({ lens: "floor", f: 0.002 });
+  // the motion floor was cut at G4; old links land on the default lens
+  expect(parseState(new URLSearchParams("lens=floor&f=0.002"))).toEqual({ lens: "price", p: 0 });
   expect(parseState(new URLSearchParams("lens=band&lo=0.003&hi=0.001"))).toEqual({ lens: "band", lo: 0.001, hi: 0.003, preset: null });
 });
-it("query values round-trip exactly", () => {
-  const f = 0.0005133123456789123;
-  expect(parseState(new URLSearchParams(stateToQuery({ lens: "floor", f }) as Record<string, string>))).toEqual({ lens: "floor", f });
+it("band edges round-trip exactly", () => {
+  const lo = 0.0005133123456789123, hi = 0.0031234567890123456;
+  const q = Object.entries(stateToQuery({ lens: "band", lo, hi, preset: null })).filter(([, v]) => v != null) as [string, string][];
+  expect(parseState(new URLSearchParams(q))).toEqual({ lens: "band", lo, hi, preset: null });
 });
 it("announces order changes only, in the new order", () => {
   const b = (es: string[], unr: string[] = []) => [
