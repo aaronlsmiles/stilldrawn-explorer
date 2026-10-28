@@ -73,6 +73,4 @@ export type Core = {
   engine: (id: string) => Engine;
   panel: (id: string) => Panel | undefined;
   clip: (id: string) => Clip | undefined;
-  /** False only in a preview build that ships a subset of the clips (VITE_MEDIA_SUBSET). */
-  streamable: (id: string) => boolean;
 };

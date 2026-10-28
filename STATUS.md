@@ -5,7 +5,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 ## Criteria (frozen 2026-10-28)
 
 - **Success:**
-  1. All 373 clips play from `media.studionephele.com` beside their source, with synced drift and motion curves.
+  1. All 373 clips play from `media.studionephele.com` beside their source, with synced drift and motion curves. *(Media uploaded and verified 28 Oct; the full-play e2e over every primary clip comes in Phase 5.)*
   2. Each Stillness Tax lens reproduces the paper at its reference setting and reorders the leaderboard live:
      - price 0 gives the paper's ranking
      - the band presets give 5 usable pairs and 2 reversals
@@ -48,6 +48,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 | 3 | 2026-10-28 | Preview deploy to the personal Hobby team | **Blocked:** the stored token is refused for the team ("re-authenticate to this scope"); nothing deployed. Preview staged (81 MB) and verified locally | — | 0 |
 | 5 | 2026-10-28 | Preview deploy, after Aaron refreshed the token (scoped to the Nephele team only) | Deployed. **Incident:** the first deploy of the new project went to production and Vercel aliased it to the public `stilldrawn-explorer.vercel.app` (200, noindex) for about a minute; the alias was removed (now 404) and the script now forces `--target=preview`. The preview redeploy is behind Vercel login (302). No custom domain, nothing indexed | yes | 0 |
 | 4 | 2026-10-28 | G4 applied: two lenses (price default, band alternate); floor and compare layout archived, old links fall back to price | 49 unit, 120 e2e green; inspector 0 FAIL on both lenses | yes | 0 |
+| 6 | 2026-10-28 | Pipeline task 7, upload half: all media to R2 (`stilldrawn-media/stilldrawn/v1.0.0/`) | 1,187 objects (373 clips byte-exact, posters, frame-0 PNGs, 34 panels ×2) plus robots.txt; clips hash-checked against CLIP-HASHES before sending; re-run skips all 1,187 (size and sha256 match); public host: 6 sampled clips give 206 on a range request and match the release byte for byte, immutable cache headers; GPTBot gets 403. Preview now streams every clip from `media.studionephele.com` (2.6 MB deploy, behind Vercel login) | yes | 0 |
 
 ## Spend: £0 of £20 · £ per keeper: n/a
 
@@ -55,6 +56,5 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- Phase 1, task 7 upload half: unblocked by G2.
 - Phase 3: blindpanel (sub-plan C), reconciling the kit design pass first.
 - Defended inspector warnings to revisit in Phase 5: Explore readouts beside provenance end apart at 1440 (provenance is a disclosure); Tax board and chart heights differ by lens; the scatter carries no hue until an engine is chosen (engines are named, never coloured; see docs/DESIGN.md).

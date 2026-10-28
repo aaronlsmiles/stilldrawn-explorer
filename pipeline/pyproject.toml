@@ -3,7 +3,11 @@ name = "stilldrawn-web"
 version = "0.1.0"
 description = "Builds StillDrawn Explorer's data contract from the public StillDrawn release"
 requires-python = ">=3.12"
-dependencies = ["numpy>=2.0", "pyyaml>=6.0"]
+dependencies = [
+    "boto3>=1.43.121",
+    "numpy>=2.0",
+    "pyyaml>=6.0",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.0"]

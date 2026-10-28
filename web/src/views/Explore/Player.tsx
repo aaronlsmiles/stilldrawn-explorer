@@ -8,26 +8,25 @@ import type { Player } from "./useFrameClock";
 
 const BIG = 10e6;
 
-function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig, streamable }: {
+function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig }: {
   clip: Clip; engine: Engine; url: (p: string) => string; videoRef: Ref<HTMLVideoElement>;
-  diff: boolean; testid: string; pinned?: boolean; lazyBig: boolean; streamable: boolean;
+  diff: boolean; testid: string; pinned?: boolean; lazyBig: boolean;
 }) {
   const big = lazyBig && clip.bytes > BIG;
-  const [errored, setFailed] = useState(false);
-  const failed = errored || !streamable;
+  const [failed, setFailed] = useState(false);
   const ratio = `${clip.width} / ${clip.height}`;
   return (
     <figure className="frame" data-testid={testid}>
       <div className={`frame-media${diff ? " is-diff" : ""}`} style={{ aspectRatio: ratio }}>
         {diff && !failed && (
-          <img data-testid="frame0" crossOrigin="anonymous" src={url(clip.media.frame0)} width={clip.width} height={clip.height} alt="" decoding="async" />
+          <img data-testid="frame0" src={url(clip.media.frame0)} width={clip.width} height={clip.height} alt="" decoding="async" />
         )}
         {failed ? (
           <img src={url(clip.media.poster)} alt={`${engine.name}, frame 96 of ${clip.id}`} width={clip.width} height={clip.height} />
         ) : (
           <video key={clip.id} ref={videoRef} data-testid="clip-video" src={url(clip.media.mp4)} poster={url(clip.media.poster)}
             muted loop playsInline preload={big ? "none" : "auto"} width={clip.width} height={clip.height}
-            aria-label={`${engine.name} clip ${clip.id}, muted`} onError={() => setFailed(true)} crossOrigin="anonymous" />
+            aria-label={`${engine.name} clip ${clip.id}, muted`} onError={() => setFailed(true)} />
         )}
       </div>
       <figcaption className={pinned ? "cap cap-pinned" : "cap"}>
@@ -39,9 +38,9 @@ function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig,
   );
 }
 
-export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, lazyBig, streamable }: {
+export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, lazyBig }: {
   panel: Panel | undefined; a: Clip; b?: Clip; engines: (id: string) => Engine; url: (p: string) => string;
-  player: Player; diff: boolean; panelOriginal: string | null; lazyBig: boolean; streamable: (id: string) => boolean;
+  player: Player; diff: boolean; panelOriginal: string | null; lazyBig: boolean;
 }) {
   return (
     <div className={`media ${b ? "media-3" : "media-2"}`}>
@@ -54,8 +53,8 @@ export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, 
           {panelOriginal && <a className="faint" href={panelOriginal}>PNG original</a>}
         </figcaption>
       </figure>
-      <ClipFrame clip={a} engine={engines(a.engine)} url={url} videoRef={player.a} diff={diff} testid="clip-a" lazyBig={lazyBig} streamable={streamable(a.id)} />
-      {b && <ClipFrame clip={b} engine={engines(b.engine)} url={url} videoRef={player.b} diff={diff} testid="clip-b" pinned lazyBig={lazyBig} streamable={streamable(b.id)} />}
+      <ClipFrame clip={a} engine={engines(a.engine)} url={url} videoRef={player.a} diff={diff} testid="clip-a" lazyBig={lazyBig} />
+      {b && <ClipFrame clip={b} engine={engines(b.engine)} url={url} videoRef={player.b} diff={diff} testid="clip-b" pinned lazyBig={lazyBig} />}
     </div>
   );
 }

@@ -2,6 +2,11 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-28 — the clips go up
+
+- All 373 clips are now on the studio's own media host, byte for byte as released, so the 288 with signed content credentials keep them. The upload hashes every clip against the release's published list before sending anything, and stops if one differs; a second run sends nothing because every object's size and hash already match. Spot checks through the public address get partial-content responses (so video can seek) and the exact released bytes.
+- The player no longer asks the media host for cross-origin permission. Nothing on the page reads pixels back from the video, so plain cross-origin video and images are enough, and the media host needs no extra configuration.
+
 ## 2026-10-28 — choosing the lens
 
 - Of the three ways to price motion, the slider that charges a price per doubling of motion became the default: it is the one a reader can explain after one go, and it carries the main finding (the leader changes as the price rises). The matched-motion band stays as the alternate because it reproduces the paper's own result, two pairs whose order flips once motion is matched. The motion floor was cut: it reshuffles a lot, but its rankings soon rest on six clips or fewer. Its code is archived, not deleted.
