@@ -108,3 +108,22 @@ def test_series_files_cover_every_clip(contract):
     out, _ = contract
     n = sum(len(_load(p)) for p in (out / "series").glob("*.json"))
     assert n == 373
+
+
+def test_engines_name_their_zenodo_zip(contract):
+    out, _ = contract
+    by = {e["id"]: e for e in _load(out / "engines.json")}
+    assert by["gen4.5"]["zip"] == "stilldrawn-clips-gen4.5-v1.0.0.zip"
+    assert by["seedance"]["zip"] == "stilldrawn-clips-seedance-v1.0.0.zip"
+
+
+def test_paper_carries_within_engine_and_pooled_rho(contract, confound):
+    out, _ = contract
+    paper = _load(out / "paper.json")
+    w = paper["within_engine_rho"]
+    assert "q2_within_engine_motion_vs_metric" in w["source"]
+    want = confound["q2_within_engine_motion_vs_metric"]["gen4.5"]["line_chamfer_mean_px"]
+    assert w["value"]["gen4.5"]["line"] == want
+    assert w["value"]["gen4.5"]["line"]["n"] == 33
+    assert set(w["value"]) == {"gen4.5", "gen4_turbo", "h3-fal", "ltx23", "wan22"}
+    assert paper["pooled_rho"]["value"]["line"]["n"] == 164

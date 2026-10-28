@@ -29,6 +29,10 @@ DOI_VERSION = "10.5281/zenodo.23072784"
 DOI_CONCEPT = "10.5281/zenodo.23072783"
 REPO = "https://github.com/aaronlsmiles/stilldrawn"
 DEPART_PX = 10.0   # frozen A4 rule (a): mean chamfer vs frame 0 > 10 px
+RELEASE_VERSION = "1.0.0"   # zenodo/pack.sh default V: stilldrawn-clips-<engine>-v<V>.zip
+# headline key -> its column name in motion_confound.json q2
+Q2_KEYS = {"line": "line_chamfer_mean_px", "tone": "tone_variance", "edge": "edge_abs_slope",
+           "style": "style_terminal", "closure": "closure_abs_terminal"}
 
 HERE = Path(__file__).resolve().parent
 WEB = HERE.parent.parent / "web"
@@ -81,7 +85,8 @@ def load_tags() -> dict:
 
 def build_engines(root):
     mv = model_versions(root)
-    return [{"id": e, **meta, "model_version": mv.get(e), "notice": e in NOTICE_ENGINES}
+    return [{"id": e, **meta, "model_version": mv.get(e), "notice": e in NOTICE_ENGINES,
+             "zip": f"stilldrawn-clips-{e}-v{RELEASE_VERSION}.zip"}
             for e, meta in ENGINES.items()]
 
 
@@ -155,13 +160,22 @@ def build_study(root, clips):
     }
 
 
-def build_paper(summ, front, pairs, segs, study, clips):
+def q2_rho(mc: dict) -> tuple[dict, dict]:
+    """Within-engine and pooled Spearman rho(motion, metric), keyed by headline."""
+    w = mc["q2_within_engine_motion_vs_metric"]
+    within = {e: {k: w[e][src] for k, src in Q2_KEYS.items()} for e in sorted(w)}
+    pooled = {k: mc["q2_pooled"][src] for k, src in Q2_KEYS.items()}
+    return within, pooled
+
+
+def build_paper(summ, front, pairs, segs, study, clips, mc):
     q = "analysis/out/motion_confound.json"
     es = sorted(summ)
     rho, p = spearman_exact([summ[e]["motion_median_norm"] for e in es], [summ[e]["drift_median_px"] for e in es])
     g45 = summ["gen4.5"]["motion_median_norm"]
     usable = {k: v for k, v in pairs.items() if v.get("usable")}
     counts = Counter(c.cid.arm for c in clips)
+    within, pooled = q2_rho(mc)
     return {
         "doi_version": _src(DOI_VERSION, "Zenodo record"),
         "doi_concept": _src(DOI_CONCEPT, "Zenodo record"),
@@ -179,6 +193,8 @@ def build_paper(summ, front, pairs, segs, study, clips):
                                 "usable": len(usable),
                                 "reversals": sorted(k for k, v in usable.items() if v["reverses_league"]),
                                 "min_n": MIN_N}, f"{q} q5a_pairwise_matched_bands"),
+        "within_engine_rho": _src(within, f"{q} q2_within_engine_motion_vs_metric (Spearman, scipy p)"),
+        "pooled_rho": _src(pooled, f"{q} q2_pooled"),
         "price_crossovers": _src(segs, "explorer: pipeline lenses.price_crossovers (not in the paper)"),
         "alpha_ordinal": _src({a: study["agreement"][a]["krippendorff_alpha_ordinal"] for a in AXES},
                               "analysis/human_check/human_check_results.json per_axis"),
@@ -213,6 +229,7 @@ def main(root: Path | None = None, web: Path = WEB) -> Path:
     pairs = pairwise_bands(b, summ)
     segs = price_crossovers(summ)
     study = build_study(root, clips)
+    mc = json.loads((root / "analysis" / "out" / "motion_confound.json").read_text())
     commit = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
 
     _write(out / "index.json", {
@@ -232,7 +249,7 @@ def main(root: Path | None = None, web: Path = WEB) -> Path:
         _write(out / "series" / f"{e}.json", d)
     _write(out / "taxonomy.json", tags)
     _write(out / "study" / "stilldrawn.json", study)
-    _write(out / "paper.json", build_paper(summ, pareto(summ), pairs, segs, study, clips))
+    _write(out / "paper.json", build_paper(summ, pareto(summ), pairs, segs, study, clips, mc))
     _write(web / "src" / "lib" / "__fixtures__" / "lenses.json", build_fixtures(b, summ, pairs, segs))
     return out
 
