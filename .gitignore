@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vercel/
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+pipeline/out/
+test-results/
+playwright-report/
+.playwright-mcp/
+.DS_Store
