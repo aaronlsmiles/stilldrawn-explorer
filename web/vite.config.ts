@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
-import { mediaDev } from "./vite/media-dev";
+import { mediaDev } from "./vite/media-dev.ts";
 
 const MEDIA = fileURLToPath(new URL("../pipeline/out/media", import.meta.url));
 

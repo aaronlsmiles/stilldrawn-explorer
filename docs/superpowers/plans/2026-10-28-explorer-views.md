@@ -57,7 +57,7 @@ deploy/                             gitignored staging (keeps .vercel/ link)
 
 **Files:** modify `pipeline/stilldrawn_web/export.py`; test `pipeline/tests/test_export.py`.
 
-- [ ] **Step 1: failing tests** (append to `tests/test_export.py`, reusing its `built` fixture that runs `export.main` into a tmp dir):
+- [x] **Step 1: failing tests** (append to `tests/test_export.py`, reusing its `built` fixture that runs `export.main` into a tmp dir):
 
 ```python
 def test_engines_name_their_zenodo_zip(built):
@@ -77,8 +77,8 @@ def test_paper_carries_within_engine_and_pooled_rho(built):
     assert pooled["line"]["n"] == 164
 ```
 
-- [ ] **Step 2:** `cd pipeline && uv run pytest tests/test_export.py -q`. Expect 2 FAIL (KeyError `zip`, `within_engine_rho`).
-- [ ] **Step 3: implement.** In `export.py`:
+- [x] **Step 2:** `cd pipeline && uv run pytest tests/test_export.py -q`. Expect 2 FAIL (KeyError `zip`, `within_engine_rho`).
+- [x] **Step 3: implement.** In `export.py`:
 
 ```python
 RELEASE_VERSION = "1.0.0"   # zenodo/pack.sh default V
@@ -105,8 +105,8 @@ def _q2(mc: dict) -> tuple[dict, dict]:
         "pooled_rho": _src(pooled, f"{q} q2_pooled"),
 ```
 
-- [ ] **Step 4:** `uv run pytest -q`. Expect 41 passed. Re-export: `uv run python -m stilldrawn_web.export`.
-- [ ] **Step 5:** `~/projects/studio/tools/scan-identifiers.sh .` → clean; commit `feat(pipeline): zip names and within-engine rho in the contract`.
+- [x] **Step 4:** `uv run pytest -q`. Expect 41 passed. Re-export: `uv run python -m stilldrawn_web.export`.
+- [x] **Step 5:** `~/projects/studio/tools/scan-identifiers.sh .` → clean; commit `feat(pipeline): zip names and within-engine rho in the contract`.
 
 ## Task 2: media derivation (pipeline task 7, derivation half)
 
@@ -118,7 +118,7 @@ Layout under `pipeline/out/media/` (mirrors `stilldrawn/v1.0.0/` on R2):
 - `posters/<id>.webp`: frame 96, scaled to 640 px wide, quality 78 (frame 96 shows the drift; frame 0 is just the panel)
 - `frame0/<id>.png`: frame 0 at native resolution, BT.709 limited → full-range RGB
 
-- [ ] **Step 1: failing tests** (`tests/test_media.py`; the release is the conftest `root`):
+- [x] **Step 1: failing tests** (`tests/test_media.py`; the release is the conftest `root`):
 
 ```python
 import os, subprocess
@@ -168,8 +168,8 @@ def test_frame0_matches_bt709_decode(out, root):
     assert got == ref
 ```
 
-- [ ] **Step 2:** `uv run pytest tests/test_media.py -q`. Expect FAIL (no module `media`).
-- [ ] **Step 3: implement** `media.py`:
+- [x] **Step 2:** `uv run pytest tests/test_media.py -q`. Expect FAIL (no module `media`).
+- [x] **Step 3: implement** `media.py`:
 
 ```python
 """Derive the explorer's display media from the public release, laid out as on R2.
@@ -248,23 +248,23 @@ if __name__ == "__main__":
 ```
 
   If `load.py`'s `Clip` names the mp4 path or engine directory differently (`mp4_path`, `cid.engine_dir`), use its names; do not add duplicates.
-- [ ] **Step 4:** `uv run pytest -q`. Expect all pass. Then the full run: `uv run python -m stilldrawn_web.media`. Expect `{'written': 780, …, 'clips': 373, 'panels': 34}`; a second run reports `written: 0`. Record the total size of posters, frame0 and panel WebPs (`du -sh pipeline/out/media/{posters,frame0,panels}`).
-- [ ] **Step 5:** scan, commit `feat(pipeline): derive posters, frame-0 references and panel webps (clips symlinked)`.
+- [x] **Step 4:** `uv run pytest -q`. Expect all pass. Then the full run: `uv run python -m stilldrawn_web.media`. Expect `{'written': 780, …, 'clips': 373, 'panels': 34}`; a second run reports `written: 0`. Record the total size of posters, frame0 and panel WebPs (`du -sh pipeline/out/media/{posters,frame0,panels}`).
+- [x] **Step 5:** scan, commit `feat(pipeline): derive posters, frame-0 references and panel webps (clips symlinked)`.
 
 ## Task 3: design direction
 
 **Files:** create `docs/DESIGN.md`.
 
-- [ ] Run `design-taste-frontend` in its **app-screens** run (Explore and Tax are screens people work in), seeded from the site concept: paper `#e2e2de`, surface `#d3d3ce`, ink `#1c1915`, muted `#574e44`, one gold `#c4922a` (hi `#d6a43c`), Schibsted Grotesk 400/600/800, square corners, 12 px gutter, the contact-sheet idea. **Gold marks only the selection** (selected cell, the pinned compare engine, the current leader under a lens, the playhead) and the one primary action.
-- [ ] Run the `dataviz` skill for the engine palette: 6 categorical hues (5 analysed engines + Seedance) that pass its validator against paper and against the dark theme's ground, keep clear of gold (no hue within ~25° of `#c4922a`), and stay distinguishable for deuteranopia. Engines are also always labelled directly (never colour alone).
-- [ ] Define the dark theme (ink ground, paper text, same gold), the type scale for dense screens (body 15–16 px, small 13 px, tabular numerals for readouts), focus ring (3 px gold), motion tokens (one ease, 160/240 ms; reduced motion = instant).
-- [ ] Write `docs/DESIGN.md`: idea sentence, tokens (both themes), engine palette with validator output, layout per view at 1440 and 390, what gold is allowed to mark. Commit `docs: design direction for the explorer views`.
+- [x] Run `design-taste-frontend` in its **app-screens** run (Explore and Tax are screens people work in), seeded from the site concept: paper `#e2e2de`, surface `#d3d3ce`, ink `#1c1915`, muted `#574e44`, one gold `#c4922a` (hi `#d6a43c`), Schibsted Grotesk 400/600/800, square corners, 12 px gutter, the contact-sheet idea. **Gold marks only the selection** (selected cell, the pinned compare engine, the current leader under a lens, the playhead) and the one primary action.
+- [x] Run the `dataviz` skill for the engine palette: 6 categorical hues (5 analysed engines + Seedance) that pass its validator against paper and against the dark theme's ground, keep clear of gold (no hue within ~25° of `#c4922a`), and stay distinguishable for deuteranopia. Engines are also always labelled directly (never colour alone).
+- [x] Define the dark theme (ink ground, paper text, same gold), the type scale for dense screens (body 15–16 px, small 13 px, tabular numerals for readouts), focus ring (3 px gold), motion tokens (one ease, 160/240 ms; reduced motion = instant).
+- [x] Write `docs/DESIGN.md`: idea sentence, tokens (both themes), engine palette with validator output, layout per view at 1440 and 390, what gold is allowed to mark. Commit `docs: design direction for the explorer views`.
 
 ## Task 4: scaffold `web/`
 
 **Files:** `web/package.json`, `package-lock.json`, `tsconfig.json`, `vite.config.ts`, `vite/media-dev.ts`, `index.html`, `.env.development`, `src/main.tsx`, `src/App.tsx`, `src/theme/*.css`; test `vite/media-dev.test.ts`.
 
-- [ ] **Step 1:** create the project by hand (no template, so nothing unpinned sneaks in):
+- [x] **Step 1:** create the project by hand (no template, so nothing unpinned sneaks in):
 
 ```bash
 cd web
@@ -276,7 +276,7 @@ npm i --save-exact -D vite@8.3.5 @vitejs/plugin-react@6.1.2 typescript@7.0.2 vit
 ```
 
   `package.json`: `"private": true, "type": "module", "engines": {"node": ">=22"}`, scripts `dev` (`vite`), `build` (`tsc --noEmit && vite build`), `test` (`vitest run`), `e2e` (`playwright test -c e2e/playwright.config.ts`). Repo root `.nvmrc`: `24`.
-- [ ] **Step 2: failing test** for the dev media server (`web/vite/media-dev.test.ts`):
+- [x] **Step 2: failing test** for the dev media server (`web/vite/media-dev.test.ts`):
 
 ```ts
 import { describe, it, expect, beforeAll } from "vitest";
@@ -319,8 +319,8 @@ describe("media dev server", () => {
 });
 ```
 
-- [ ] **Step 3:** `npx vitest run vite/media-dev.test.ts`. Expect FAIL (module missing).
-- [ ] **Step 4: implement** `web/vite/media-dev.ts`:
+- [x] **Step 3:** `npx vitest run vite/media-dev.test.ts`. Expect FAIL (module missing).
+- [x] **Step 4: implement** `web/vite/media-dev.ts`:
 
 ```ts
 // Dev only: serve pipeline/out/media at /media/, as R2 will. Range-aware so <video> can seek.
@@ -378,14 +378,14 @@ export default defineConfig({
 ```
 
   `.env.development`: `VITE_MEDIA_BASE=/media/`. `index.html` loads Schibsted Grotesk from Google Fonts (400/600/800, `display=swap`), sets `<html lang="en">`, a `theme-color` meta for both schemes, and `<title>StillDrawn Explorer</title>`.
-- [ ] **Step 5:** `npx vitest run` → 3 pass. `npm run dev` and `curl -sI localhost:5173/media/clips/wan22/act-tone-2_campush_wan22.mp4` → 200 video/mp4.
-- [ ] **Step 6:** `tokens.css` and `base.css` from `docs/DESIGN.md` (light on `:root`; dark under `@media (prefers-color-scheme: dark)` and `:root[data-theme=dark]`; engine tokens `--e-gen45` …). `App.tsx` renders a header (wordmark, nav: Explore · Motion vs drift · Stillness Tax, theme toggle) and the routed view. Commit `feat(web): scaffold Vite + React + TS with a local media server`.
+- [x] **Step 5:** `npx vitest run` → 3 pass. `npm run dev` and `curl -sI localhost:5173/media/clips/wan22/act-tone-2_campush_wan22.mp4` → 200 video/mp4.
+- [x] **Step 6:** `tokens.css` and `base.css` from `docs/DESIGN.md` (light on `:root`; dark under `@media (prefers-color-scheme: dark)` and `:root[data-theme=dark]`; engine tokens `--e-gen45` …). `App.tsx` renders a header (wordmark, nav: Explore · Motion vs drift · Stillness Tax, theme toggle) and the routed view. Commit `feat(web): scaffold Vite + React + TS with a local media server`.
 
 ## Task 5: `stats.ts`
 
 **Files:** `web/src/lib/stats.ts`, `web/src/lib/stats.test.ts`.
 
-- [ ] **Step 1: failing tests:**
+- [x] **Step 1: failing tests:**
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -414,8 +414,8 @@ describe("stats", () => {
 });
 ```
 
-- [ ] **Step 2:** `npx vitest run src/lib/stats.test.ts` → FAIL.
-- [ ] **Step 3: implement:**
+- [x] **Step 2:** `npx vitest run src/lib/stats.test.ts` → FAIL.
+- [x] **Step 3: implement:**
 
 ```ts
 // Ports of the numpy calls in pipeline/stilldrawn_web/lenses.py. Percentile is numpy's default 'linear'.
@@ -482,13 +482,13 @@ export function spearmanExact(x: number[], y: number[]): [number, number] {
 }
 ```
 
-- [ ] **Step 4:** run → 7 pass. Commit `feat(web): stats port (median, numpy-linear percentile, Spearman exact)`.
+- [x] **Step 4:** run → 7 pass. Commit `feat(web): stats port (median, numpy-linear percentile, Spearman exact)`.
 
 ## Task 6: `pareto.ts` and `lenses.ts`, parity with Python
 
 **Files:** `web/src/lib/pareto.ts`, `lenses.ts`, `lenses.test.ts`, `web/src/data/types.ts` (lens types).
 
-- [ ] **Step 1: failing parity tests** (`lenses.test.ts`):
+- [x] **Step 1: failing parity tests** (`lenses.test.ts`):
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -548,8 +548,8 @@ describe("parity with pipeline/stilldrawn_web/lenses.py", () => {
 ```
 
   Enable `"resolveJsonModule": true` in `tsconfig.json`.
-- [ ] **Step 2:** run → FAIL.
-- [ ] **Step 3: implement** `pareto.ts`:
+- [x] **Step 2:** run → FAIL.
+- [x] **Step 3: implement** `pareto.ts`:
 
 ```ts
 import type { Summary } from "./lenses";
@@ -695,14 +695,14 @@ export function pairwiseBands(basis: BasisRow[], summ: Summary) {
 }
 ```
 
-- [ ] **Step 4:** run → 8 pass. If a board's order differs, check tie-breaks first (code-point order), then NaN handling (`nanmedian` only in `summary`).
-- [ ] **Step 5:** commit `feat(web): lenses and pareto ported, parity-tested against the pipeline`.
+- [x] **Step 4:** run → 8 pass. If a board's order differs, check tie-breaks first (code-point order), then NaN handling (`nanmedian` only in `summary`).
+- [x] **Step 5:** commit `feat(web): lenses and pareto ported, parity-tested against the pipeline`.
 
 ## Task 7: data loaders, model and format
 
 **Files:** `web/src/data/types.ts`, `load.ts`, `media.ts`, `model.ts`, `model.test.ts`; `web/src/lib/format.ts`, `format.test.ts`.
 
-- [ ] **Step 1: failing tests** (`model.test.ts`, reading the real contract from `public/data/v1` with `fs`):
+- [x] **Step 1: failing tests** (`model.test.ts`, reading the real contract from `public/data/v1` with `fs`):
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -756,8 +756,8 @@ it("formats", () => {
 });
 ```
 
-- [ ] **Step 2:** run → FAIL.
-- [ ] **Step 3: implement.**
+- [x] **Step 2:** run → FAIL.
+- [x] **Step 3: implement.**
   - `types.ts`: `Engine`, `Panel`, `Clip`, `Series`, `Paper` (typed as `Record<string, {value: unknown; source: string}>` with typed accessors for the keys used), `Taxonomy`, `Index`, mirroring the JSON shown in the facts above.
   - `load.ts`: `loadCore()` fetches index, engines, panels, clips, paper, taxonomy in parallel from `/data/v1/` once (module-level promise); `loadSeries(engine)` caches per engine. A React hook `useCore()` built on `use()` with a Suspense boundary in `App.tsx` and an error boundary that shows a plain retry message.
   - `media.ts`: `MEDIA_BASE = import.meta.env.VITE_MEDIA_BASE ?? index.media_base`; `mediaUrl(path)`.
@@ -811,13 +811,13 @@ export function basisRank(clips: Clip[], clip: Clip, metric: keyof Clip["h"]) {
 
   (`gridRows` sorts engine ids with default `sort()`, which is code-point order. Standard columns follow `ANALYSED`, the order DESIGN.md sets.)
   - `format.ts`: `px(v)` = 2 dp + " px"; `ratio(v)` = 1 dp + "×"; `norm(v)` = 2 significant figures in fixed notation (`0.00080`); `ordinal(n)`; `pct`. One module, so every surface rounds the same way.
-- [ ] **Step 4:** run → pass. Commit `feat(web): typed contract loaders, grid model, formatting`.
+- [x] **Step 4:** run → pass. Commit `feat(web): typed contract loaders, grid model, formatting`.
 
 ## Task 8: router and query state
 
 **Files:** `web/src/router.ts`, `router.test.ts`.
 
-- [ ] **Step 1: failing tests:**
+- [x] **Step 1: failing tests:**
 
 ```ts
 import { describe, it, expect, beforeEach } from "vitest";
@@ -848,8 +848,8 @@ describe("router", () => {
 });
 ```
 
-- [ ] **Step 2:** run → FAIL.
-- [ ] **Step 3: implement:**
+- [x] **Step 2:** run → FAIL.
+- [x] **Step 3: implement:**
 
 ```ts
 // Real paths, state in the query string. pushState for navigation, replaceState for control changes.
@@ -892,7 +892,7 @@ export function onLinkClick(e: React.MouseEvent<HTMLAnchorElement>) {
 ```
 
   `App.tsx` maps `/` → `navigate("/explore" + search, {replace: true})`, `/explore` → Explore, `/explore/failures` → FailureGallery, `/scatter`, `/tax`, else a 404 view with links. Focus moves to the view's `<h1>` on path change (not on query change); `document.title` updates per view.
-- [ ] **Step 4:** run → pass. Commit `feat(web): history router with query-string state`.
+- [x] **Step 4:** run → pass. Commit `feat(web): history router with query-string state`.
 
 ## Task 9: Explore grid
 
@@ -906,7 +906,7 @@ Behaviour:
 - At 390 px: a panel list (one row per cell: thumbnail, key) and, under the open row, engine tabs (radio group) instead of the 5-column sheet. No horizontal page scroll.
 - Keyboard: Tab reaches the arms filter, then the grid. Inside the grid, arrow keys move between cells (roving tabindex), Enter/Space selects.
 
-- [ ] **Step 1: e2e config** (`web/e2e/playwright.config.ts`):
+- [x] **Step 1: e2e config** (`web/e2e/playwright.config.ts`):
 
 ```ts
 import { defineConfig } from "@playwright/test";
@@ -939,7 +939,7 @@ export const test = base.extend<{ clean: void }>({
 export { expect };
 ```
 
-- [ ] **Step 2: failing spec** (`explore.spec.ts`):
+- [x] **Step 2: failing spec** (`explore.spec.ts`):
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -987,9 +987,9 @@ test("no horizontal page scroll", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 3:** `npx playwright install chromium` (once), then `npm run e2e -- explore.spec.ts` → FAIL.
-- [ ] **Step 4:** implement `Explore.tsx` (reads `arm`, `cell`, `e`, `draw`, `vs` from `useQuery`; renders `ArmFilter`, `Player` when a cell is selected, then `Grid`) and `Grid.tsx` per the behaviour above and DESIGN.md.
-- [ ] **Step 5:** e2e passes on all four projects. Scan, commit `feat(web): Explore contact sheet with arms filter and refused slot`.
+- [x] **Step 3:** `npx playwright install chromium` (once), then `npm run e2e -- explore.spec.ts` → FAIL.
+- [x] **Step 4:** implement `Explore.tsx` (reads `arm`, `cell`, `e`, `draw`, `vs` from `useQuery`; renders `ArmFilter`, `Player` when a cell is selected, then `Grid`) and `Grid.tsx` per the behaviour above and DESIGN.md.
+- [x] **Step 5:** e2e passes on all four projects. Scan, commit `feat(web): Explore contact sheet with arms filter and refused slot`.
 
 ## Task 10: the player, frame clock and difference toggle
 
@@ -1002,7 +1002,7 @@ Behaviour:
 - Difference: a stacked view where the frame-0 PNG sits under the video and the video takes `mix-blend-mode: difference`. Same box, `object-fit: contain`, same intrinsic size, so they are pixel-aligned. Caption: "Clip minus its own first frame. Black means unchanged; this is what line drift measures." Frame 0 should read near-black.
 - If the clip fails to load (media host not live, preview subset), the player shows the poster and "This clip streams once the media host is live." No console error (handle `error` on the element; do not let the browser log an unhandled promise from `play()`).
 
-- [ ] **Step 1: failing unit test** for the frame maths (`useFrameClock.test.ts`):
+- [x] **Step 1: failing unit test** for the frame maths (`useFrameClock.test.ts`):
 
 ```ts
 import { it, expect } from "vitest";
@@ -1015,7 +1015,7 @@ it("maps media time to frames and back to mid-frame times", () => {
 });
 ```
 
-- [ ] **Step 2: failing e2e** (`player.spec.ts`), using the default pair:
+- [x] **Step 2: failing e2e** (`player.spec.ts`), using the default pair:
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -1059,7 +1059,7 @@ test("difference at frame 0 is near-black", async ({ page }) => {
 ```
 
   If the last test fails with a mean around 3–8 and a colour cast, the PNG's matrix is wrong: switch `RGB_FILTER` to BT.601 in `media.py`, re-derive, re-run, and record which one Chrome uses in LOG.md.
-- [ ] **Step 3:** run → FAIL. **Step 4:** implement `useFrameClock.ts` (`frameAt`, `timeFor`, the hook) and `Player.tsx`. Keyboard shortcuts are bound on the player region (not `window`) and ignored when focus is in a text input. **Step 5:** pass on all four projects; commit `feat(web): player with frame stepping, speed and the difference view`.
+- [x] **Step 3:** run → FAIL. **Step 4:** implement `useFrameClock.ts` (`frameAt`, `timeFor`, the hook) and `Player.tsx`. Keyboard shortcuts are bound on the player region (not `window`) and ignored when focus is in a text input. **Step 5:** pass on all four projects; commit `feat(web): player with frame stepping, speed and the difference view`.
 
 ## Task 11: drift curve, readouts, provenance
 
@@ -1072,7 +1072,7 @@ Behaviour:
 - `Readouts`: the five headlines (`h.line` …, `—` for null with "not defined for this clip"), each with `basisRank` ("12th steadiest of 33 for Gen-4.5"); motion `median_px` and `median_norm`; `departed` badge ("Departed: line drift over 10 px", threshold from `paper.departure_threshold_px`); hand tags with their taxonomy name and definition, linked to the failure gallery.
 - `Provenance` (a `<details>` open on desktop): sha256 (monospace, copy button), "Byte-identical to the release" plus "C2PA Content Credentials intact" when `c2pa`, the engine's `model_version`, the zip name (`engines[].zip`), DOI link (`paper.doi_version`), "CC BY 4.0, StillDrawn dataset (Aaron Smiles, 2026)". When `engine.notice` or `panel.notice`: a badge "Provider notice: please don't train on this clip" linking to `NOTICE-PROVIDERS.md` in the public repo.
 
-- [ ] **Step 1: failing unit test** (`curve.test.ts`):
+- [x] **Step 1: failing unit test** (`curve.test.ts`):
 
 ```ts
 import { it, expect } from "vitest";
@@ -1084,7 +1084,7 @@ it("aligns each series to frame indices", () => {
 });
 ```
 
-- [ ] **Step 2: failing e2e** (`curve.spec.ts`):
+- [x] **Step 2: failing e2e** (`curve.spec.ts`):
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -1119,7 +1119,7 @@ test("readouts show basis rank and provenance from the contract", async ({ page 
 });
 ```
 
-- [ ] **Step 3–5:** run → FAIL; implement; pass on all projects; commit `feat(web): synced drift curve, readouts and provenance`.
+- [x] **Step 3–5:** run → FAIL; implement; pass on all projects; commit `feat(web): synced drift curve, readouts and provenance`.
 
 ## Task 12: compare mode and the failure gallery
 
@@ -1131,7 +1131,7 @@ Behaviour:
 - On phones, A and B stack under the source; the chart stays one.
 - Failure gallery (`/explore/failures`): the 7 modes grouped by axis, plus A4 marked "candidate", each with its definition and exemplar posters linking to `/explore?cell=…&e=…&draw=…`. Exemplar ids come from `taxonomy.json` only.
 
-- [ ] **Step 1: failing e2e:**
+- [x] **Step 1: failing e2e:**
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -1156,7 +1156,7 @@ test("failure gallery lists the taxonomy's exemplars", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 2–4:** FAIL → implement → pass. Commit `feat(web): compare mode (act-tone-2 default) and failure gallery`.
+- [x] **Step 2–4:** FAIL → implement → pass. Commit `feat(web): compare mode (act-tone-2 default) and failure gallery`.
 
 ## Task 13: `/scatter`
 
@@ -1170,7 +1170,7 @@ Behaviour:
 - "Show as table" toggle renders the same points as a sortable table for screen readers and keyboard users.
 - Quoted figures (the engine-level ρ = 0.90, p = 0.083 caption) come from `paper.engine_rho_motion_drift`.
 
-- [ ] **Step 1: failing unit test:**
+- [x] **Step 1: failing unit test:**
 
 ```ts
 import { it, expect } from "vitest";
@@ -1191,7 +1191,7 @@ it("median cross matches the lens summary for line drift", () => {
 ```
 
   Note: `clips.json` rounds `h.line` and `motion.median_norm` to 4 significant figures while the fixture basis is full precision. If the medians differ at 1e-9, build the scatter's primary points from the fixture `basis` values joined by id (full precision) and keep `clips.json` for the other arms. Decide from the test, and record the choice in `scatterModel.ts`'s header comment.
-- [ ] **Step 2: failing e2e:**
+- [x] **Step 2: failing e2e:**
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -1208,7 +1208,7 @@ test("y metric switch updates the axis label", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 3–4:** FAIL → implement → pass. Commit `feat(web): motion vs drift scatter`.
+- [x] **Step 3–4:** FAIL → implement → pass. Commit `feat(web): motion vs drift scatter`.
 
 ## Task 14: `/tax`: lenses, shared FLIP leaderboard
 
@@ -1228,7 +1228,7 @@ Behaviour:
 - Gen-4.5's rank is framed as motion, never quality: copy says "leads once motion is priced at …", never "best".
 - **G4 review layout:** `/tax?view=compare` renders the three lenses side by side (three columns at 1440, stacked at 390), each with its own control and its own board, all three driven from the same basis. This is the page for the gate; it can be removed after G4.
 
-- [ ] **Step 1: failing unit tests** (`taxModel.test.ts`):
+- [x] **Step 1: failing unit tests** (`taxModel.test.ts`):
 
 ```ts
 import { it, expect } from "vitest";
@@ -1277,7 +1277,7 @@ it("announces order changes only", async () => {
 });
 ```
 
-- [ ] **Step 2: failing e2e** (`tax.spec.ts`):
+- [x] **Step 2: failing e2e** (`tax.spec.ts`):
 
 ```ts
 import { test, expect } from "./fixtures";
@@ -1320,8 +1320,8 @@ test("G4 compare layout shows three lenses", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 3:** run → FAIL.
-- [ ] **Step 4: implement.** `flip.ts`:
+- [x] **Step 3:** run → FAIL.
+- [x] **Step 4: implement.** `flip.ts`:
 
 ```ts
 // FLIP: measure, reorder (React commits), invert, play. Reduced motion → no animation.
@@ -1341,22 +1341,22 @@ export const measure = (container: HTMLElement) =>
 ```
 
   `Leaderboard` measures in a `useLayoutEffect` cleanup-free pattern: keep the previous rects in a ref updated after each `flip` call; call `flip` in `useLayoutEffect` when the order key changes. `taxModel.ts` maps query state to `boardFor` (price → `priceRanking(summary(basis), p)`, floor → `floorRanking`, band → `bandRanking`) and owns `floorScale` (log scale over [min motion, p90 motion], 0–100 → value).
-- [ ] **Step 5:** pass (Vitest and all four e2e projects). Commit `feat(web): Stillness Tax with three lenses and a FLIP leaderboard`.
+- [x] **Step 5:** pass (Vitest and all four e2e projects). Commit `feat(web): Stillness Tax with three lenses and a FLIP leaderboard`.
 
 ## Task 15: whole-app verification pass
 
-- [ ] `npm test` and `npm run e2e` green on all four projects; `npm run build` with `tsc --noEmit` clean.
-- [ ] Playwright MCP screenshots of every view at 1440 and 390, light and dark (into `.playwright-mcp/`); look at each, fix what reads wrong against DESIGN.md.
-- [ ] Keyboard-only walk: header nav → Explore grid → player → curve → compare menu → Scatter table → Tax control and slider. Focus always visible, no traps.
-- [ ] `break-ui` on the leaderboard and readouts (long engine names, n = 0, null headlines, huge numbers) behind a dev-only `?worst=1` flag; fix what breaks.
-- [ ] Contrast check of text tokens in both themes (WCAG AA), and the engine palette through the dataviz validator.
-- [ ] Commit `fix(web): verification pass` with whatever changed.
+- [x] `npm test` and `npm run e2e` green on all four projects; `npm run build` with `tsc --noEmit` clean.
+- [x] Playwright MCP screenshots of every view at 1440 and 390, light and dark (into `.playwright-mcp/`); look at each, fix what reads wrong against DESIGN.md.
+- [x] Keyboard-only walk: header nav → Explore grid → player → curve → compare menu → Scatter table → Tax control and slider. Focus always visible, no traps.
+- [x] `break-ui` on the leaderboard and readouts (long engine names, n = 0, null headlines, huge numbers) behind a dev-only `?worst=1` flag; fix what breaks.
+- [x] Contrast check of text tokens in both themes (WCAG AA), and the engine palette through the dataviz validator.
+- [x] Commit `fix(web): verification pass` with whatever changed.
 
 ## Task 16: preview deploy, then stop at G4
 
 **Files:** `tools/stage-preview.sh`, `REDEPLOY.md` (preview section), `.env.op` (gitignored; 1Password secret references only), `.env.op.example`.
 
-- [ ] **Step 1:** `tools/stage-preview.sh`:
+- [x] **Step 1:** `tools/stage-preview.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -1392,8 +1392,8 @@ du -sh "$out"
 ```
 
   The panel PNG originals link to the PNG path; in the preview that link 404s for all but none, so the player links the PNG only when `MEDIA_BASE` is the R2 host (flag `index.media_base === MEDIA_BASE`). Keep the staged size under 90 MB; if posters push it over, drop poster quality to 65 in `media.py` and re-derive.
-- [ ] **Step 2:** find the token for the personal Hobby team in 1Password by title only (`op item list --vault <Personal – Dev id> --format json | jq -r '.[].title' | grep -i vercel`). Write `.env.op` with one line, `VERCEL_TOKEN=` followed by the item's secret reference built from vault and item IDs (not names). Never print the value; verify with `op run --env-file=.env.op -- sh -c 'echo len ${#VERCEL_TOKEN}'`.
-- [ ] **Step 3:** first deploy links the project on the right team:
+- [x] **Step 2:** find the token for the personal Hobby team in 1Password by title only (`op item list --vault <Personal – Dev id> --format json | jq -r '.[].title' | grep -i vercel`). Write `.env.op` with one line, `VERCEL_TOKEN=` followed by the item's secret reference built from vault and item IDs (not names). Never print the value; verify with `op run --env-file=.env.op -- sh -c 'echo len ${#VERCEL_TOKEN}'`.
+- [ ] **Step 3 (blocked 28 Oct: the token is refused for the personal team; see STATUS):** first deploy links the project on the right team:
 
 ```bash
 cd deploy/preview
@@ -1408,6 +1408,11 @@ op run --env-file=../../.env.op -- vercel deploy --yes --scope "$VERCEL_SCOPE"
 - [ ] **Step 6: stop at G4.** Hand Aaron `/tax?view=compare` on the preview plus screenshots of the three lenses side by side at 1440 (light and dark), each with its one-sentence explanation and the reference setting that reproduces the paper. Ask him to pick the default lens and whether the other two stay as alternates. Nothing after G4 starts until he answers.
 
 ---
+
+## Execution notes (28 Oct)
+
+- Deviations: WebP via cwebp (Homebrew ffmpeg has no libwebp); a fifth arm view for the four H3 hazard cells with no primary draw; `basis.json` added to the contract for full-precision lens and scatter values; the motion series drawn as its own strip under the drift chart (one axis per chart); scrubbing the curve pauses playback; engines named, not coloured (docs/DESIGN.md); the band presets carry no edges in the URL.
+- Test order: the lib, model, router and Tax model were test-first. The Explore views were built before their e2e specs, which were written afterwards from this plan (they caught a missing phone h1, a seek race and a test that tabbed before the data loaded). The Scatter and Tax e2e specs were written before their views.
 
 ## Self-review (done while writing)
 

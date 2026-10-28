@@ -25,7 +25,14 @@ World models will need evaluations that price motion openly, and the tools for r
 
 ## How to run
 
-Each section is added as its phase lands.
+Needs a local copy of the public StillDrawn release (`STILLDRAWN_ROOT`, default `~/projects/stilldrawn`), uv, Node 22+ and ffmpeg with cwebp.
 
-- `pipeline/`: Python (uv). Builds the data contract from a local copy of the public StillDrawn release.
-- `web/`: Vite + React + TypeScript.
+```bash
+cd pipeline && uv sync && uv run pytest            # goldens, counts, contract schema
+uv run python -m stilldrawn_web.export             # writes web/public/data/v1/
+uv run python -m stilldrawn_web.media              # posters, frame-0 PNGs, panel WebPs into pipeline/out/media/ (clips symlinked)
+cd ../web && npm ci && npm run dev                 # http://localhost:5173, media served from pipeline/out/media at /media/
+npm test && npm run e2e                            # Vitest (incl. Python parity) and Playwright at 1440/390, light/dark
+```
+
+Design direction: [docs/DESIGN.md](docs/DESIGN.md). Deploying: [REDEPLOY.md](REDEPLOY.md).

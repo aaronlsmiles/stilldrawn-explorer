@@ -2,6 +2,15 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-28 — the views
+
+- The engines carry no colour. A colourblind-safety check on every five-colour palette we could find or search for (60,000 candidates) failed the moment all five engines share one scatter: at least one pair always sat too close even for full colour vision. So engines are named everywhere, data is ink, context is grey, and the one gold marks whatever the reader has selected. The constraint became the look: ink on paper, with a grease-pencil circle.
+- The contact sheet shows each clip at frame 96, four seconds in, not frame 0. Frame 0 is just the panel again; frame 96 is where the drift shows, so a glance across a row already tells the story before anything is clicked.
+- The difference view (the clip over its own first frame, blended by difference) only works if the reference frame is decoded exactly as the browser decodes the video. The clips carry no colour tags; browsers assume BT.709 for HD while the usual extraction default is BT.601. Extracting as BT.709 makes frame 0 cancel to near-black (mean difference under 2 of 255), and a test now holds it there.
+- The price-of-motion lens has a near-tie hiding in it: Wan 2.2, LTX-2.3 and Gen-4.5 sit almost on one straight line in (doublings of motion, median drift). That is why LTX-2.3 leads for only 0.04 px of price, and why one slider position can flip three places at once.
+- Every lens board is computed in the browser by a port of the pipeline's code and checked against the pipeline's own outputs: ranks exactly, values to 1e-9. Two traps found on the way: JavaScript's locale-aware sort puts "_" before ".", unlike Python, so ties broke differently until the comparison used code points; and rounding a band edge in the URL can drop the one clip that sits exactly on it, so URLs carry exact values and a preset always uses the pair's computed edges.
+- The matched-motion band ranks all five engines inside a pair's band, not just the pair. The paper's reversals still reproduce within each pair (H3 beats Gen-4 Turbo, 2.46 against 2.88 px; LTX-2.3 beats Gen-4 Turbo, 1.83 against 2.88 px), and the board shows what else lives in that band.
+
 ## 2026-10-28 — pipeline
 
 - The data contract builds from the public release alone: 373 clips in 2.2 MB of JSON, with per-frame series loaded per engine.

@@ -134,7 +134,7 @@ function finding(s: LensState, d: Derived, rows: ReturnType<typeof boardFor>, na
   }
   const range = s.lens === "floor" ? `clips that move at least ${norm(s.f)}` : `clips with motion from ${norm(s.lo)} to ${norm(s.hi)}`;
   if (!lead?.ranked) return `No engine has five ${range}.`;
-  return `Among ${range}, ${name(lead.engine)} has the lowest median line drift (${px(lead.score!)}, n = ${lead.n}).${thin ? ` ${thin} of ${rows.length} engines have too few clips to rank.` : ""}`;
+  return `Among ${range}, ${name(lead.engine)} has the lowest median line drift (${px(lead.score!)}, n = ${lead.n}).${thin ? ` ${thin} of ${rows.length} engines ${thin === 1 ? "has" : "have"} too few clips to rank.` : ""}`;
 }
 
 function LensPanel({ s, set, d, name, compact = false, paperCard }: {
@@ -182,9 +182,16 @@ export default function Tax() {
     ? { ...parsed, lo: d.pairs[parsed.preset].lo, hi: d.pairs[parsed.preset].hi } : parsed;
   const pb = core.paper.pairwise_bands.value;
   const status = core.paper.status_motion.value;
-  const [local, setLocal] = useState<Record<LensId, LensState>>(() => ({
-    price: defaultFor("price", d), floor: defaultFor("floor", d), band: defaultFor("band", d),
-  }));
+  // The compare layout keeps each lens's state locally; p, f and preset in the URL set where they start.
+  const [local, setLocal] = useState<Record<LensId, LensState>>(() => {
+    const p = Number(q.get("p")), f = Number(q.get("f")), k = q.get("preset");
+    const band = k && d.pairs[k]?.overlaps ? { lens: "band" as const, lo: d.pairs[k].lo, hi: d.pairs[k].hi, preset: k } : defaultFor("band", d);
+    return {
+      price: q.has("p") && Number.isFinite(p) ? { lens: "price", p: Math.max(0, Math.min(P_MAX, p)) } : defaultFor("price", d),
+      floor: q.has("f") && Number.isFinite(f) ? { lens: "floor", f } : defaultFor("floor", d),
+      band,
+    };
+  });
   useEffect(() => { document.title = "Stillness Tax · StillDrawn Explorer"; }, []);
   const paperCard = (
     <p className="paper-card" data-testid="paper-card">
