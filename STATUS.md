@@ -46,6 +46,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 | 1 | 2026-10-28 | Pipeline sub-plan A, tasks 1–6: loader, headlines, lenses, series, human check, export | 39 tests pass; reproduces the motion-confound outputs, α and the headline table exactly | yes | 0 |
 | 2 | 2026-10-28 | Sub-plan B (explorer views): contract additions (zip names, within-engine ρ, full-precision `basis.json`), media derivation (780 files; clips symlinked), design direction, Vite app, Explore, scatter, Stillness Tax with all three lenses and the G4 compare layout | Pipeline 47 tests; web 49 unit tests (lens parity: ranks exact, values 1e-9) and 124 e2e runs at 1440/390 × light/dark, console clean; `inspect.mjs --app` 0 FAIL on every view; frame-0 difference test passes (BT.709) | yes | 0 |
 | 3 | 2026-10-28 | Preview deploy to the personal Hobby team | **Blocked:** the stored token is refused for the team ("re-authenticate to this scope"); nothing deployed. Preview staged (81 MB) and verified locally | — | 0 |
+| 5 | 2026-10-28 | Preview deploy, after Aaron refreshed the token (scoped to the Nephele team only) | Deployed. **Incident:** the first deploy of the new project went to production and Vercel aliased it to the public `stilldrawn-explorer.vercel.app` (200, noindex) for about a minute; the alias was removed (now 404) and the script now forces `--target=preview`. The preview redeploy is behind Vercel login (302). No custom domain, nothing indexed | yes | 0 |
 | 4 | 2026-10-28 | G4 applied: two lenses (price default, band alternate); floor and compare layout archived, old links fall back to price | 49 unit, 120 e2e green; inspector 0 FAIL on both lenses | yes | 0 |
 
 ## Spend: £0 of £20 · £ per keeper: n/a
@@ -54,7 +55,6 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- **Aaron:** refresh the Vercel token for the personal team (create a token scoped to that team, store it over the same 1Password item with `~/.claude/scripts/op-new.sh`), then `tools/deploy-preview.sh`.
 - Phase 1, task 7 upload half: unblocked by G2.
 - Phase 3: blindpanel (sub-plan C), reconciling the kit design pass first.
 - Defended inspector warnings to revisit in Phase 5: Explore readouts beside provenance end apart at 1440 (provenance is a disclosure); Tax board and chart heights differ by lens; the scatter carries no hue until an engine is chosen (engines are named, never coloured; see docs/DESIGN.md).

@@ -11,4 +11,6 @@ cd "$here/deploy/preview"
 ENV_OP="${ENV_OP:-$HOME/projects/studio/tools/stilldrawn-explorer.env.op}"
 run() { op run --env-file="$ENV_OP" -- "$@"; }
 [ -f .vercel/project.json ] || run vercel link --yes --scope "$VERCEL_SCOPE" --project stilldrawn-explorer
-run vercel deploy --yes --scope "$VERCEL_SCOPE"
+# --target=preview: on 28 Oct a plain deploy of this new project went to production and Vercel aliased
+# it to the public <project>.vercel.app. A preview target keeps it behind Vercel login.
+run vercel deploy --yes --target=preview --scope "$VERCEL_SCOPE"
