@@ -8,10 +8,10 @@
 
 .sheet { display: grid; gap: 4px; }
 .sheet [role="row"] { display: contents; }
-.sheet-head > * { position: sticky; top: var(--bar-h); z-index: 3; background: var(--ground); padding: 6px 0; font-size: var(--fs-small); color: var(--muted);
+.sheet-head > * { position: sticky; top: var(--bar-h); z-index: 3; background: var(--ground); padding: 6px 0; font-size: 13px; color: var(--muted);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-eng.is-sel { color: var(--text); font-weight: 600; }
-.sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: var(--fs-small); line-height: 1.3; padding-right: 4px; }
+.sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: 13px; line-height: 1.3; padding-right: 4px; }
 .sl-panel { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-row.is-sel .sheet-label .sl-panel { text-decoration: underline 2px var(--gold-line); text-underline-offset: 3px; }
 .sheet-cell { min-width: 0; }
@@ -46,7 +46,7 @@
 .frame-media > img, .frame-media > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .frame-media.is-diff > video { mix-blend-mode: difference; }
 .frame-media.is-empty { outline: 1px dashed var(--control); outline-offset: -1px; background: var(--ground); }
-.cap { display: flex; justify-content: space-between; gap: 8px; padding-top: 6px; font-size: var(--fs-small); min-width: 0; }
+.cap { display: flex; justify-content: space-between; gap: 8px; padding-top: 6px; font-size: 13px; min-width: 0; }
 .cap-name { font-weight: 600; white-space: nowrap; }
 .cap-pinned .cap-name { box-shadow: inset 0 -3px 0 var(--gold); }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -63,10 +63,10 @@
 .plot { overflow: visible; }
 .plot .grid { stroke: var(--grid); stroke-width: 1; }
 .plot .base { stroke: var(--control); stroke-width: 1; }
-.plot .tick, .plot .axis-label, .plot .end-label { font-size: 11px; fill: var(--faint); font-family: var(--font); }
+.plot .tick, .plot .axis-label, .plot .end-label { font-size: 12px; fill: var(--faint); font-family: var(--font); }
 .plot .tick { font-variant-numeric: tabular-nums; }
 .plot .axis-label { fill: var(--muted); }
-.plot .end-label { fill: var(--text); font-size: 12px; }
+.plot .end-label { fill: var(--text); font-size: 13px; }
 .plot .ln path { fill: none; stroke-width: 2; stroke-linejoin: round; }
 .plot .ln-main path { stroke: var(--text); }
 .plot .ln-other path { stroke: var(--context); }
@@ -100,6 +100,12 @@
 .detail-empty { padding-top: 8px; }
 
 @media (max-width: 1180px) {
+  .detail-foot { grid-template-columns: 1fr; }
+}
+/* Tablet band: one column, the detail first, the sheet full width under it */
+@media (max-width: 1100px) {
+  .explore { grid-template-columns: 1fr; gap: 32px; }
+  .detail-pane { order: -1; position: static; max-height: none; overflow: visible; padding: 0; }
   .detail-foot { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {

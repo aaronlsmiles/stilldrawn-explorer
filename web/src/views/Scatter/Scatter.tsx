@@ -173,6 +173,10 @@ export default function Scatter() {
               </tbody>
             </table>
           </fieldset>
+          <div className="sc-pooled">
+            <p><strong>All five engines pooled</strong> ({paper.pooled_rho.value[metric].n} clips): ρ = <span className="num">{fmtRho(paper.pooled_rho.value[metric].rho)}</span>, p {pval(paper.pooled_rho.value[metric].p)}.</p>
+            {metric === "line" && <p><strong>Engine medians</strong> ({er.n_engines} points): ρ = <span className="num">{fmtRho(er.rho)}</span>, exact p = <span className="num">{er.p_exact_two_sided.toFixed(3)}</span>.</p>}
+          </div>
           <p className="faint small">Medians over each engine's standard cells. ρ within is the paper's Spearman correlation of motion with this measure inside each engine, with its p.</p>
         </section>
       </div>

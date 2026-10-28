@@ -4,12 +4,15 @@
 .sc-arms legend { float: left; width: 100%; }
 .check, .radio-row { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; cursor: pointer; white-space: nowrap; }
 .check input, .radio-row input { accent-color: var(--text); width: 16px; height: 16px; margin: 0; }
-.sc-body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr); gap: var(--gap); align-items: start; }
+.sc-body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr); gap: var(--gap); align-items: stretch; }
+.sc-body > .panel { align-self: stretch; }
+.sc-pooled { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.sc-pooled strong { font-weight: 600; }
 .sc-plot { min-width: 0; }
 .sc-chart svg { display: block; overflow: visible; }
 .sc-chart .grid { stroke: var(--grid); }
 .sc-chart .base { stroke: var(--control); }
-.sc-chart .tick, .sc-chart .axis-label, .sc-chart .cross-label { font-family: var(--font); font-size: 11px; fill: var(--faint); }
+.sc-chart .tick, .sc-chart .axis-label, .sc-chart .cross-label { font-family: var(--font); font-size: 12px; fill: var(--faint); }
 .sc-chart .tick { font-variant-numeric: tabular-nums; }
 .sc-chart .axis-label { fill: var(--muted); font-size: 12px; }
 .pt { fill: var(--context); fill-opacity: .7; stroke: var(--surface); stroke-width: 1; cursor: pointer; }
@@ -19,11 +22,11 @@
 .pt.is-hover { stroke: var(--text); stroke-width: 2; }
 .cross line { stroke: var(--text); stroke-width: 1.5; }
 .cross rect { fill: var(--text); }
-.cross .cross-label { fill: var(--text); font-size: 12px; font-weight: 600; }
+.cross .cross-label { fill: var(--text); font-size: 13px; font-weight: 600; }
 .cross.is-hl line { stroke: var(--gold-line); stroke-width: 2.5; }
 .cross.is-hl rect { fill: var(--gold-line); }
 .sc-note { margin-top: 8px; max-width: 90ch; }
-.sc-side { display: grid; gap: 12px; }
+.sc-side { display: grid; gap: 12px; align-content: start; }
 .sc-eng-list { border: 0; padding: 0; margin: 0; min-width: 0; }
 .sc-side tr.is-hl td:first-child { box-shadow: inset 3px 0 0 var(--gold-line); padding-left: 8px; }
 .sc-table-wrap { max-height: 560px; overflow: auto; }
