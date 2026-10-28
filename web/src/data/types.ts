@@ -66,7 +66,9 @@ export type Paper = {
   status_motion: Src<string>;
 };
 
+export type BasisRow = { id: string; engine: string; motion: number; drift: number | null };
 export type Core = {
+  basis: BasisRow[];
   index: Index; engines: Engine[]; panels: Panel[]; clips: Clip[]; paper: Paper; taxonomy: Taxonomy;
   engine: (id: string) => Engine;
   panel: (id: string) => Panel | undefined;

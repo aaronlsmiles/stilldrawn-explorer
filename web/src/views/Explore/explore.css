@@ -63,7 +63,8 @@
 .plot { overflow: visible; }
 .plot .grid { stroke: var(--grid); stroke-width: 1; }
 .plot .base { stroke: var(--control); stroke-width: 1; }
-.plot .tick, .plot .axis-label, .plot .end-label { font-size: 11px; fill: var(--faint); font-family: var(--font); font-variant-numeric: tabular-nums; }
+.plot .tick, .plot .axis-label, .plot .end-label { font-size: 11px; fill: var(--faint); font-family: var(--font); }
+.plot .tick { font-variant-numeric: tabular-nums; }
 .plot .axis-label { fill: var(--muted); }
 .plot .end-label { fill: var(--text); font-size: 12px; }
 .plot .ln path { fill: none; stroke-width: 2; stroke-linejoin: round; }

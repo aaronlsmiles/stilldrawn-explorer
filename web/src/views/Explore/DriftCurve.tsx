@@ -1,6 +1,7 @@
 // The drift curve: the chosen per-frame series, with the motion series in its own strip
 // underneath (one axis per chart), a gold playhead, and scrubbing by pointer or keyboard.
-import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useRef, type KeyboardEvent, type PointerEvent } from "react";
+import { useWidth } from "../../ui/useSize";
 import { scaleLinear } from "d3-scale";
 import { line as d3line } from "d3-shape";
 import type { SeriesKey } from "../../data/types";
@@ -8,25 +9,11 @@ import { seriesFrames, valueAtFrame } from "./curve";
 
 export type CurveLine = { label: string; values: number[]; emphasis: boolean };
 
-function useWidth<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  const [w, setW] = useState(0);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => setW(Math.round(e.contentRect.width)));
-    ro.observe(el);
-    setW(Math.round(el.getBoundingClientRect().width));
-    return () => ro.disconnect();
-  }, []);
-  return [ref, w] as const;
-}
-
 const M = { l: 44, r: 72, t: 8, b: 22 };
 
-function Plot({ lines, seriesKey, nFrames, frame, width, height, yLabel, ticks = 4, showX }: {
+function Plot({ lines, seriesKey, nFrames, frame, width, height, yLabel, ticks = 4, showX, endLabels = true }: {
   lines: CurveLine[]; seriesKey: SeriesKey; nFrames: number; frame: number; width: number; height: number;
-  yLabel: string; ticks?: number; showX: boolean;
+  yLabel: string; ticks?: number; showX: boolean; endLabels?: boolean;
 }) {
   const { start, step } = seriesFrames(seriesKey);
   const all = lines.flatMap((l) => l.values).filter(Number.isFinite);
@@ -52,7 +39,7 @@ function Plot({ lines, seriesKey, nFrames, frame, width, height, yLabel, ticks =
         return (
           <g key={l.label} className={l.emphasis ? "ln ln-main" : "ln ln-other"}>
             <path d={path(l.values) ?? ""} />
-            {lines.length > 1 && (
+            {endLabels && lines.length > 1 && (
               <text x={x(start + lastI * step) + 6} y={y(l.values[lastI])} dy="0.32em" className="end-label">{l.label}</text>
             )}
           </g>
@@ -89,7 +76,7 @@ export function DriftCurve({ lines, motion, seriesKey, nFrames, frame, onSeek, y
       {width > 0 && (
         <>
           <Plot lines={lines} seriesKey={seriesKey} nFrames={nFrames} frame={frame} width={width} height={188} yLabel={yLabel} showX={false} />
-          <Plot lines={motion} seriesKey="motion" nFrames={nFrames} frame={frame} width={width} height={84} yLabel="Optical flow (px)" ticks={2} showX />
+          <Plot lines={motion} seriesKey="motion" nFrames={nFrames} frame={frame} width={width} height={84} yLabel="Optical flow (px)" ticks={2} showX endLabels={false} />
         </>
       )}
     </div>
@@ -102,7 +89,7 @@ export function SeriesTable({ lines, seriesKey }: { lines: CurveLine[]; seriesKe
   const rows = Array.from({ length: n }, (_, i) => i).filter((i) => i % 8 === 0 || i === n - 1);
   return (
     <table className="data series-table">
-      <thead><tr><th className="num">Frame</th>{lines.map((l) => <th key={l.label} className="num">{l.label}</th>)}</tr></thead>
+      <thead><tr><th className="r">Frame</th>{lines.map((l) => <th key={l.label} className="r">{l.label}</th>)}</tr></thead>
       <tbody>
         {rows.map((i) => (
           <tr key={i}><td className="num">{start + i * step}</td>

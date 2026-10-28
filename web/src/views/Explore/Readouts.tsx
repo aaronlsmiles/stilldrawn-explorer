@@ -26,7 +26,7 @@ export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
     <section className="panel readouts" data-testid="readouts" aria-labelledby="readouts-h">
       <h2 id="readouts-h">Readouts</h2>
       <table className="data" data-testid={clips.length > 1 ? "compare-table" : undefined}>
-        <thead><tr><th>Headline</th>{clips.map((c) => <th key={c.id} className="num">{name(c)}</th>)}</tr></thead>
+        <thead><tr><th>Headline</th>{clips.map((c) => <th key={c.id} className="r">{name(c)}</th>)}</tr></thead>
         <tbody>
           {METRICS.map((m) => (
             <tr key={m}>

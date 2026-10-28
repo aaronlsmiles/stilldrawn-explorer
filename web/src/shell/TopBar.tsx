@@ -13,13 +13,22 @@ const NAV = [
 type Theme = "light" | "dark";
 const systemTheme = (): Theme => (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
+/** Follows the system until the reader picks a theme; only an explicit pick is stored. */
 function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => (document.documentElement.dataset.theme as Theme) || systemTheme());
+  const [picked, setPicked] = useState<Theme | null>(() => (document.documentElement.dataset.theme as Theme) || null);
+  const [system, setSystem] = useState<Theme>(systemTheme);
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    try { localStorage.setItem("sd-theme", theme); } catch { /* storage may be unavailable */ }
-  }, [theme]);
-  return [theme, setTheme] as const;
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const on = () => setSystem(mq.matches ? "dark" : "light");
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  const pick = (t: Theme) => {
+    setPicked(t);
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem("sd-theme", t); } catch { /* storage may be unavailable */ }
+  };
+  return [picked ?? system, pick] as const;
 }
 
 export function TopBar() {

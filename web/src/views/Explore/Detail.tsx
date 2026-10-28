@@ -29,7 +29,7 @@ function Finding({ clip, core }: { clip: Clip; core: Core }) {
   const name = core.engine(clip.engine).name;
   return (
     <>
-      <strong className="num">{name}: line drift {px(clip.h.line!)}</strong>
+      <strong>{name}: line drift {px(clip.h.line!)}</strong>
       {r ? `, ${ordinal(r.rank)} lowest of ${name}'s ${r.of} cells` : ""}; motion {norm(clip.motion.median_norm)}.
     </>
   );
@@ -65,7 +65,7 @@ function Curve({ a, b, core, series, player, set }: {
         <h2 id="curve-h">Per frame</h2>
         <Segmented label="Series" hideLabel value={key} options={opts} onChange={(v) => set({ series: v === "line" ? null : v })} />
       </div>
-      <p className="curve-read num" aria-hidden="true">{vt(player.frame)}</p>
+      <p className="curve-read" aria-hidden="true">{vt(player.frame)}</p>
       <DriftCurve lines={lines} motion={motion} seriesKey={key} nFrames={a.n_frames} frame={player.frame}
         onSeek={(f) => { player.pause(); player.seekFrame(f); }} yLabel={SERIES[key].axis} valueText={vt} />
       <button type="button" className="btn-text small" aria-expanded={table} onClick={() => setTable(!table)}>

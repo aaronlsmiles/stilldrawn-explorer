@@ -73,7 +73,7 @@ table.data th { font-weight: 400; font-size: var(--fs-small); color: var(--faint
 table.data td { padding: 8px; border-top: 1px solid var(--rule); vertical-align: baseline; }
 table.data th:first-child, table.data td:first-child { padding-left: 0; }
 table.data th:last-child, table.data td:last-child { padding-right: 0; }
-table.data .num { text-align: right; white-space: nowrap; }
+table.data .num, table.data .r { text-align: right; white-space: nowrap; }
 .dash { color: var(--faint); }
 .pill-neg { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; background: var(--neg-bg); color: var(--neg-ink); font-size: var(--fs-small); font-weight: 600; white-space: nowrap; flex: none; }
 .pill { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; background: var(--raised); color: var(--text); font-size: var(--fs-small); white-space: nowrap; flex: none; }
