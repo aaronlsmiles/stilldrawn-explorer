@@ -14,6 +14,29 @@ Needs two gitignored files:
 
 The preview URL is behind Vercel's deployment protection: only the team's logged-in members can open it.
 
+### What the staged folder holds (`deploy/preview/`)
+
+| Path | What |
+|---|---|
+| `public/` | the built app (`web/dist`), including `data/blindpanel/stilldrawn/{study,reveal}.json` |
+| `api/` | `submit.ts`, `tally.ts`, `keepwarm.ts` and `_lib.ts` from `web/api/` (tests excluded) |
+| `package.json`, `package-lock.json`, `vendor/blindpanel-<v>.tgz` | Vercel runs `npm install` here and builds the functions against the vendored kit |
+| `vercel.json` | SPA rewrite (except `api/`, `assets/`, `data/`, `favicon`), the study shipped with each function, a daily cron for `/api/keepwarm`, `noindex` |
+
+`tools/check-stage.mjs` checks this layout at the end of every stage. Vercel Cron calls **production** deployments only, so on a preview `/api/keepwarm` is called by hand with `Authorization: Bearer $CRON_SECRET`.
+
+### The kit (blindpanel)
+
+```bash
+tools/vendor-blindpanel.sh      # needs ../blindpanel at a clean commit
+```
+
+It builds and packs the kit, builds the StillDrawn study into `web/public/data/blindpanel/stilldrawn/`, writes `web/vendor/blindpanel.lock.json` (version, tag, commit, sha256 of the tarball and the study files) and reinstalls the tarball in `web/`. A unit test holds the lock, the tarball and the study files together.
+
+### Environment variables (Vercel project, preview environment)
+
+`SUPABASE_URL`, `SUPABASE_SECRET_KEY` (the `sb_secret_…` key; server only) and `CRON_SECRET`. Each value is piped from `op read` into `vercel env add <NAME> preview`, never typed or echoed. Production gets the same three at G5.
+
 ## Media (R2)
 
 ```bash

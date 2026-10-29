@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Build web/ and stage a static preview in deploy/preview/ (its .vercel/ link is kept).
+# Build web/ and stage deploy/preview/ (its .vercel/ link is kept): the built app under public/,
+# the API functions under api/ with a package.json that installs the vendored blindpanel tarball
+# (Vercel runs npm install and builds the functions there; it cannot see ../blindpanel), and vercel.json.
 # Media come from the media host named in the contract (index.json media_base), so the
 # preview ships the app and its data only. Before the media host was live (until 28 Oct),
 # this script shipped a hash-checked subset of clips instead; see git history.
@@ -13,13 +15,34 @@ code="$(curl -s -o /dev/null -w '%{http_code}' -r 0-0 "${base}clips/wan22/act-to
 
 (cd "$here/web" && npm ci --silent && VITE_MEDIA_BASE= npm run build --silent)
 mkdir -p "$out"
-rsync -a --delete --exclude .vercel "$here/web/dist/" "$out/"
+find "$out" -mindepth 1 -maxdepth 1 ! -name .vercel -exec rm -rf {} +
+mkdir -p "$out/public" "$out/api" "$out/vendor"
+rsync -a "$here/web/dist/" "$out/public/"
+for f in "$here"/web/api/*.ts; do case "$f" in *.test.ts) ;; *) cp "$f" "$out/api/" ;; esac; done
+tarball="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['tarball'])" "$here/web/vendor/blindpanel.lock.json")"
+cp "$here/web/vendor/$tarball" "$out/vendor/"
+# the functions' type check on Vercel needs Node's types; same pin as web/
+typesnode="$(node -p "require('$here/web/package.json').devDependencies['@types/node']")"
+cat > "$out/package.json" <<JSON
+{
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "dependencies": { "blindpanel": "file:vendor/$tarball" },
+  "devDependencies": { "@types/node": "$typesnode" }
+}
+JSON
+(cd "$out" && npm install --package-lock-only --silent --no-audit --no-fund)
+# Cron jobs run on production deployments only; on a preview, /api/keepwarm is called by hand.
 cat > "$out/vercel.json" <<'JSON'
 {
-  "rewrites": [{ "source": "/((?!assets/|data/|favicon).*)", "destination": "/index.html" }],
+  "rewrites": [{ "source": "/((?!api/|assets/|data/|favicon).*)", "destination": "/index.html" }],
+  "functions": { "api/*.ts": { "includeFiles": "public/data/blindpanel/stilldrawn/study.json" } },
+  "crons": [{ "path": "/api/keepwarm", "schedule": "17 6 * * *" }],
   "headers": [
     { "source": "/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
   ]
 }
 JSON
 du -sh "$out"
+node "$here/tools/check-stage.mjs" "$out"
