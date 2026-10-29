@@ -10,9 +10,7 @@ import { Segmented } from "../../ui/Segmented";
 import { Link } from "../../ui/Link";
 import { Grid, PanelList } from "./Grid";
 import { Detail, DetailEmpty } from "./Detail";
-
-// The default deep link: the site concept's drift test.
-const DEFAULT = { cell: "act-tone-2_campush", e: "gen4.5", vs: "wan22" };
+import { DEFAULT } from "./defaults";
 
 export function useMedia(q: string) {
   const [m, setM] = useState(() => matchMedia(q).matches);

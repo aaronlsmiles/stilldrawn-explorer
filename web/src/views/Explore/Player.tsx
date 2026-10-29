@@ -2,6 +2,7 @@
 // with the difference view: the clip over its own frame 0, blended by difference.
 import { useState, type Ref } from "react";
 import type { Clip, Engine, Panel } from "../../data/types";
+import { PANEL_SIZES, srcset, type Variants } from "../../data/srcset";
 import { mb } from "../../lib/format";
 import { Segmented } from "../../ui/Segmented";
 import type { Player } from "./useFrameClock";
@@ -39,15 +40,17 @@ function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig,
 }
 
 /** `deferred`: on phones the clips' posters and data wait until the source panel (the largest paint) has loaded. */
-export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, lazyBig, deferred = false, onPanelLoad }: {
-  panel: Panel | undefined; a: Clip; b?: Clip; engines: (id: string) => Engine; url: (p: string) => string;
+export function Media({ panel, a, b, engines, url, variants, player, diff, panelOriginal, lazyBig, deferred = false, onPanelLoad }: {
+  panel: Panel | undefined; a: Clip; b?: Clip; engines: (id: string) => Engine; url: (p: string) => string; variants: Variants;
   player: Player; diff: boolean; panelOriginal: string | null; lazyBig: boolean; deferred?: boolean; onPanelLoad?: () => void;
 }) {
   return (
     <div className={`media ${b ? "media-3" : "media-2"}`}>
       <figure className="frame">
         <div className="frame-media" style={{ aspectRatio: panel ? `${panel.width} / ${panel.height}` : "16 / 9" }}>
-          {panel && <img src={url(panel.media.webp)} alt={panel.alt} width={panel.width} height={panel.height} decoding="async" fetchPriority="high" onLoad={onPanelLoad} onError={onPanelLoad} />}
+          {panel && <img src={url(panel.media.webp)} srcSet={srcset(url, panel.media.webp, panel.width, variants.panels)}
+            sizes={b ? PANEL_SIZES.compare : PANEL_SIZES.single} alt={panel.alt} width={panel.width} height={panel.height}
+            decoding="async" fetchPriority="high" onLoad={onPanelLoad} onError={onPanelLoad} />}
         </div>
         <figcaption className="cap">
           <span className="cap-name">Source panel</span>

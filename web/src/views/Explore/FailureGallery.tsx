@@ -3,6 +3,7 @@ import "./explore.css";
 import { useCore } from "../../data/core";
 import { rowKeyOf } from "../../data/model";
 import { mediaUrl } from "../../data/media";
+import { srcset } from "../../data/srcset";
 import { MOTION_WORDS } from "../../data/metrics";
 import { Link } from "../../ui/Link";
 
@@ -11,6 +12,7 @@ const AXIS: Record<string, string> = { register: "Register: is it still ink?", c
 export default function FailureGallery() {
   const core = useCore();
   const url = (p: string) => mediaUrl(core.index.media_base, p);
+  const v = core.index.variants;
   const modes = Object.entries(core.taxonomy);
   const axes = [...new Set(modes.map(([, m]) => m.axis))];
   useEffect(() => {
@@ -39,7 +41,9 @@ export default function FailureGallery() {
                   return (
                     <li key={id}>
                       <Link href={href} className="g-clip" data-testid="exemplar">
-                        <img src={url(c.media.poster)} alt="" width={640} height={Math.round((640 * c.height) / c.width)} loading="lazy" decoding="async" />
+                        <img src={url(c.media.poster)} srcSet={srcset(url, c.media.poster, v.poster_width, v.posters)}
+                          sizes="(max-width: 760px) calc(50vw - 24px), 240px" alt="" width={640} height={Math.round((640 * c.height) / c.width)}
+                          loading="lazy" decoding="async" />
                         <span className="g-cap"><strong>{core.engine(c.engine).name}</strong> · {c.panel}, {(MOTION_WORDS[c.motion_class] ?? c.motion_class).toLowerCase()}</span>
                       </Link>
                     </li>

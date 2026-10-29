@@ -147,7 +147,7 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
             onChange={(d) => set({ draw: d === "r1" ? null : d })} />
         )}
       </div>
-      <Media panel={panel} a={a} b={b} engines={core.engine} url={url} player={player} diff={diff} lazyBig={!wide}
+      <Media panel={panel} a={a} b={b} engines={core.engine} url={url} variants={core.index.variants} player={player} diff={diff} lazyBig={!wide}
         deferred={!painted} onPanelLoad={() => setPainted(true)}
         panelOriginal={live && panel ? url(panel.media.png) : null} />
       <Toolbar player={player} nFrames={a.n_frames} diff={diff} setDiff={(d) => set({ diff: d ? "1" : null })} big={big} bytes={a.bytes} />

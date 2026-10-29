@@ -8,7 +8,9 @@ Layout (mirrors stilldrawn/v1.0.0/ on the media host):
   clips/<engine>/<id>.mp4   symlink to the released file: never re-encoded (288 carry C2PA)
   panels/<id>.png           symlink to dataset/panels/<id>.png
   panels/<id>.webp          display copy
+  panels/<id>-w<W>.webp     the display copy at W px wide, W in PANEL_WIDTHS below its own width
   posters/<id>.webp         frame 96, 640 px wide (frame 0 is just the panel again)
+  posters/<id>-w<W>.webp    the poster at W px wide, W in POSTER_WIDTHS
   frame0/<id>.png           frame 0 at native size, for the difference view
 
 Frames are extracted with ffmpeg; WebP is encoded with cwebp (libwebp), because
@@ -34,6 +36,11 @@ from . import release_root
 from .load import load_clips
 
 POSTER_FRAME = 96
+# srcset steps (index.json "variants"): a phone's source panel needs 640 px at most at 2x, a
+# contact-sheet frame 320, where the display copies are 1344 and 640 px wide
+PANEL_WIDTHS = (320, 640, 960)
+POSTER_WIDTH = 640
+POSTER_WIDTHS = (320,)
 # The clips carry no colour tags. Browsers decode untagged HD as BT.709 limited range;
 # ffmpeg's default is BT.601, which would tint the difference view.
 RGB_FILTER = "scale=in_color_matrix=bt709:in_range=tv:out_range=pc,format=rgb24"
@@ -47,6 +54,25 @@ AI_CRAWLERS = ["GPTBot", "ChatGPT-User", "OAI-SearchBot", "ClaudeBot", "anthropi
                "Amazonbot", "cohere-ai", "Diffbot", "ImagesiftBot", "Omgilibot", "Timpibot"]
 # The release asks people not to train on these clips (NOTICE-PROVIDERS.md).
 ROBOTS = "".join(f"User-agent: {b}\nDisallow: /\n\n" for b in AI_CRAWLERS) + "User-agent: *\nAllow: /\n"
+
+
+def variant(path: str, w: int) -> str:
+    """The contract's rule for a display copy at width w: panels/x.webp -> panels/x-w640.webp."""
+    stem, ext = path.rsplit(".", 1)
+    return f"{stem}-w{w}.{ext}"
+
+
+def webp_size(path: Path) -> tuple[int, int]:
+    b = Path(path).read_bytes()[:30]
+    kind = b[12:16]
+    if kind == b"VP8X":
+        return int.from_bytes(b[24:27], "little") + 1, int.from_bytes(b[27:30], "little") + 1
+    if kind == b"VP8 ":
+        return int.from_bytes(b[26:28], "little") & 0x3FFF, int.from_bytes(b[28:30], "little") & 0x3FFF
+    if kind == b"VP8L":
+        bits = int.from_bytes(b[21:25], "little")
+        return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+    raise ValueError(f"not a WebP: {path}")
 
 
 def png_size(path: Path) -> tuple[int, int]:
@@ -74,9 +100,10 @@ def _ffmpeg(dst: Path, args: list[str]) -> None:
     subprocess.run(["ffmpeg", "-v", "error", "-y", *args, str(dst)], check=True)
 
 
-def _webp(dst: Path, src_png: Path, quality: int) -> None:
+def _webp(dst: Path, src_png: Path, quality: int, width: int | None = None) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(["cwebp", "-quiet", "-q", str(quality), str(src_png), "-o", str(dst)], check=True)
+    resize = ["-resize", str(width), "0"] if width else []
+    subprocess.run(["cwebp", "-quiet", "-q", str(quality), *resize, str(src_png), "-o", str(dst)], check=True)
 
 
 def derive(root: Path | None = None, out: Path = OUT, clips=None, panels=None) -> dict:
@@ -92,13 +119,16 @@ def derive(root: Path | None = None, out: Path = OUT, clips=None, panels=None) -
             _ffmpeg(f0, ["-i", str(c.mp4), "-frames:v", "1", "-vf", RGB_FILTER])
             written += 1
         poster = out / "posters" / f"{c.id}.webp"
-        if not _fresh(poster, c.mp4):
+        sizes = [(poster, None)] + [(out / variant(f"posters/{c.id}.webp", w), w) for w in POSTER_WIDTHS]
+        stale = [(p, w) for p, w in sizes if not _fresh(p, c.mp4)]
+        if stale:
             tmp = poster.with_suffix(".tmp.png")
-            vf = f"select=eq(n\\,{POSTER_FRAME}),scale=640:-2:flags=lanczos,{RGB_FILTER}"
+            vf = f"select=eq(n\\,{POSTER_FRAME}),scale={POSTER_WIDTH}:-2:flags=lanczos,{RGB_FILTER}"
             _ffmpeg(tmp, ["-i", str(c.mp4), "-vf", vf, "-frames:v", "1"])
-            _webp(poster, tmp, 78)
+            for p, w in stale:
+                _webp(p, tmp, 78, w)
+                written += 1
             tmp.unlink()
-            written += 1
     for pid in panels:
         src = panel_dir / f"{pid}.png"
         linked += _link(out / "panels" / f"{pid}.png", src)
@@ -106,6 +136,11 @@ def derive(root: Path | None = None, out: Path = OUT, clips=None, panels=None) -
         if not _fresh(webp, src):
             _webp(webp, src, 85)       # panels are at most 1344 px wide already
             written += 1
+        for w in PANEL_WIDTHS:
+            v = out / variant(f"panels/{pid}.webp", w)
+            if w < png_size(src)[0] and not _fresh(v, src):
+                _webp(v, src, 85, w)
+                written += 1
     return {"written": written, "linked": linked, "clips": len(clips), "panels": len(panels)}
 
 
@@ -126,9 +161,12 @@ def plan_uploads(out: Path = OUT, clips=None, panels=None, root: Path | None = N
         items += [Item(f"clips/{c.cid.engine}/{c.id}.mp4", out / "clips" / c.cid.engine / f"{c.id}.mp4", TYPES[".mp4"], c.sha256),
                   Item(f"posters/{c.id}.webp", out / "posters" / f"{c.id}.webp", TYPES[".webp"]),
                   Item(f"frame0/{c.id}.png", out / "frame0" / f"{c.id}.png", TYPES[".png"])]
+        items += [Item(k, out / k, TYPES[".webp"]) for k in (variant(f"posters/{c.id}.webp", w) for w in POSTER_WIDTHS)]
     for pid in panels:
         items += [Item(f"panels/{pid}.png", out / "panels" / f"{pid}.png", TYPES[".png"]),
                   Item(f"panels/{pid}.webp", out / "panels" / f"{pid}.webp", TYPES[".webp"])]
+        own = png_size(out / "panels" / f"{pid}.png")[0]
+        items += [Item(k, out / k, TYPES[".webp"]) for k in (variant(f"panels/{pid}.webp", w) for w in PANEL_WIDTHS if w < own)]
     return items
 
 

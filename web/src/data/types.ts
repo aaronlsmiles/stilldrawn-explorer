@@ -10,6 +10,7 @@ export type Index = {
   media_base: string;
   counts: Record<Arm, number>;
   missing_cells: { cell: string; reason: string }[];
+  variants: { panels: number[]; posters: number[]; poster_width: number; rule: string };
 };
 
 export type Engine = {

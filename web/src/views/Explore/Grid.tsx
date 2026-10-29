@@ -5,6 +5,7 @@ import type { Core } from "../../data/types";
 import type { GridRow } from "../../data/model";
 import { MOTION_WORDS } from "../../data/metrics";
 import { Keep } from "../../ui/Keep";
+import { srcset } from "../../data/srcset";
 
 export type Pick = (row: string, engine: string) => void;
 
@@ -16,6 +17,7 @@ export function Grid({ rows, core, url, sel, onPick }: {
   const ref = useRef<HTMLDivElement>(null);
   const cols = rows[0]?.cells.map((c) => c.engine) ?? [];
   const missing = new Map(core.index.missing_cells.map((m) => [m.cell, m.reason]));
+  const v = core.index.variants;
   const selR = Math.max(0, rows.findIndex((r) => r.key === sel.row));
   const selC = Math.max(0, cols.indexOf(sel.engine ?? ""));
   const onKey = (e: KeyboardEvent) => {
@@ -69,8 +71,8 @@ export function Grid({ rows, core, url, sel, onPick }: {
                 <button type="button" className={`frame-btn${on ? " keep" : ""}`} data-r={r} data-c={c} tabIndex={tab}
                   aria-label={label + (cell.draws > 1 ? `, ${cell.draws} draws` : "")} aria-current={on ? "true" : undefined}
                   onClick={() => onPick(row.key, cell.engine)}>
-                  <img src={url(cell.clip.media.poster)} alt="" width={640} height={Math.round((640 * cell.clip.height) / cell.clip.width)}
-                    loading="lazy" decoding="async" />
+                  <img src={url(cell.clip.media.poster)} srcSet={srcset(url, cell.clip.media.poster, v.poster_width, v.posters)} sizes="160px"
+                    alt="" width={640} height={Math.round((640 * cell.clip.height) / cell.clip.width)} loading="lazy" decoding="async" />
                   {cell.draws > 1 && <span className="draws num" aria-hidden="true">{cell.draws}</span>}
                   {on && <Keep />}
                 </button>
@@ -92,7 +94,8 @@ export function PanelList({ rows, core, url, onPick }: { rows: GridRow[]; core: 
         return (
           <li key={row.key} data-testid="panel-row">
             <button type="button" className="plist-btn" onClick={() => first && onPick(row.key, first.engine)}>
-              {panel && <img src={url(panel.media.webp)} alt="" width={96} height={55} loading="lazy" decoding="async" />}
+              {panel && <img src={url(panel.media.webp)} srcSet={srcset(url, panel.media.webp, panel.width, core.index.variants.panels)} sizes="96px"
+                alt="" width={96} height={55} loading="lazy" decoding="async" />}
               <span className="plist-text">
                 <span className="sl-panel">{rowLabel(row)}</span>
                 <span className="faint">{MOTION_WORDS[row.motion_class] ?? row.motion_class} · {row.cells.filter((c) => c.clip).length} engines</span>

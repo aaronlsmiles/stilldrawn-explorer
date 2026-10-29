@@ -31,6 +31,20 @@ def test_poster_and_panel_display_copies(out):
     assert (out / "panels" / "act-tone-2.png").is_symlink()
 
 
+def test_display_copies_come_in_srcset_widths(out):
+    # a phone's source panel and the contact sheet's frames need far fewer pixels than the display copy
+    assert [media.webp_size(out / "panels" / f"act-tone-2-w{w}.webp")[0] for w in media.PANEL_WIDTHS] == [320, 640, 960]
+    assert media.webp_size(out / "panels" / "act-tone-2-w640.webp")[1] == 366          # 768 × 640 / 1344
+    assert media.webp_size(out / "posters" / f"{ONE}-w320.webp")[0] == 320
+    assert media.webp_size(out / "posters" / f"{ONE}.webp")[0] == 640
+    assert (out / "panels" / "act-tone-2-w640.webp").stat().st_size < (out / "panels" / "act-tone-2.webp").stat().st_size / 2
+
+
+def test_variant_paths_follow_the_contract_rule():
+    assert media.variant("panels/act-tone-2.webp", 640) == "panels/act-tone-2-w640.webp"
+    assert media.variant("posters/a_b_c-r2.webp", 320) == "posters/a_b_c-r2-w320.webp"
+
+
 def test_rerun_is_idempotent(out, root, clips):
     files = [p for p in out.rglob("*") if p.is_file() and not p.is_symlink()]
     before = {p: p.stat().st_mtime_ns for p in files}
@@ -87,7 +101,9 @@ def test_plan_mirrors_the_media_layout(items):
     assert by[f"frame0/{ONE}.png"].content_type == "image/png"
     assert by["panels/act-tone-2.png"].content_type == "image/png"
     assert by["panels/act-tone-2.webp"].content_type == "image/webp"
-    assert len(items) == 2 * 3 + 2
+    assert by[f"posters/{ONE}-w320.webp"].content_type == "image/webp"
+    assert {f"panels/act-tone-2-w{w}.webp" for w in (320, 640, 960)} <= set(by)
+    assert len(items) == 2 * (3 + 1) + 2 + 3
 
 
 def test_upload_sets_immutable_headers_and_records_the_hash(items):

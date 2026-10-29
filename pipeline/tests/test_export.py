@@ -82,6 +82,13 @@ def test_clips_contract(contract):
         assert set(r["h"]) == {"line", "tone", "edge", "style", "closure"}
 
 
+def test_index_declares_the_display_widths(contract):
+    out, _ = contract
+    v = _load(out / "index.json")["variants"]
+    assert v["panels"] == [320, 640, 960] and v["posters"] == [320] and v["poster_width"] == 640
+    assert v["rule"] == "{stem}-w{w}.webp, for each w below the item's own width"
+
+
 def test_panels_and_notice(contract):
     out, _ = contract
     panels = _load(out / "panels.json")

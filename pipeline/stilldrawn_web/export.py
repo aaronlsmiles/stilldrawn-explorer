@@ -21,6 +21,7 @@ from .human import AXES, krippendorff_alpha_ordinal, load_ratings, protocol_text
 from .lenses import (MIN_N, REF_ENGINE, band_ranking, floor_ranking, pairwise_bands, pareto,
                      price_crossovers, price_ranking, spearman_exact, summary)
 from .load import basis, load_clips
+from .media import PANEL_WIDTHS, POSTER_WIDTH, POSTER_WIDTHS
 from .series import clip_series, round_sig
 
 CONTRACT = "v1"
@@ -238,6 +239,8 @@ def main(root: Path | None = None, web: Path = WEB) -> Path:
         "media_base": os.environ.get("MEDIA_BASE", f"https://media.studionephele.com/stilldrawn/{MEDIA_VERSION}/"),
         "counts": dict(Counter(c.cid.arm for c in clips)),
         "missing_cells": [{"cell": "cu-tone-3_idle_gen4t", "reason": "Refused by the engine's moderation (runs/README.md)"}],
+        "variants": {"panels": list(PANEL_WIDTHS), "posters": list(POSTER_WIDTHS), "poster_width": POSTER_WIDTH,
+                     "rule": "{stem}-w{w}.webp, for each w below the item's own width"},
     })
     _write(out / "engines.json", build_engines(root))
     _write(out / "panels.json", build_panels(root))
