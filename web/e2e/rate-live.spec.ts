@@ -1,5 +1,5 @@
 // The real thing: the preview's /rate, its /api/submit and /api/tally, the live database.
-// Only desktop-light opts in, so one run adds exactly one row. Its session id is written to
+// Only desktop-light opts in, and only with LIVE_OPT_IN=1, so a run adds at most one row. Its session id is written to
 // test-results/live-session.txt for the psql check.
 import { test, expect } from "./fixtures";
 import type { Page } from "@playwright/test";
@@ -29,13 +29,14 @@ async function toResults(page: Page, session: string, keyboard: boolean) {
   await expectNoOverflow(page);
 }
 
-test("live: rate, see where you land, and (desktop-light only) opt in once", async ({ page }, info) => {
+test("live: rate, see where you land, and (desktop-light, LIVE_OPT_IN=1 only) opt in once", async ({ page }, info) => {
   const session = crypto.randomUUID();
   await toResults(page, session, false);
   await expect(page.getByRole("heading", { name: "Other visitors" })).toBeVisible();
   mkdirSync("test-results/screens", { recursive: true });
   await page.screenshot({ path: `test-results/screens/live-${info.project.name}-results.png`, fullPage: true });
-  if (info.project.name !== "desktop-light") return;
+  // opting in writes a row to the live table: only when asked (LIVE_OPT_IN=1), and only once per run
+  if (info.project.name !== "desktop-light" || process.env.LIVE_OPT_IN !== "1") return;
   const add = page.getByRole("button", { name: "Add my ratings to the public tally" });
   const sent = page.waitForResponse((r) => r.url().endsWith("/api/submit") && r.request().method() === "POST");
   await add.click();

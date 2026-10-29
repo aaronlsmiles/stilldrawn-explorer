@@ -8,7 +8,10 @@
 .sc-body > .panel { align-self: stretch; }
 .sc-pooled { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--rule); }
 .sc-pooled strong { font-weight: 600; }
-.sc-plot { min-width: 0; }
+.sc-plot { min-width: 0; display: flex; flex-direction: column; }
+.sc-plot .sc-chart { position: relative; flex: 1; min-height: 420px; }
+.sc-plot .sc-chart svg { position: absolute; inset: 0 auto auto 0; }
+@media (max-width: 600px) { .sc-plot .sc-chart { min-height: 340px; } }
 .sc-chart svg { display: block; overflow: visible; }
 .sc-chart .grid { stroke: var(--grid); }
 .sc-chart .base { stroke: var(--control); }

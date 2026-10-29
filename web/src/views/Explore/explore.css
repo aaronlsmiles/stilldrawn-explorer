@@ -16,7 +16,7 @@
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-eng.is-sel { color: var(--text); font-weight: 600; }
 .sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: var(--fs-small); line-height: 1.33; padding-right: 4px; }
-.sl-panel { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sl-panel { font-size: var(--fs-body); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-row.is-sel .sheet-label .sl-panel { text-decoration: underline 2px var(--gold-line); text-underline-offset: 3px; }
 .sheet-cell { min-width: 0; }
 .frame-btn { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: var(--raised); cursor: pointer; }

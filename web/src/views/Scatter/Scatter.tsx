@@ -1,7 +1,7 @@
 // Motion vs drift: one point per clip on log axes, engine medians as labelled crosses.
 // Engines are named, never coloured (docs/DESIGN.md); the chosen engine is the one gold.
 import { useEffect, useMemo, useState } from "react";
-import { useWidth } from "../../ui/useSize";
+import { useBox } from "../../ui/useSize";
 import { scaleLog } from "d3-scale";
 import "./scatter.css";
 import { useCore } from "../../data/core";
@@ -39,8 +39,9 @@ function Chart({ pts, crosses, metric, hl, names, onHover, hover }: {
   pts: Pt[]; crosses: Cross[]; metric: Metric; hl: string | null; names: (e: string) => string;
   onHover: (p: Pt | null, x?: number, y?: number) => void; hover: Pt | null;
 }) {
-  const [ref, width] = useWidth<HTMLDivElement>();
-  const height = width < 600 ? 340 : 480;
+  // beside the Engines card the chart fills the row that card sets; stacked, it keeps its floor
+  const [ref, width, boxH] = useBox<HTMLDivElement>();
+  const height = width < 600 ? 340 : Math.max(420, boxH);
   const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
   const x = scaleLog().domain([Math.min(...xs) * 0.9, Math.max(...xs) * 1.1]).range([M.l, Math.max(M.l + 10, width - (width < 600 ? 64 : 96))]);
   const y = scaleLog().domain([Math.min(...ys) * 0.8, Math.max(...ys) * 1.25]).range([height - M.b, M.t]);

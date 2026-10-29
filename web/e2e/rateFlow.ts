@@ -76,9 +76,9 @@ export async function expectNoOverflow(page: Page) {
   expect(doc, `page is ${doc}px wide in a ${view}px viewport`).toBeLessThanOrEqual(view);
 }
 
-/** Every visible, enabled kit button: text against its own (or nearest opaque) background, WCAG contrast. */
-async function buttonContrast(page: Page) {
-  return page.locator(".bp button:visible:not(:disabled)").evaluateAll((bs) => {
+/** Every visible, enabled control matching `selector`: text against its own (or nearest opaque) background, WCAG contrast. */
+export async function buttonContrast(page: Page, selector = ".bp button:visible:not(:disabled)") {
+  return page.locator(selector).evaluateAll((bs) => {
     const rgb = (c: string) => (c.match(/[\d.]+/g) ?? []).map(Number);
     const lum = ([r, g, b]: number[]) => {
       const f = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
