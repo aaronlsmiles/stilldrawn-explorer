@@ -48,7 +48,8 @@
 .media-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .frame { min-width: 0; }
 .frame-media { position: relative; background: var(--raised); overflow: hidden; }
-.frame-media > img, .frame-media > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.frame-media > picture { display: contents; }
+.frame-media > img, .frame-media > picture > img, .frame-media > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .frame-media.is-diff > video { mix-blend-mode: difference; }
 .frame-media.is-empty { outline: 1px dashed var(--control); outline-offset: -1px; background: var(--ground); }
 .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding-top: 6px; font-size: var(--fs-body); min-width: 0; }

@@ -12,7 +12,7 @@ async function fit(img: Locator) {
 
 test("Explore's source panel is fetched once, with the HTML, at the size its slot needs", async ({ page }) => {
   await page.goto("/explore");
-  expect(await page.locator("link[rel=preload][as=image]").count()).toBe(1);
+  expect(await page.locator("link[rel=preload][as=image]").count()).toBe(2);   // phone and wider: only the matching one fetches
   const r = await fit(page.locator(".frame-media img").first());
   expect(r.natural).toBeGreaterThanOrEqual(r.need);
   expect(r.natural, "no larger than the next step up").toBeLessThanOrEqual(Math.max(320, r.need * 2));
@@ -25,6 +25,17 @@ test.describe("on Lighthouse's phone (a real mobile viewport: 412 px at 1.75x, l
   test("the preload and the <img> still agree, so the panel is fetched once", async ({ page }) => {
     await page.goto("/explore");
     const r = await fit(page.locator(".frame-media img").first());
+    const fetched = await page.evaluate(() => performance.getEntriesByType("resource").map((e) => e.name).filter((n) => /\/panels\/act-tone-2[-.]/.test(n)));
+    expect(fetched).toEqual([r.src]);
+  });
+});
+
+test.describe("on a 3x phone (390 px, the default compare view)", () => {
+  test.use({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+  test("phones stop at the 960 px copy (2.5x), fetched once, not the 1,344 px original", async ({ page }) => {
+    await page.goto("/explore");
+    const r = await fit(page.locator(".frame-media img").first());
+    expect(r.src).toMatch(/act-tone-2-w960\.webp$/);
     const fetched = await page.evaluate(() => performance.getEntriesByType("resource").map((e) => e.name).filter((n) => /\/panels\/act-tone-2[-.]/.test(n)));
     expect(fetched).toEqual([r.src]);
   });

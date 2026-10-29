@@ -2,7 +2,7 @@
 // with the difference view: the clip over its own frame 0, blended by difference.
 import { useState, type Ref } from "react";
 import type { Clip, Engine, Panel } from "../../data/types";
-import { PANEL_SIZES, srcset, type Variants } from "../../data/srcset";
+import { PANEL_SIZES, PHONE, srcset, type Variants } from "../../data/srcset";
 import { mb } from "../../lib/format";
 import { Segmented } from "../../ui/Segmented";
 import type { Player } from "./useFrameClock";
@@ -48,9 +48,15 @@ export function Media({ panel, a, b, engines, url, variants, player, diff, panel
     <div className={`media ${b ? "media-3" : "media-2"}`}>
       <figure className="frame">
         <div className="frame-media" style={{ aspectRatio: panel ? `${panel.width} / ${panel.height}` : "16 / 9" }}>
-          {panel && <img src={url(panel.media.webp)} srcSet={srcset(url, panel.media.webp, panel.width, variants.panels)}
-            sizes={b ? PANEL_SIZES.compare : PANEL_SIZES.single} alt={panel.alt} width={panel.width} height={panel.height}
-            decoding="async" fetchPriority="high" onLoad={onPanelLoad} onError={onPanelLoad} />}
+          {panel && (
+            <picture>
+              <source media={PHONE.media} srcSet={srcset(url, panel.media.webp, panel.width, variants.panels, PHONE.max)}
+                sizes={b ? PANEL_SIZES.compare : PANEL_SIZES.single} />
+              <img src={url(panel.media.webp)} srcSet={srcset(url, panel.media.webp, panel.width, variants.panels)}
+                sizes={b ? PANEL_SIZES.compare : PANEL_SIZES.single} alt={panel.alt} width={panel.width} height={panel.height}
+                decoding="async" fetchPriority="high" onLoad={onPanelLoad} onError={onPanelLoad} />
+            </picture>
+          )}
         </div>
         <figcaption className="cap">
           <span className="cap-name">Source panel</span>

@@ -4,10 +4,10 @@
 // <link rel=preload> with the <img>'s own srcset and sizes, so the browser fetches it once.
 import { readFileSync } from "node:fs";
 import type { Plugin } from "vite";
-import { PANEL_SIZES } from "../src/data/srcset";
+import { PANEL_SIZES, PHONE } from "../src/data/srcset";
 import { DEFAULT } from "../src/views/Explore/defaults";
 
-type Data = { base: string; widths: number[]; own: Record<string, number>; cell: string; sizes: typeof PANEL_SIZES };
+type Data = { base: string; widths: number[]; own: Record<string, number>; cell: string; sizes: typeof PANEL_SIZES; phone: typeof PHONE };
 
 /** Runs in the page before any module. Keep it in step with srcset() (src/data/srcset.ts). */
 export function preloadScript(d: Data) {
@@ -18,13 +18,18 @@ export function preloadScript(d: Data) {
   var id = cell && cell.split("_")[0], own = id && d.own[id];
   if (!own) return;
   var path = d.base + "panels/" + id;
-  var set = d.widths.filter(function (w) { return w < own; })
-    .map(function (w) { return path + "-w" + w + ".webp " + w + "w"; }).concat(path + ".webp " + own + "w").join(", ");
-  var l = document.createElement("link");
-  l.rel = "preload"; l.setAttribute("as", "image"); l.setAttribute("fetchpriority", "high");
-  l.setAttribute("imagesrcset", set);
-  l.setAttribute("imagesizes", explicit && !q.has("vs") ? d.sizes.single : d.sizes.compare);
-  document.head.appendChild(l);
+  // one link per <picture> branch, with complementary media: only the matching one fetches
+  [[d.phone.media, d.phone.max], ["not all and " + d.phone.media, Infinity]].forEach(function (b) {
+    var max = b[1];
+    var set = d.widths.filter(function (w) { return w < own && w <= max; })
+      .map(function (w) { return path + "-w" + w + ".webp " + w + "w"; })
+      .concat(own <= max ? [path + ".webp " + own + "w"] : []).join(", ");
+    var l = document.createElement("link");
+    l.rel = "preload"; l.setAttribute("as", "image"); l.setAttribute("fetchpriority", "high"); l.setAttribute("media", b[0]);
+    l.setAttribute("imagesrcset", set);
+    l.setAttribute("imagesizes", explicit && !q.has("vs") ? d.sizes.single : d.sizes.compare);
+    document.head.appendChild(l);
+  });
 })(${JSON.stringify(d)});`;
 }
 
@@ -38,7 +43,7 @@ export function panelPreload(dataDir: string): Plugin {
       const panels: { id: string; width: number; media: { webp: string } }[] = JSON.parse(readFileSync(`${dataDir}/panels.json`, "utf8"));
       for (const p of panels) if (p.media.webp !== `panels/${p.id}.webp`) throw new Error(`panel-preload: ${p.id} is not at panels/<id>.webp`);
       const d: Data = { base: base || index.media_base, widths: index.variants.panels,
-        own: Object.fromEntries(panels.map((p) => [p.id, p.width])), cell: DEFAULT.cell, sizes: PANEL_SIZES };
+        own: Object.fromEntries(panels.map((p) => [p.id, p.width])), cell: DEFAULT.cell, sizes: PANEL_SIZES, phone: PHONE };
       // end of <head>, after <meta name="viewport">: before it, a phone lays the page out 980 px wide,
       // and the preload would pick its copy for that width, not the one the <img> picks
       return [{ tag: "script", children: preloadScript(d), injectTo: "head" }];
