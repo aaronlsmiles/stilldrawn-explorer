@@ -59,7 +59,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- Phase 5 done 29 Oct (rounds 8 and 9). Before/after screenshots and the final numbers: a private page linked from the hub's session log. Judgment calls: `~/projects/studio/docs/phase5-design-calls.md`.
-- **Open for Aaron:** Explore misses LCP 2.5 s on Lighthouse's simulated phone at 3.6 s (was 5.2; 0.5 s observed; desktop 0.9 s). The last second is the panel itself, about 6–7 ms per KB on Slow 4G: under 2.5 s needs a panel of about 30 KB (visibly blurred screentone) or a pre-rendered Explore page. Accept the miss, or try the pre-render as a spike.
+- Phase 5 done and closed 29 Oct (rounds 8 and 9). Final preview: 374 e2e local, 402 on the R2 build, live 8/8 with 0 rows. Before/after screenshots and the final numbers: a private page linked from the hub's session log. Judgment calls: `~/projects/studio/docs/phase5-design-calls.md`.
+- **Decided (Aaron, 29 Oct):** Explore's mobile LCP of 3.6 s on Lighthouse's simulated phone is accepted for a media viewer (0.5 s observed; desktop 0.9 s). Phones stop at the 960 px panel (`30a8cd9`): a 3x phone in the default view takes 199 KB, not the 422 KB original. **Phase 5 is closed.**
 - Defended inspector warnings: Explore's 12 px text is the contact sheet's sublines (98 draw counts, 33 motion classes under 14 px names); the scatter has no hue until an engine is chosen (gold is the reader's selection; engines carry no colour, docs/DESIGN.md).
 - Phase 6 (films) next, then writing, clearance and G5. Production at `stilldrawn.studionephele.com` waits for G5: the three env vars for production, the custom domain and the cron.
