@@ -8,6 +8,7 @@ const Explore = lazy(() => import("./views/Explore/Explore"));
 const FailureGallery = lazy(() => import("./views/Explore/FailureGallery"));
 const Scatter = lazy(() => import("./views/Scatter/Scatter"));
 const Tax = lazy(() => import("./views/Tax/Tax"));
+const Rate = lazy(() => import("./views/Rate/Rate"));
 
 class Boundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null };
@@ -27,7 +28,7 @@ class Boundary extends Component<{ children: ReactNode }, { error: Error | null 
 function NotFound() {
   return (
     <main className="page"><h1 tabIndex={-1}>Not found</h1>
-      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link> or <Link href="/tax">Stillness Tax</Link>.</p>
+      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link>, <Link href="/tax">Stillness Tax</Link> or <Link href="/rate">Rate it yourself</Link>.</p>
     </main>
   );
 }
@@ -48,6 +49,7 @@ function Routes() {
   if (path === "/explore/failures") return <FailureGallery />;
   if (path === "/scatter") return <Scatter />;
   if (path === "/tax") return <Tax />;
+  if (path === "/rate") return <Rate />;
   return <NotFound />;
 }
 

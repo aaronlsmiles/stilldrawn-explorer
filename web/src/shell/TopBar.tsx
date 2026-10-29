@@ -8,6 +8,7 @@ const NAV = [
   { href: "/explore", label: "Explore" },
   { href: "/scatter", label: "Motion vs drift" },
   { href: "/tax", label: "Stillness Tax" },
+  { href: "/rate", label: "Rate it yourself" },
 ];
 
 type Theme = "light" | "dark";

@@ -1,0 +1,12 @@
+/* blindpanel themed by the explorer's tokens (docs/DESIGN.md): no new colours.
+   The kit's rules sit in @layer blindpanel, so these unlayered ones win. */
+.rate .bp {
+  --bp-paper: var(--surface); --bp-ground: var(--ground); --bp-raised: var(--raised);
+  --bp-ink: var(--text); --bp-muted: var(--muted); --bp-faint: var(--faint);
+  --bp-line: var(--border); --bp-control: var(--control); --bp-context: var(--context);
+  --bp-accent: var(--gold); --bp-accent-line: var(--gold-line); --bp-on-accent: var(--on-gold);
+  --bp-font: var(--font); --bp-radius: 0; --bp-gap: var(--gap); --bp-ease: var(--ease);
+  color-scheme: inherit;
+}
+.rate-lede { max-width: 60ch; }
+.rate-again { margin-top: var(--gap); }

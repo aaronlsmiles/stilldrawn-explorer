@@ -1,0 +1,23 @@
+import { use, useEffect } from "react";
+import type { Study } from "blindpanel";
+import "./rate.css";
+import { RatingPanel } from "./RatingPanel";
+import { STUDY_URL } from "./rateModel";
+
+let pending: Promise<Study> | null = null;
+const loadStudy = () => (pending ??= fetch(STUDY_URL).then((r) => {
+  if (!r.ok) throw new Error(`The rating study could not be loaded (HTTP ${r.status}).`);
+  return r.json() as Promise<Study>;
+}));
+
+export default function Rate() {
+  const study = use(loadStudy());
+  useEffect(() => { document.title = "Rate it yourself · StillDrawn Explorer"; }, []);
+  return (
+    <main id="main" className="page rate">
+      <h1 tabIndex={-1}>Rate it yourself</h1>
+      <p className="muted rate-lede">Score eight clips blind, as the paper's six raters did, then see where you land against them and against the automatic metrics.</p>
+      <RatingPanel study={study} studyUrl={STUDY_URL} />
+    </main>
+  );
+}
