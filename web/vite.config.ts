@@ -7,5 +7,5 @@ const MEDIA = fileURLToPath(new URL("../pipeline/out/media", import.meta.url));
 
 export default defineConfig({
   plugins: [react(), mediaDev(MEDIA)],
-  test: { environment: "jsdom", include: ["src/**/*.test.{ts,tsx}", "vite/**/*.test.ts"] },
+  test: { environment: "jsdom", include: ["src/**/*.test.{ts,tsx}", "vite/**/*.test.ts", "api/**/*.test.ts"] },
 });
