@@ -17,16 +17,17 @@ export function loadCore(): Promise<Core> {
     const e = new Map(engines.map((x) => [x.id, x])), p = new Map(panels.map((x) => [x.id, x])), c = new Map(clips.map((x) => [x.id, x]));
     return { basis, index, engines, panels, clips, paper, taxonomy, engine: (id) => e.get(id)!, panel: (id) => p.get(id), clip: (id) => c.get(id) };
   });
-  core.catch(() => (core = null)); // a failed load can be retried
+  // a failure stays cached: resetting it here made every render request the file again
+  // (1,779 requests in 3 s); the error screen's Retry reloads the page
   return core;
 }
 
 const series = new Map<string, Promise<Record<string, Series>>>();
 export function loadSeries(engine: string) {
   if (!series.has(engine)) {
-    const p = get<Record<string, Series>>(`series/${engine}.json`);
-    p.catch(() => series.delete(engine));
-    series.set(engine, p);
+    series.set(engine, get<Record<string, Series>>(`series/${engine}.json`));
   }
   return series.get(engine)!;
 }
+/** Forget a failed series so the curve's Retry fetches it again. */
+export const retrySeries = (...engines: string[]) => engines.forEach((e) => series.delete(e));

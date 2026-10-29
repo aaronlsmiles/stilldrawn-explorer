@@ -160,7 +160,9 @@ export default function Tax() {
   const [q, set] = useQuery();
   const d = useDerived(core.basis);
   const name = (e: string) => core.engine(e).name;
-  const parsed = parseState(q);
+  // a bare ?lens=band (no edges, no preset) means the lens's default, as choosing the lens does
+  const bare = q.get("lens") === "band" && !q.has("lo") && !q.has("hi") && !q.has("preset");
+  const parsed = bare ? defaultFor("band", d) : parseState(q);
   // A preset's band is the pair's exact IQR overlap, never a value read back from the URL.
   const s: LensState = parsed.lens === "band" && parsed.preset && d.pairs[parsed.preset]?.overlaps
     ? { ...parsed, lo: d.pairs[parsed.preset].lo, hi: d.pairs[parsed.preset].hi } : parsed;

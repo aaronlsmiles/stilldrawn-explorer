@@ -1,8 +1,9 @@
-import { Component, Suspense, lazy, useEffect, useRef, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import { CoreProvider } from "./data/core";
 import { navigate, useRoute } from "./router";
 import { TopBar } from "./shell/TopBar";
 import { Link } from "./ui/Link";
+import { Boundary } from "./ui/Boundary";
 
 const Explore = lazy(() => import("./views/Explore/Explore"));
 const FailureGallery = lazy(() => import("./views/Explore/FailureGallery"));
@@ -10,20 +11,14 @@ const Scatter = lazy(() => import("./views/Scatter/Scatter"));
 const Tax = lazy(() => import("./views/Tax/Tax"));
 const Rate = lazy(() => import("./views/Rate/Rate"));
 
-class Boundary extends Component<{ children: ReactNode }, { error: Error | null }> {
-  state = { error: null as Error | null };
-  static getDerivedStateFromError(error: Error) { return { error }; }
-  render() {
-    if (!this.state.error) return this.props.children;
-    return (
-      <main className="page"><div className="state-error" role="alert">
-        <h1>Couldn't load the data</h1>
-        <p className="muted">{this.state.error.message}</p>
-        <button type="button" className="btn" onClick={() => location.reload()}>Retry</button>
-      </div></main>
-    );
-  }
-}
+// Retry reloads: the data loaders keep a failed load cached (re-requesting it on every render looped).
+const LoadError = (error: Error) => (
+  <main className="page"><div className="state-error" role="alert">
+    <h1>Couldn't load the data</h1>
+    <p className="muted">{error.message}</p>
+    <button type="button" className="btn" onClick={() => location.reload()}>Retry</button>
+  </div></main>
+);
 
 function NotFound() {
   return (
@@ -57,12 +52,14 @@ const Loading = () => <main className="page" aria-busy="true"><p className="mute
 
 export function App() {
   return (
-    <Boundary>
+    <Boundary fallback={LoadError}>
       <Suspense fallback={<Loading />}>
         <CoreProvider>
           <a className="skip" href="#main">Skip to content</a>
           <TopBar />
-          <Suspense fallback={<Loading />}><Routes /></Suspense>
+          <Boundary fallback={LoadError}>
+            <Suspense fallback={<Loading />}><Routes /></Suspense>
+          </Boundary>
         </CoreProvider>
       </Suspense>
     </Boundary>

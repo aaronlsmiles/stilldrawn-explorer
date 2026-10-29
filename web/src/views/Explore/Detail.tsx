@@ -1,11 +1,12 @@
 import { Suspense, use, useState, type KeyboardEvent } from "react";
 import type { Clip, Core, SeriesKey } from "../../data/types";
-import { loadSeries } from "../../data/load";
+import { loadSeries, retrySeries } from "../../data/load";
+import { Boundary } from "../../ui/Boundary";
 import { MOTION_WORDS, SERIES } from "../../data/metrics";
 import { drawsOf } from "../../data/model";
 import { isLiveHost } from "../../data/media";
 import { basisRank } from "../../data/model";
-import { norm, ordinal, px } from "../../lib/format";
+import { fixed, norm, ordinal, px } from "../../lib/format";
 import { Segmented } from "../../ui/Segmented";
 import { Link } from "../../ui/Link";
 import { usePlayer, type Player } from "./useFrameClock";
@@ -24,13 +25,25 @@ export type DetailProps = {
 const DRAW_WORD = (d: string) => (d === "r1" ? "Main" : d === "r2" ? "Repeat" : d.toUpperCase());
 const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function Finding({ clip, core }: { clip: Clip; core: Core }) {
-  const r = basisRank(core.clips, clip, "line");
-  const name = core.engine(clip.engine).name;
+function Finding({ a, b, core }: { a: Clip; b?: Clip; core: Core }) {
+  const name = (c: Clip) => core.engine(c.engine).name;
+  const rank = (c: Clip) => {
+    const r = basisRank(core.clips, c, "line");
+    return r ? `${ordinal(r.rank)} steadiest of its ${r.of} cells` : null;
+  };
+  if (!b || a.h.line == null || b.h.line == null) {
+    const r = rank(a);
+    return <><strong>{name(a)}: line drift {a.h.line == null ? "not defined" : px(a.h.line)}</strong>{r ? `, ${r}` : ""}; motion {norm(a.motion.median_norm)}.</>;
+  }
+  // the contrast first: within-engine ranks side by side read as equal when the drift is not
+  const [hi, lo] = a.h.line >= b.h.line ? [a, b] : [b, a];
+  const ratio = hi.h.line! / lo.h.line!;
+  const ra = rank(a), rb = rank(b);
   return (
     <>
-      <strong>{name}: line drift {px(clip.h.line!)}</strong>
-      {r ? `, ${ordinal(r.rank)} lowest of ${name}'s ${r.of} cells` : ""}; motion {norm(clip.motion.median_norm)}.
+      <strong>On this panel, {name(hi)} drifts {lo.h.line! > 0 && ratio >= 1.1 ? `${ratio.toFixed(1)}× as far as` : "about as far as"} {name(lo)}</strong>
+      {" "}({fixed(hi.h.line!, 2)} against {px(lo.h.line!)}).
+      {ra && rb ? ` ${name(a)} is the ${ra}, ${name(b)} the ${rb}` : ""}; motion {norm(a.motion.median_norm)} against {norm(b.motion.median_norm)}.
     </>
   );
 }
@@ -57,6 +70,7 @@ function Curve({ a, b, core, series, player, set }: {
       const v = valueAtFrame(l.values, key, f);
       return `${l.label} ${v == null ? "not defined" : +v.toPrecision(3)}`;
     });
+    if (f === 0 && lines.every((l) => valueAtFrame(l.values, key, 0) == null)) return `Frame 0 is the reference: ${SERIES[key].name} measures every later frame against it`;
     return `Frame ${f}, ${SERIES[key].name}: ${parts.join(", ")}`;
   };
   return (
@@ -102,8 +116,7 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
         {a.arm !== "primary" && <span className="chip">{a.arm === "seedance" ? "Scout, not analysed" : a.arm}</span>}
       </div>
       <p className="finding">
-        <Finding clip={a} core={core} />
-        {b && <> <Finding clip={b} core={core} /></>}
+        <Finding a={a} b={b} core={core} />
       </p>
       <div className="detail-controls">
         <Segmented label="Engine" value={sel.engine} options={engines.map((e) => ({ value: e, label: core.engine(e).name }))}
@@ -125,10 +138,18 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
       <Media panel={panel} a={a} b={b} engines={core.engine} url={url} player={player} diff={diff} lazyBig={!wide}
         panelOriginal={live && panel ? url(panel.media.png) : null} />
       <Toolbar player={player} nFrames={a.n_frames} diff={diff} setDiff={(d) => set({ diff: d ? "1" : null })} big={big} bytes={a.bytes} />
+      <p className="faint small keys-hint">With the player focused: K or Space plays and pauses, comma and full stop step a frame, D shows the difference.</p>
       {diff && <p className="faint small diff-note">Each clip minus its own first frame. Black means unchanged; line drift measures this against frame 0.</p>}
-      <Suspense fallback={<section className="panel curve-panel" aria-busy="true"><h2>Per frame</h2><div className="curve-skeleton" /></section>}>
-        <Curve a={a} b={b} core={core} series={series} player={player} set={set} />
-      </Suspense>
+      <Boundary key={`${a.id}|${b?.id ?? ""}`} onRetry={() => retrySeries(a.engine, ...(b ? [b.engine] : []))}
+        fallback={(_, retry) => (
+          <section className="panel curve-panel"><h2>Per frame</h2>
+            <p className="muted" role="alert">Couldn't load the per-frame series. <button type="button" className="btn-text" onClick={retry}>Retry</button></p>
+          </section>
+        )}>
+        <Suspense fallback={<section className="panel curve-panel" aria-busy="true"><h2>Per frame</h2><div className="curve-skeleton" /></section>}>
+          <Curve a={a} b={b} core={core} series={series} player={player} set={set} />
+        </Suspense>
+      </Boundary>
       <div className="detail-foot">
         <Readouts clips={b ? [a, b] : [a]} core={core} />
         <div className="prov-col">

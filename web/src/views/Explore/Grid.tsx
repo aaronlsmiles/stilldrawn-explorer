@@ -34,7 +34,7 @@ export function Grid({ rows, core, url, sel, onPick }: {
   };
   return (
     <div className="sheet" role="grid" aria-label="Contact sheet: cells by engine" data-testid="grid" ref={ref} onKeyDown={onKey}
-      style={{ gridTemplateColumns: `minmax(96px, 1.3fr) repeat(${cols.length}, minmax(0, 1fr))` }}>
+      style={{ gridTemplateColumns: `minmax(max-content, 1.3fr) repeat(${cols.length}, minmax(0, 1fr))` }}>
       <div role="row" className="sheet-head">
         <div role="columnheader" className="sheet-corner"><span className="visually-hidden">Cell</span></div>
         {cols.map((e) => (

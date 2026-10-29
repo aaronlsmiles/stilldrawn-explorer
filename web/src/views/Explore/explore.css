@@ -5,22 +5,26 @@
 .sheet-pane { min-width: 0; }
 .sheet-top { display: grid; gap: 8px; margin-bottom: 12px; }
 .sheet-note { margin-top: 12px; }
+.keys-hint { margin-top: -8px; }
+@media (hover: none) { .keys-hint { display: none; } }
+.sheet-links { font-size: var(--fs-body); }
+.sheet-links a { display: inline-block; padding: 4px 0; }
 
 .sheet { display: grid; gap: 4px; }
 .sheet [role="row"] { display: contents; }
-.sheet-head > * { position: sticky; top: var(--bar-h); z-index: 3; background: var(--ground); padding: 6px 0; font-size: 13px; color: var(--muted);
+.sheet-head > * { position: sticky; top: var(--bar-h); z-index: 3; background: var(--ground); padding: 6px 0; font-size: var(--fs-small); color: var(--muted);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-eng.is-sel { color: var(--text); font-weight: 600; }
-.sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: 13px; line-height: 1.3; padding-right: 4px; }
+.sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: var(--fs-small); line-height: 1.33; padding-right: 4px; }
 .sl-panel { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-row.is-sel .sheet-label .sl-panel { text-decoration: underline 2px var(--gold-line); text-underline-offset: 3px; }
 .sheet-cell { min-width: 0; }
 .frame-btn { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: var(--raised); cursor: pointer; }
 .frame-btn img { width: 100%; height: 100%; object-fit: cover; transition: opacity var(--fast) var(--ease); }
-.frame-btn:hover img { opacity: .82; }
+@media (hover: hover) and (pointer: fine) { .frame-btn:hover img { opacity: .82; } }
 .frame-btn.is-missing { display: grid; place-items: center; background: var(--ground); outline: 1px dashed var(--control); outline-offset: -1px;
-  font-size: 11px; color: var(--faint); line-height: 1.1; text-align: center; }
-.frame-btn .draws { position: absolute; right: 2px; bottom: 2px; min-width: 16px; height: 16px; padding: 0 3px; font-size: 11px; line-height: 16px;
+  font-size: var(--fs-small); color: var(--faint); line-height: 1.1; text-align: center; }
+.frame-btn .draws { position: absolute; right: 2px; bottom: 2px; min-width: 16px; height: 16px; padding: 0 3px; font-size: var(--fs-small); line-height: 16px;
   background: var(--ground); color: var(--text); }
 .frame-btn.keep { z-index: 2; }
 
@@ -46,9 +50,12 @@
 .frame-media > img, .frame-media > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .frame-media.is-diff > video { mix-blend-mode: difference; }
 .frame-media.is-empty { outline: 1px dashed var(--control); outline-offset: -1px; background: var(--ground); }
-.cap { display: flex; justify-content: space-between; gap: 8px; padding-top: 6px; font-size: 13px; min-width: 0; }
+.cap { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding-top: 6px; font-size: var(--fs-body); min-width: 0; }
 .cap-name { font-weight: 600; white-space: nowrap; }
-.cap-pinned .cap-name { box-shadow: inset 0 -3px 0 var(--gold); }
+.cap .faint { font-size: var(--fs-small); }
+.cap a { display: inline-block; padding: 4px 0; }
+.media-3 [data-testid="clip-a"] .cap-name { text-decoration: underline 2px var(--gold-line); text-underline-offset: 4px; }
+.cap-pinned .cap-name { color: var(--muted); }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .btn-play { min-width: 72px; }
 .frame-readout { min-width: 104px; padding: 0 4px; }
@@ -66,7 +73,9 @@
 .plot .tick, .plot .axis-label, .plot .end-label { font-size: 12px; fill: var(--faint); font-family: var(--font); }
 .plot .tick { font-variant-numeric: tabular-nums; }
 .plot .axis-label { fill: var(--muted); }
-.plot .end-label { fill: var(--text); font-size: 13px; }
+.plot .end-label { fill: var(--text); font-size: var(--fs-small); }
+/* labels that sit on or near lines carry a halo of the panel colour */
+.plot .axis-label, .plot .end-label { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .plot .ln path { fill: none; stroke-width: 2; stroke-linejoin: round; }
 .plot .ln-main path { stroke: var(--text); }
 .plot .ln-other path { stroke: var(--context); }
@@ -74,7 +83,8 @@
 .plot .playhead { stroke: var(--gold-line); stroke-width: 2; }
 .series-table { margin-top: 8px; max-width: 480px; }
 
-.detail-foot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+/* readouts, then each clip's provenance, stacked: provenance is a disclosure, so no row beside it can balance */
+.detail-foot { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap); align-items: start; }
 .prov-col { display: grid; gap: var(--gap); }
 .readouts th[scope="row"] { font-size: 14px; color: var(--text); padding-left: 0; white-space: normal; }
 .rd-name { display: block; font-weight: 600; }
@@ -84,29 +94,26 @@
 .flags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
 .flags-name { font-weight: 600; font-size: var(--fs-small); margin-right: 4px; }
 .flags a.pill { text-decoration: none; }
-.flags a.pill:hover { background: var(--border); }
+@media (hover: hover) and (pointer: fine) { .flags a.pill:hover { background: var(--border); } }
 
-.provenance summary { cursor: pointer; list-style: none; }
+.provenance summary { cursor: pointer; list-style: none; padding: 4px 0; }
 .provenance summary::-webkit-details-marker { display: none; }
 .provenance summary h2 { display: inline; }
 .provenance summary::after { content: " +"; color: var(--faint); }
 .provenance[open] summary::after { content: " −"; }
-.provenance dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; margin-top: 12px; font-size: 13px; }
+.provenance dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; margin-top: 12px; font-size: var(--fs-small); }
 .provenance dt { color: var(--faint); }
 .provenance dd { min-width: 0; overflow-wrap: anywhere; }
 .provenance .sha { display: flex; gap: 8px; align-items: baseline; }
+.provenance .sha button { white-space: nowrap; }
 .provenance code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.notice { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-top: 12px; font-size: 13px; }
+.notice { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-top: 12px; font-size: var(--fs-small); }
 .detail-empty { padding-top: 8px; }
 
-@media (max-width: 1180px) {
-  .detail-foot { grid-template-columns: 1fr; }
-}
 /* Tablet band: one column, the detail first, the sheet full width under it */
 @media (max-width: 1100px) {
   .explore { grid-template-columns: 1fr; gap: 32px; }
   .detail-pane { order: -1; position: static; max-height: none; overflow: visible; padding: 0; }
-  .detail-foot { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .explore { display: block; }
@@ -126,7 +133,7 @@
 .g-clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--gap); }
 .g-clip { display: grid; gap: 6px; text-decoration: none; }
 .g-clip img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--raised); transition: opacity var(--fast) var(--ease); }
-.g-clip:hover img { opacity: .85; }
+@media (hover: hover) and (pointer: fine) { .g-clip:hover img { opacity: .85; } }
 .g-cap { font-size: var(--fs-small); color: var(--muted); }
 .g-cap strong { color: var(--text); font-weight: 600; }
 @media (max-width: 760px) { .g-mode { grid-template-columns: 1fr; } .g-clips { grid-template-columns: 1fr 1fr; } }

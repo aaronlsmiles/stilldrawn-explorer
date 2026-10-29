@@ -4,17 +4,18 @@ import { scaleLinear, scaleLog } from "d3-scale";
 import type { BasisRow, Summary } from "../../lib/lenses";
 import { priceLines } from "../../lib/pareto";
 import { norm } from "../../lib/format";
-import { useWidth } from "../../ui/useSize";
+import { textWidth, useBox } from "../../ui/useSize";
 import { spreadLabels } from "../Scatter/scatterModel";
 
 export function ParetoChart({ summ, front, dominatedBy, p, leader, name }: {
   summ: Summary; front: string[]; dominatedBy: Record<string, string[]>; p: number; leader: string;
   name: (e: string) => string;
 }) {
-  const [ref, width] = useWidth<HTMLDivElement>();
+  // the chart fills its panel, which the leaderboard beside it sizes (a minimum when stacked)
+  const [ref, width, boxH] = useBox<HTMLDivElement>();
   const L = priceLines(summ, "wan22");
   const es = Object.keys(L);
-  const h = 300, m = { l: 44, r: 24, t: 12, b: 36 };
+  const h = Math.max(240, boxH), m = { l: 44, r: 16, t: 28, b: 36 };
   const xs = es.map((e) => L[e].x), ys = es.map((e) => L[e].drift);
   const x = scaleLinear().domain([Math.min(0, ...xs) - 0.2, Math.max(...xs) + 0.4]).range([m.l, Math.max(m.l + 10, width - m.r)]);
   const y = scaleLinear().domain([0, Math.max(...ys) * 1.15]).nice(4).range([h - m.b, m.t]);
@@ -38,15 +39,19 @@ export function ParetoChart({ summ, front, dominatedBy, p, leader, name }: {
             <text key={t} className="tick" x={x(t)} y={h - m.b + 16} textAnchor="middle">{t}</text>
           ))}
           <text className="axis-label" x={x.range()[1]} y={h - 4} textAnchor="end">Doublings of motion over Wan 2.2</text>
-          <text className="axis-label" x={m.l} y={m.t - 2}>Median line drift (px)</text>
+          <text className="axis-label" x={m.l} y={m.t - 14}>Median line drift (px)</text>
           <polyline className="front" points={frontPts.map((q) => `${x(q.x)},${y(q.drift)}`).join(" ")} />
-          {p > 0 && <line className="iso" clipPath="url(#clip-pareto)" x1={x(x0)} y1={y(iso(x0))} x2={x(x1)} y2={y(iso(x1))} />}
+          {/* drawn at p = 0 too: flat through the leader, the price line the slider then tilts */}
+          <line className="iso" clipPath="url(#clip-pareto)" x1={x(x0)} y1={y(iso(x0))} x2={x(x1)} y2={y(iso(x1))} />
           {es.map((e, i) => {
             const dom = dominatedBy[e]?.length ? ` (dominated by ${dominatedBy[e].map(name).join(", ")})` : "";
+            const label = name(e) + dom;
+            // a label that would run past the chart's right edge sits to the left of its mark
+            const left = x(L[e].x) + 9 + textWidth(label, front.includes(e) ? undefined : "400 12px 'Schibsted Grotesk'") > width;
             return (
               <g key={e} className={`eng${e === leader ? " is-leader" : ""}${front.includes(e) ? "" : " is-dominated"}`}>
                 <rect x={x(L[e].x) - 4.5} y={y(L[e].drift) - 4.5} width={9} height={9} />
-                <text x={x(L[e].x) + 9} y={labelY[i]} dy="0.32em">{name(e)}{dom}</text>
+                <text x={x(L[e].x) + (left ? -9 : 9)} y={labelY[i]} dy="0.32em" textAnchor={left ? "end" : "start"}>{label}</text>
               </g>
             );
           })}
@@ -60,14 +65,16 @@ export function StripChart({ basis, engines, lo, hi, name, scaleMin, scaleMax }:
   basis: BasisRow[]; engines: string[]; lo: number; hi: number; name: (e: string) => string;
   scaleMin: number; scaleMax: number;
 }) {
-  const [ref, width] = useWidth<HTMLDivElement>();
-  const row = 32, m = { l: 92, r: 56, t: 8, b: 30 };
+  const [ref, width, boxH] = useBox<HTMLDivElement>();
+  const m = { l: 92, r: 56, t: 8, b: 40 };   // ticks, then the axis title on its own line
+  // rows of 32 px at least; taller when the leaderboard beside the chart is taller
+  const row = Math.max(32, Math.floor((boxH - m.t - m.b) / engines.length));
   const h = m.t + engines.length * row + m.b;
   const x = scaleLog().domain([scaleMin * 0.95, scaleMax * 1.05]).range([m.l, Math.max(m.l + 10, width - m.r)]);
   const inside = (v: number) => v >= lo && v <= hi;
   const ticks = [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1].filter((t) => t >= scaleMin && t <= scaleMax);
   return (
-    <div ref={ref} className="tax-chart">
+    <div ref={ref} className="tax-chart strip">
       {width > 0 && (
         <svg width={width} height={h} role="img"
           aria-label={`Each engine's standard clips by motion; clips with motion from ${norm(lo)} to ${norm(hi)} count. ${engines

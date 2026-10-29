@@ -65,3 +65,16 @@ test("no horizontal page scroll", async ({ page }) => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), u).toBe(true);
   }
 });
+
+test("the compare finding leads with the contrast, its ratio computed from the two values it shows", async ({ page }) => {
+  await page.goto("/explore");
+  const f = page.locator(".detail p.finding");
+  await expect(f).toContainText("On this panel, Gen-4.5 drifts");
+  const m = (await f.textContent())!.match(/drifts ([\d.]+)× as far as Wan 2\.2 \(([\d.]+) against ([\d.]+) px\)/)!;
+  expect(m, "contrast sentence").not.toBeNull();
+  expect(Number(m[1])).toBeCloseTo(Number(m[2]) / Number(m[3]), 1);
+  await expect(f).toContainText(/22nd steadiest of its 33 cells/);
+  // one clip alone keeps the single-engine reading
+  await page.goto("/explore?cell=act-tone-2_campush&e=gen4.5");
+  await expect(page.locator(".detail p.finding")).toHaveText(/^Gen-4\.5: line drift [\d.]+ px, \d+(st|nd|rd|th) steadiest of its 33 cells; motion [\d.]+\.$/);
+});

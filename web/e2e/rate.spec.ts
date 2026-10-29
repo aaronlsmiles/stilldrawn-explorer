@@ -55,6 +55,16 @@ test("blinded session, then results whose reveal links open the clip in Explore 
   await toResults(page);
   const open = page.locator(".bp-reveal a", { hasText: "Open" });
   await expect(open).toHaveCount(8);
+  // no word in the reveal's clip, model or link column splits across lines (it did at 390: "Op / en")
+  const split = await page.locator(".bp-reveal tbody th, .bp-reveal tbody td:nth-child(2), .bp-reveal tbody td:last-child").evaluateAll((els) =>
+    els.flatMap((el) => [...(el.textContent ?? "").matchAll(/\S+/g)].filter((m) => {
+      const t = el.querySelector("a") ?? el, n = t.firstChild!, r = document.createRange();
+      const start = (n.textContent ?? "").indexOf(m[0]);
+      if (start < 0) return false;
+      r.setStart(n, start); r.setEnd(n, start + m[0].length);
+      return new Set([...r.getClientRects()].filter((q) => q.width).map((q) => Math.round(q.top))).size > 1;
+    }).map((m) => m[0])));
+  expect(split).toEqual([]);
   for (const href of await open.evaluateAll((as) => as.map((a) => a.getAttribute("href")))) expect(href).toMatch(/^\/explore\?cell=/);
   const href = (await open.first().getAttribute("href"))!;
   await page.evaluate(() => ((window as unknown as { marker: number }).marker = 1));

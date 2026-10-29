@@ -1,6 +1,15 @@
 /* Layer order, declared first: the base reset loses to blindpanel's layer; unlayered rules win over both. */
 @layer reset, blindpanel;
 
+/* Schibsted Grotesk (OFL), self-hosted: tools/font/build_font.py; its tnum swaps digits only. */
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("/fonts/schibsted-grotesk-latin.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Achromatic ledger on paper (docs/DESIGN.md). Gold marks only the selection. */
 :root {
   color-scheme: light;

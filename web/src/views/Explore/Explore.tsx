@@ -69,6 +69,7 @@ export default function Explore() {
         {phone ? <h1 id="sheet-h" tabIndex={-1}>Contact sheet</h1> : <h2 id="sheet-h">Contact sheet</h2>}
         <Segmented label="Which clips" hideLabel value={arm} options={ARM_VIEWS.map((v) => ({ value: v.id, label: v.label }))}
           onChange={(v) => set({ arm: v, cell: null, e: null, vs: null, draw: null })} />
+        <p className="sheet-links"><Link href="/explore/failures">Failure modes and their exemplar clips</Link></p>
       </div>
       {phone ? <PanelList rows={rows} core={core} url={url} onPick={pick} />
         : <Grid rows={rows} core={core} url={url} sel={{ row, engine }} onPick={pick} />}
@@ -77,7 +78,7 @@ export default function Explore() {
           One cell was never generated: {core.engine(missingEngine ?? "")?.name ?? "one engine"} on {missing.cell.split("_").slice(0, 2).join(" ")}. {missing.reason}.
         </p>
       )}
-      <p className="small sheet-note"><Link href="/explore/failures">Failure modes and their exemplar clips</Link></p>
+      <p className="faint small sheet-note">A number on a frame counts the cell's draws: the main draw plus its repeat and hazard draws. Pick one under the player.</p>
     </section>
   );
 

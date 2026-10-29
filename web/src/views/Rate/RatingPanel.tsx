@@ -21,9 +21,6 @@ export function RatingPanel({ study, studyUrl }: { study: Study; studyUrl: strin
     const el = host.current!;
     let disposed = false;
     let results: ResultsController | null = null;
-    // the tally is edge-cached for 5 minutes; once this visitor has opted in, read past the
-    // cache so the count includes them (one uncached request per opt-in, random key)
-    let fresh: string | null = null;
     const session = mountSession(el, study);
     session.on("complete", async ({ submission }) => {
       let reveal: Reveal;
@@ -52,11 +49,12 @@ export function RatingPanel({ study, studyUrl }: { study: Study; studyUrl: strin
             headers: { "content-type": "application/json" },
             body: JSON.stringify(submission),
           });
-          if (r.ok) fresh = crypto.randomUUID();
           return { ok: r.ok, status: r.status };
         },
-        loadTally: async () => {
-          const r = await fetch(fresh ? `${study.endpoints.tally}?fresh=${fresh}` : study.endpoints.tally);
+        // the tally is edge-cached for 5 minutes; right after this visitor's opt-in the kit asks
+        // for it fresh, and a random key reaches the function so the count includes them
+        loadTally: async ({ fresh }) => {
+          const r = await fetch(fresh ? `${study.endpoints.tally}?fresh=${crypto.randomUUID()}` : study.endpoints.tally);
           if (!r.ok) throw new Error(String(r.status));
           return r.json();
         },

@@ -25,6 +25,8 @@ export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
   return (
     <section className="panel readouts" data-testid="readouts" aria-labelledby="readouts-h">
       <h2 id="readouts-h">Readouts</h2>
+      {/* numbers never wrap: on the narrowest phones the table scrolls inside its own frame, never the page */}
+      <div className="table-frame" tabIndex={0} role="region" aria-labelledby="readouts-h">
       <table className="data" data-testid={clips.length > 1 ? "compare-table" : undefined}>
         <thead><tr><th>Headline</th>{clips.map((c) => <th key={c.id} className="r">{name(c)}</th>)}</tr></thead>
         <tbody>
@@ -42,6 +44,7 @@ export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
           </tr>
         </tbody>
       </table>
+      </div>
       {clips.map((c) => (
         <div key={c.id} className="flags">
           {clips.length > 1 && <span className="flags-name">{name(c)}</span>}

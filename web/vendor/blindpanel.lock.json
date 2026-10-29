@@ -2,12 +2,12 @@
   "package": "blindpanel",
   "version": "0.1.0",
   "tag": null,
-  "commit": "26e3063d70dac525d26b785a9d9a64ed6edb8674",
+  "commit": "fd67336fb258986b950417bab834f536ec30b93b",
   "tarball": "blindpanel-0.1.0.tgz",
-  "tarball_sha256": "dbbff5fa062e4c9a9ad85b91f98e9e4f3c6b426624d2351a34af506c2fc48ac2",
+  "tarball_sha256": "87f94fce2d9edbbc382236fbaedf32ed6890fd09408c418a59b526d0df71cdb8",
   "study": {
     "source": "examples/stilldrawn/study.yaml",
-    "study_sha256": "613b81ad0fdf2978d9adc086136b405491c0019287b40d4a647933a7000daab8",
+    "study_sha256": "5429e432a6031a95fe20b7df81592206a69e53ba556cd31c5cf8a8ad87250083",
     "reveal_sha256": "91eba47be470fa02c177fad330ecb11b999cfcec8140cc88c4f3dda5a7323730"
   }
 }

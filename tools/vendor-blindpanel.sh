@@ -39,4 +39,6 @@ cat > "$vendor/blindpanel.lock.json" <<JSON
 JSON
 # reinstall from the fresh tarball (npm caches file: tarballs by path, so remove first)
 (cd "$here/web" && rm -rf node_modules/blindpanel && npm install --silent --save-exact "blindpanel@file:vendor/blindpanel-$version.tgz")
+# Vite pre-bundles dependencies: drop its cache, or a dev server keeps serving the old kit (restart a running one)
+rm -rf "$here/web/node_modules/.vite"
 echo "vendored blindpanel $version @ ${commit:0:7}${tag:+ ($tag)}"

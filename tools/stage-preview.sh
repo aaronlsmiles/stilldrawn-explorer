@@ -36,7 +36,7 @@ JSON
 # Cron jobs run on production deployments only; on a preview, /api/keepwarm is called by hand.
 cat > "$out/vercel.json" <<'JSON'
 {
-  "rewrites": [{ "source": "/((?!api/|assets/|data/|favicon).*)", "destination": "/index.html" }],
+  "rewrites": [{ "source": "/((?!api/|assets/|data/|fonts/|favicon).*)", "destination": "/index.html" }],
   "functions": { "api/*.ts": { "includeFiles": "public/data/blindpanel/stilldrawn/study.json" } },
   "crons": [{ "path": "/api/keepwarm", "schedule": "17 6 * * *" }],
   "headers": [

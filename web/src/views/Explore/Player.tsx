@@ -31,7 +31,7 @@ function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig 
       </div>
       <figcaption className={pinned ? "cap cap-pinned" : "cap"}>
         <span className="cap-name">{engine.name}</span>
-        {failed ? <span className="faint">This clip streams once the media host is live.</span>
+        {failed ? <span className="faint">The clip couldn't be loaded. Check your connection and reload.</span>
           : big ? <span className="faint num">{mb(clip.bytes)}</span> : null}
       </figcaption>
     </figure>

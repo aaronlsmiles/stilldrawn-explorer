@@ -33,7 +33,6 @@ function Plot({ lines, seriesKey, nFrames, frame, width, height, yLabel, ticks =
       {showX && xt.map((t) => (
         <text key={t} x={x(t)} y={height - 6} textAnchor="middle" className="tick">{t}</text>
       ))}
-      <text x={M.l} y={M.t + 2} dy="0.7em" className="axis-label" transform="translate(4,0)">{yLabel}</text>
       {[...lines].sort((p, q) => Number(p.emphasis) - Number(q.emphasis)).map((l) => {
         const lastI = l.values.length - 1;
         return (
@@ -46,6 +45,8 @@ function Plot({ lines, seriesKey, nFrames, frame, width, height, yLabel, ticks =
         );
       })}
       <line x1={x(frame)} x2={x(frame)} y1={M.t} y2={height - M.b} className="playhead" />
+      {/* drawn last, with a halo, so the playhead and the lines pass under it */}
+      <text x={M.l} y={M.t + 2} dy="0.7em" className="axis-label" transform="translate(4,0)">{yLabel}</text>
     </svg>
   );
 }

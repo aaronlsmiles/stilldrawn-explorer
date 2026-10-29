@@ -155,6 +155,7 @@ export default function Scatter() {
           <h2 id="sc-eng">Engines</h2>
           <fieldset className="sc-eng-list">
             <legend className="visually-hidden">Highlight an engine</legend>
+            <div className="table-frame">
             <table className="data">
               <thead><tr><th>Engine</th><th className="r">Motion</th><th className="r">{HEADLINE[metric].name}</th><th className="r">ρ within</th></tr></thead>
               <tbody>
@@ -166,12 +167,13 @@ export default function Scatter() {
                       <td><label className="radio-row"><input type="radio" name="hl" checked={c.engine === hl} onChange={() => set({ hl: c.engine })} /> {names(c.engine)}</label></td>
                       <td className="num">{norm(c.x)}</td>
                       <td className="num">{fmtHeadline(metric, c.y)}</td>
-                      <td className="num">{w ? <>{fmtRho(w.rho)}<span className="faint small"> p {pval(w.p)}</span></> : <span className="dash">—</span>}</td>
+                      <td className="num">{w ? <>{fmtRho(w.rho)}<span className="faint small pv"> p {pval(w.p)}</span></> : <span className="dash">—</span>}</td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+            </div>
           </fieldset>
           <div className="sc-pooled">
             <p><strong>All five engines pooled</strong> ({paper.pooled_rho.value[metric].n} clips): ρ = <span className="num">{fmtRho(paper.pooled_rho.value[metric].rho)}</span>, p {pval(paper.pooled_rho.value[metric].p)}.</p>

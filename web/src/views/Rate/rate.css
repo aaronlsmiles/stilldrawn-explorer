@@ -7,6 +7,24 @@
   --bp-accent: var(--gold); --bp-accent-line: var(--gold-line); --bp-on-accent: var(--on-gold);
   --bp-font: var(--font); --bp-radius: 0; --bp-gap: var(--gap); --bp-ease: var(--ease);
   color-scheme: inherit;
+  /* the page's frame and type scale: the card starts on the h1's edge; body 14 */
+  max-width: none; margin-inline: 0;
+  font-size: var(--fs-body); line-height: 1.43;
 }
-.rate-lede { max-width: 60ch; }
+/* 12 / 14 / 16 / 24: the page's h1 is the only 24; the kit's screen title is a card title */
+.rate .bp-h, .rate .bp-headline { font-size: var(--fs-section); line-height: 1.4; }
+.rate .bp h3 { font-size: var(--fs-body); }
+.rate .bp-btn { min-height: var(--control-h); padding: 0 16px;
+  transition: background-color var(--fast) var(--ease), transform var(--fast) var(--ease); }
+.rate .bp-btn:active:not(:disabled) { transform: scale(.97); }   /* the explorer's press feedback */
+
+/* The intro is a protocol read in order; at full width it runs in two columns, like a printed
+   sheet, instead of one 68ch column beside an empty card. DOM and reading order are unchanged. */
+@media (min-width: 1100px) {
+  .rate .bp-screen:has([data-bp="start"]) { columns: 2 auto; column-gap: 48px; }
+  .rate .bp-screen:has([data-bp="start"]) > * { break-inside: avoid; }
+  .rate .bp-screen:has([data-bp="start"]) > :is(.bp-h, .bp-lede, .bp-toggle, .bp-nav) { column-span: all; }
+}
+
+.rate-lede { max-width: 60ch; margin-bottom: var(--gap); }
 .rate-again { margin-top: var(--gap); }

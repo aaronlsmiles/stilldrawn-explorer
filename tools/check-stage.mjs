@@ -17,7 +17,7 @@ const json = (p) => JSON.parse(readFileSync(p, "utf8"));
 const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
 
 const STUDY = "public/data/blindpanel/stilldrawn/study.json";
-for (const p of ["public/index.html", "public/data/v1/index.json", STUDY, "api/_lib.ts", "api/submit.ts", "api/tally.ts", "api/keepwarm.ts", "package.json", "package-lock.json", "vercel.json"])
+for (const p of ["public/index.html", "public/data/v1/index.json", "public/fonts/schibsted-grotesk-latin.woff2", "public/fonts/OFL.txt", STUDY, "api/_lib.ts", "api/submit.ts", "api/tally.ts", "api/keepwarm.ts", "package.json", "package-lock.json", "vercel.json"])
   check(existsSync(at(p)), `missing ${p}`);
 if (existsSync(at(STUDY))) check(sha(at(STUDY)) === sha(join(repo, "web", STUDY)), "staged study.json differs from web/public");
 
@@ -37,7 +37,7 @@ if (existsSync(at("vercel.json"))) {
   check(crons.length === 1 && crons[0].path === "/api/keepwarm" && /^\d+ \d+ \* \* \*$/.test(crons[0].schedule), "one daily cron for /api/keepwarm");
   check((v.functions?.["api/*.ts"]?.includeFiles ?? "").includes("study.json"), "functions must include the study file");
   const rw = v.rewrites?.[0]?.source ?? "";
-  for (const p of ["api/", "assets/", "data/", "favicon"]) check(rw.includes(p), `SPA rewrite must exclude ${p}`);
+  for (const p of ["api/", "assets/", "data/", "fonts/", "favicon"]) check(rw.includes(p), `SPA rewrite must exclude ${p}`);
   const robots = (v.headers ?? []).flatMap((h) => h.headers).find((h) => h.key === "X-Robots-Tag");
   check(robots?.value === "noindex, nofollow", "noindex header");
 }

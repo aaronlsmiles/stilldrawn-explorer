@@ -65,3 +65,20 @@ test("no horizontal page scroll on tax", async ({ page }) => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), u).toBe(true);
   }
 });
+
+test("a bare ?lens=band link lands where choosing the lens does, not on an empty band", async ({ page }) => {
+  await page.goto("/tax");
+  await page.getByRole("radio", { name: "Matched-motion band" }).check();
+  await expect(page).toHaveURL(/preset=/);
+  const chosen = await page.getByTestId("board-row").allTextContents();
+  const finding = await page.locator(".lens-finding").textContent();
+  await page.goto("/tax?lens=band");
+  await expect(page.getByTestId("board-row").first()).toBeVisible();
+  expect(await page.getByTestId("board-row").allTextContents()).toEqual(chosen);
+  expect(await page.locator(".lens-finding").textContent()).toBe(finding);
+});
+
+test("the price line is drawn at a price of 0 too, flat through the leader", async ({ page }) => {
+  await page.goto("/tax");
+  await expect(page.locator(".tax-chart line.iso")).toHaveCount(1);
+});

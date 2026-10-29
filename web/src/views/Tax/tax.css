@@ -1,8 +1,8 @@
 .tax { display: grid; gap: 16px; }
 .lens-switch { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; }
 .lens-panel { display: grid; gap: 12px; min-width: 0; }
-.lens-sentence { font-size: 16px; max-width: 72ch; }
-.lens-finding { color: var(--muted); max-width: 90ch; }
+.lens-sentence { font-size: 16px; max-width: 36em; }
+.lens-finding { color: var(--muted); max-width: 40em; }
 .lens-controls { display: grid; gap: 10px; max-width: 760px; }
 .slider { display: grid; gap: 6px; position: relative; }
 .slider .val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -10,15 +10,15 @@
 .slider .ticks { position: relative; height: 8px; margin: -10px 8px 0; pointer-events: none; }
 .slider .ticks i { position: absolute; top: 0; width: 2px; height: 8px; background: var(--gold-line); transform: translateX(-1px); }
 .segs { display: flex; flex-wrap: wrap; gap: 8px; }
-.seg-jump { height: 32px; padding: 0 10px; border: 1px solid var(--control); background: var(--surface); cursor: pointer; white-space: nowrap;
+.seg-jump { height: var(--control-h); padding: 0 10px; border: 1px solid var(--control); background: var(--surface); cursor: pointer; white-space: nowrap;
   transition: background-color var(--fast) var(--ease); }
-.seg-jump:hover { background: var(--raised); }
+@media (hover: hover) and (pointer: fine) { .seg-jump:hover { background: var(--raised); } }
 .seg-jump.is-on { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
 .seg-jump.is-on .faint { color: var(--on-gold); }
 .band-controls { grid-template-columns: minmax(220px, 1fr) 2fr; align-items: end; max-width: none; }
 .band-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-.lens-body { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+.lens-body { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: var(--gap); align-items: stretch; }
 .board-panel, .chart-panel { min-width: 0; }
 .board-table td.eng-cell { font-weight: 600; }
 .board-table tr.is-unranked td { color: var(--faint); }
@@ -31,18 +31,23 @@
 .band-result, .paper-card { margin-top: 12px; font-size: 14px; max-width: 70ch; }
 .paper-card { color: var(--muted); padding-top: 12px; border-top: 1px solid var(--rule); }
 
-.tax-chart svg { display: block; overflow: visible; }
+/* the charts fill their panel: the leaderboard beside them sets the row's height */
+.chart-panel { display: flex; flex-direction: column; }
+.tax-chart { position: relative; flex: 1; min-height: 240px; }
+.tax-chart.strip { min-height: 198px; }
+.tax-chart svg { position: absolute; inset: 0 auto auto 0; display: block; overflow: visible; }
 .tax-chart .grid { stroke: var(--grid); }
 .tax-chart .base { stroke: var(--control); }
-.tax-chart .tick, .tax-chart .axis-label, .tax-chart .row-label { font-family: var(--font); font-size: 11px; fill: var(--faint); }
+.tax-chart .tick, .tax-chart .axis-label, .tax-chart .row-label { font-family: var(--font); font-size: var(--fs-small); fill: var(--faint); }
 .tax-chart .tick { font-variant-numeric: tabular-nums; }
 .tax-chart .axis-label { fill: var(--muted); font-size: 12px; }
 .tax-chart .row-label { fill: var(--text); font-size: 12px; font-weight: 600; }
-.tax-chart .tick.is-thin { fill: var(--neg-ink); }
+.tax-chart .tick.is-thin { fill: var(--text); font-weight: 600; } /* too few to rank: ink, not the departed pill's red */
 .tax-chart .front { fill: none; stroke: var(--text); stroke-width: 1.5; }
 .tax-chart .iso { stroke: var(--gold-line); stroke-width: 2; }
 .tax-chart .eng rect { fill: var(--text); }
-.tax-chart .eng text { font-family: var(--font); font-size: 12px; fill: var(--text); font-weight: 600; }
+.tax-chart .eng text { font-family: var(--font); font-size: 12px; fill: var(--text); font-weight: 600;
+  paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .tax-chart .eng.is-dominated rect { fill: var(--surface); stroke: var(--text); stroke-width: 1.5; }
 .tax-chart .eng.is-dominated text { font-weight: 400; fill: var(--muted); }
 .tax-chart .eng.is-leader rect { fill: var(--gold-line); }
@@ -55,6 +60,4 @@
 }
 @media (max-width: 640px) {
   .band-controls, .band-sliders { grid-template-columns: 1fr; }
-  .lens-switch .seg-track { display: flex; }
-  .lens-switch .seg-opt { flex: 1; justify-content: center; padding: 0 6px; white-space: normal; text-align: center; line-height: 1.2; }
 }

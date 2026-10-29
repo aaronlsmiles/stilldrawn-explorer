@@ -5,7 +5,7 @@ const schemes = ["light", "dark"] as const;
 
 export default defineConfig({
   testDir: ".",
-  testIgnore: /rate-live\.spec\.ts/, // needs a deployed preview: e2e/live.config.ts
+  testIgnore: /rate-live\.spec\.ts|shots\.spec\.ts/, // live: e2e/live.config.ts; screenshots: e2e/shots.config.ts
   timeout: 30_000,
   fullyParallel: true,
   reporter: [["list"]],

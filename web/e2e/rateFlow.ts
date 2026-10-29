@@ -31,8 +31,8 @@ export async function seedSession(page: Page, session: string, seconds = 0) {
 
 export const leaks = (html: string) => banned.filter((b) => (typeof b === "string" ? html.toLowerCase().includes(b.toLowerCase()) : b.test(html))).map(String);
 
-/** From the intro to the "Done" screen, by mouse or by keyboard only. */
-export async function runSession(page: Page, { keyboard = false } = {}) {
+/** From the intro to the "Done" screen, by mouse or by keyboard only; `answers` gives every clip the same score. */
+export async function runSession(page: Page, { keyboard = false, answers }: { keyboard?: boolean; answers?: number } = {}) {
   const session = page.locator('[data-bp="session"]');
   const heading = session.getByRole("heading", { level: 2 });
   await expect(heading).toHaveText(study.title);
@@ -54,7 +54,7 @@ export async function runSession(page: Page, { keyboard = false } = {}) {
       keys = [5];
     } else {
       const code = clipByVideo.get((await session.locator("video").getAttribute("src")) ?? "")!;
-      keys = [panelMean("register", code), panelMean("sameness", code)];
+      keys = answers ? [answers, answers] : [panelMean("register", code), panelMean("sameness", code)];
     }
     const sets = session.locator("fieldset");
     if (h.startsWith("Clip 1 ")) await expectReadable(page);
