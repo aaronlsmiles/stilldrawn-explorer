@@ -10,9 +10,9 @@
 .slider .ticks { position: relative; height: 8px; margin: -10px 8px 0; pointer-events: none; }
 .slider .ticks i { position: absolute; top: 0; width: 2px; height: 8px; background: var(--gold-line); transform: translateX(-1px); }
 .segs { display: flex; flex-wrap: wrap; gap: 8px; }
-.seg-jump { height: var(--control-h); padding: 0 10px; border: 1px solid var(--control); background: var(--surface); cursor: pointer; white-space: nowrap;
-  transition: background-color var(--fast) var(--ease); }
-@media (hover: hover) and (pointer: fine) { .seg-jump:hover { background: var(--raised); } }
+.seg-jump { height: var(--control-h); padding: 0 10px; border: 1px solid var(--control); background: var(--surface); cursor: pointer; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .seg-jump:hover { background: var(--raised);
+  transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease), color var(--fast) var(--ease); } }
 .seg-jump.is-on { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
 .seg-jump.is-on .faint { color: var(--on-gold); }
 .band-controls { grid-template-columns: minmax(220px, 1fr) 2fr; align-items: end; max-width: none; }

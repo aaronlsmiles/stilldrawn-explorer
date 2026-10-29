@@ -8,8 +8,8 @@
 .bar-nav { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 24px; }
 .bar-nav nav { display: flex; gap: 24px; }
 .bar-nav nav a, .bar-end a { color: var(--muted); text-decoration: none; height: var(--bar-h); display: inline-flex; align-items: center;
-  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--fast) var(--ease); }
-@media (hover: hover) and (pointer: fine) { .bar-nav nav a:hover, .bar-end a:hover { color: var(--text); } }
+  border-bottom: 2px solid transparent; margin-bottom: -1px; }
+@media (hover: hover) and (pointer: fine) { .bar-nav nav a:hover, .bar-end a:hover { color: var(--text); transition: color var(--fast) var(--ease); } }
 .bar-nav nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--text); }
 .bar-end { display: flex; align-items: center; gap: 20px; }
 .theme-btn { background: none; border: 0; padding: 0; height: 32px; color: var(--muted); cursor: pointer; }
@@ -42,8 +42,11 @@
 /* Controls */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: var(--control-h); min-width: var(--control-h); padding: 0 12px;
   background: var(--surface); border: 1px solid var(--control); color: var(--text); cursor: pointer; white-space: nowrap;
-  transition: background-color var(--fast) var(--ease), transform var(--fast) var(--ease); }
-@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--raised); } }  /* a tap would leave it filled */
+  transition: transform var(--fast) var(--ease); }
+/* Colour eases only while a pointer hovers (a tap would leave it filled); a toggle by key, tap
+   or an unhovered click changes at once. The press scales any time. */
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--raised);
+  transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease), color var(--fast) var(--ease), transform var(--fast) var(--ease); } }
 .btn:active { transform: scale(.97); }
 .btn[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
 .btn-text { display: inline-flex; align-items: center; min-height: 24px; background: none; border: 0; padding: 0; color: var(--text); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
@@ -54,9 +57,10 @@ select.select { height: var(--control-h); padding: 0 28px 0 10px; border: 1px so
 .seg-label { padding: 0; font-size: var(--fs-small); color: var(--muted); margin-bottom: 4px; }
 .seg-track { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--control); background: var(--surface); }
 .seg-opt { position: relative; display: inline-flex; align-items: center; height: calc(var(--control-h) - 2px); padding: 0 12px; cursor: pointer;
-  color: var(--muted); white-space: nowrap; transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease); }
+  color: var(--muted); white-space: nowrap; }
 .seg-opt + .seg-opt { border-left: 1px solid var(--rule); }
-@media (hover: hover) and (pointer: fine) { .seg-opt:hover { color: var(--text); background: var(--raised); } }
+@media (hover: hover) and (pointer: fine) { .seg-opt:hover { color: var(--text); background: var(--raised);
+  transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease); } }
 .seg-opt.is-on { background: var(--text); color: var(--ground); }
 .seg-opt.is-off { opacity: .55; cursor: not-allowed; }
 .seg-opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: inherit; }
