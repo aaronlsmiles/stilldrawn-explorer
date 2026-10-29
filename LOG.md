@@ -10,6 +10,14 @@ Newest first. Written to be read in public: no account names, IDs or private rep
 - Opting in sends one row and nothing personal: a random session id, the answers, their order, whether autoplay and shortcuts were used, a duration rounded to ten seconds, and the day. The database refuses edits and deletes even to the site's own key. The public tally is cached for five minutes, so right after someone adds their ratings the page reads past the cache once, and the count includes them.
 - The live test sent one real submission from the page, plus four scripted ones so the tally's five-rater threshold could be seen working. Then all six test rows were deleted. The tally starts at zero.
 
+## 2026-10-29 — sizes that fit, and motion that waits for the pointer
+
+- **Images at the size their slot needs.** The source panel came at 1,344 px everywhere, and the contact sheet showed 640 px posters in frames about 90 px wide (7 MB for one screen). Panels now also come at 320, 640 and 960 px and posters at 320 px. The data contract declares the widths once, and every image picks its own size: the default phone view's panel went from 422 KB to one fetch of the right copy, and a sheet frame from about 31 KB to 10.
+- **A preload in the wrong place.** On `/explore` the panel now starts downloading with the page itself, not after the app has loaded. The first version ran before the page's viewport tag, when a phone still lays the page out 980 px wide, so it fetched one copy and the image then asked for another. A test now runs on Lighthouse's own phone profile.
+- **What a slow phone still costs.** On Lighthouse's simulated mid-range phone (slow 4G, 4× CPU), Explore's largest paint went from 5.2 s to 3.6 s; the other views sit at 2.3 s and desktop under 1 s. Each 100 KB of panel costs about 0.65 s there: the same page with an 87 KB panel measured 2.9 s. Getting under 2.5 s would need a panel of about 30 KB, which blurs the screentone the view exists to show.
+- **Motion that only answers a pointer.** A motion review found colour fades on state changes made from the keyboard: the difference toggle (D), the segmented switches and the rating keys 1–5. Colour now eases only while a pointer hovers; a key, a tap or an unhovered click changes it at once. One leaderboard row could also jump when a reorder landed exactly on its new place.
+- **A measurement mistake.** Keeping the preview's access cookie between Lighthouse runs also kept the browser cache, so runs after the first could start warm. The script now clears the cache before each run; the numbers above are all cold.
+
 ## 2026-10-29 — the design pass
 
 A design pass over all five surfaces, with the verification the plan asked for. What we learned:
