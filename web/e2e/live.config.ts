@@ -9,6 +9,7 @@ if (!process.env.PREVIEW_URL || !process.env.VERCEL_BYPASS) throw new Error("PRE
 export default defineConfig({
   ...base,
   webServer: undefined,
+  testIgnore: [],
   testMatch: /rate-live\.spec\.ts/,
   timeout: 180_000,
   use: { ...base.use, baseURL: process.env.PREVIEW_URL },
