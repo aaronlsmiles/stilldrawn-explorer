@@ -5,7 +5,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 ## Criteria (frozen 2026-10-28)
 
 - **Success:**
-  1. All 373 clips play from `media.studionephele.com` beside their source, with synced drift and motion curves. *(Media uploaded and verified 28 Oct; the full-play e2e over every primary clip comes in Phase 5.)*
+  1. All 373 clips play from `media.studionephele.com` beside their source, with synced drift and motion curves. *(Media uploaded and verified 28 Oct; 29 Oct: all 170 primary clips (164 + 6 FLINT) play from the media host with their curves, e2e `allclips.spec`.)*
   2. Each Stillness Tax lens reproduces the paper at its reference setting and reorders the leaderboard live:
      - price 0 gives the paper's ranking
      - the band presets give 5 usable pairs and 2 reversals
@@ -50,6 +50,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 | 4 | 2026-10-28 | G4 applied: two lenses (price default, band alternate); floor and compare layout archived, old links fall back to price | 49 unit, 120 e2e green; inspector 0 FAIL on both lenses | yes | 0 |
 | 6 | 2026-10-28 | Pipeline task 7, upload half: all media to R2 (`stilldrawn-media/stilldrawn/v1.0.0/`) | 1,187 objects (373 clips byte-exact, posters, frame-0 PNGs, 34 panels ×2) plus robots.txt; clips hash-checked against CLIP-HASHES before sending; re-run skips all 1,187 (size and sha256 match); public host: 6 sampled clips give 206 on a range request and match the release byte for byte, immutable cache headers; GPTBot gets 403. Preview now streams every clip from `media.studionephele.com` (2.6 MB deploy, behind Vercel login) | yes | 0 |
 | 7 | 2026-10-29 | Phase 4 (sub-plan D, `docs/superpowers/plans/2026-10-29-integration.md`): blindpanel vendored as a tarball with a lock; `/rate` (React wrapper, `--bp-*` mapped to the explorer's tokens, reveal links routed into Explore); `api/submit`, `tally`, `keepwarm` over the kit's Supabase store; schema applied live; preview env vars; deployed preview | 61 unit, 144 local e2e, 8 live e2e (1440/390 × light/dark, keyboard, clean console, no overflow, button contrast ≥ 4.5); live DB check 27/27; one UI opt-in = exactly one row; tally at n ≥ 5 seen live; `blindpanel report --store supabase` read it; 6 test rows deleted, 0 remain. Fixed on the way: kit buttons unreadable under the explorer's reset (reset now layered below the kit); results 425 px wide at 390 (kit fix); stale crowd count after opting in | yes | 0 |
+| 8 | 2026-10-29 | Phase 5 (design pass and verification): design-taste-frontend direction check; impeccable critique (two isolated agents), audit, layout, typeset, polish; improve-animations (3 plans, done); break-ui; kit fixes and re-vendor (`fd67336`) | The spaced decimals were the font: Schibsted Grotesk's tnum widens `. , : % ×`, now self-hosted with a digits-only tnum. /rate sits in the page (edge, type scale, two-column intro). A failed load refetched in a loop (1,779 requests in 3 s), now fixed. Local: 62 unit, 348 e2e; production build streaming from R2: 376 e2e, all 170 primary clips; axe serious 0; inspect 0 FAIL; detector 0. Preview: 8 live runs, no opt-in, 0 rows. Lighthouse mobile LCP 2.2–2.3 s on four views; Explore 5.2 s (the 423 KB source panel; desktop 1.3 s) | yes | 0 |
 
 ## Spend: £0 of £20 · £ per keeper: n/a
 
@@ -57,7 +58,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- Phase 4 done 29 Oct: `/rate` runs on the login-protected preview with the live database (schema applied, RLS forced, test rows removed). Judgment calls: `~/projects/studio/docs/phase4-integration-calls.md`.
-- **Phase 5 (design pass and verification)** in a fresh session. Carried in from Phase 4: the kit's type inside `/rate` doesn't follow the explorer's scale (16 px body, its own h2/h3 sizes); punctuation gets tabular spacing ("author , who") because the kit sets `tabular-nums` on all text; the reveal table breaks words at 390 ("Cli / p 3", "Op / en"); the lede and the kit's card sit on different left edges.
-- Defended inspector warnings to revisit in Phase 5: Explore readouts beside provenance end apart at 1440 (provenance is a disclosure); Tax board and chart heights differ by lens; the scatter carries no hue until an engine is chosen (engines are named, never coloured; see docs/DESIGN.md).
-- Production at `stilldrawn.studionephele.com` waits for G5: the three env vars for production, the custom domain, and the cron (which only runs on production).
+- Phase 5 done 29 Oct (round 8). Before/after screenshots and the final numbers: a private page linked from the hub's session log. Judgment calls: `~/projects/studio/docs/phase5-design-calls.md`.
+- **Open for Aaron:** (1) `/review-animations` is slash-only and hasn't run; the motion plans it would review are in `plans/`. (2) Explore misses LCP 2.5 s on Lighthouse's simulated mobile (5.2–6.6 s; 1.6 s observed; desktop 1.3 s): a phone-sized source panel (121 KB at 800 px, measured) would mean 34 new objects on the media host.
+- Defended inspector warnings: Explore's 12 px text is the contact sheet's sublines (98 draw counts, 33 motion classes under 14 px names); the scatter has no hue until an engine is chosen (gold is the reader's selection; engines carry no colour, docs/DESIGN.md).
+- Phase 6 (films) next, then writing, clearance and G5. Production at `stilldrawn.studionephele.com` waits for G5: the three env vars for production, the custom domain and the cron.

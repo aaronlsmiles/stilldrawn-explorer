@@ -10,6 +10,17 @@ Newest first. Written to be read in public: no account names, IDs or private rep
 - Opting in sends one row and nothing personal: a random session id, the answers, their order, whether autoplay and shortcuts were used, a duration rounded to ten seconds, and the day. The database refuses edits and deletes even to the site's own key. The public tally is cached for five minutes, so right after someone adds their ratings the page reads past the cache once, and the count includes them.
 - The live test sent one real submission from the page, plus four scripted ones so the tally's five-rater threshold could be seen working. Then all six test rows were deleted. The tally starts at zero.
 
+## 2026-10-29 — the design pass
+
+A design pass over all five surfaces, with the verification the plan asked for. What we learned:
+
+- **Tabular figures that weren't.** Every decimal read "0 . 78". The font's `tnum` feature gives the full stop, comma, colon, per cent and × a digit's width (8.9 px against 3.4 px for the stop at 14 px). The site now serves its own copy of Schibsted Grotesk (OFL) whose `tnum` swaps digits only, built reproducibly from the upstream file by `tools/font/build_font.py`. A test measures it, and was itself caught passing for the wrong reason twice before it could fail.
+- **A failure that hammered the server.** With one data file returning an error, the page asked for it again on every render: 1,779 requests in three seconds and no error message. The loaders now keep a failed load, the error screen says what failed and offers Retry, and the per-frame curve fails on its own without taking the clip with it.
+- **Worst cases from the data itself.** The release already holds the extremes: a 21-character panel id, 103 px of drift, a screentone value of 5×10⁻⁹, a 26.8 MB clip, a cell with ten draws. They found a table 37 px too wide on a 320 px phone and a status chip that wouldn't wrap.
+- **Local media can hide a broken host.** The full pass over all 170 primary clips passed in 27 seconds, even with the media host blocked: the dev server reads clips from a local folder. Run against a build that streams from the host, it fails when the host is blocked and passes when it isn't.
+- **Charts that fill their row.** Both Stillness Tax charts and the scatter now take their height from the table beside them, so panels in a row end together under either lens.
+- **What still misses.** On Lighthouse's simulated mid-range phone, Explore's largest paint (the 423 KB source panel) lands at about 5 s; the other views land at 2.2–2.3 s, and Explore on a desktop at 1.3 s.
+
 ## 2026-10-28 — the clips go up
 
 - All 373 clips are now on the studio's own media host, byte for byte as released, so the 288 with signed content credentials keep them. The upload hashes every clip against the release's published list before sending anything, and stops if one differs; a second run sends nothing because every object's size and hash already match. Spot checks through the public address get partial-content responses (so video can seek) and the exact released bytes.
