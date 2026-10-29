@@ -1,3 +1,6 @@
+/* The reset sits in a cascade layer declared before blindpanel's (tokens.css), so the kit's own
+   rules beat it inside .bp while every unlayered explorer rule still beats both. */
+@layer reset {
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -20,3 +23,4 @@ button, input, select { font: inherit; color: inherit; }
 .small { font-size: var(--fs-small); }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+}

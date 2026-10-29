@@ -1,6 +1,8 @@
 import { test, expect } from "./fixtures";
 import type { Page } from "@playwright/test";
-import { ENGINE_IN_URL, expectNoOverflow, leaks, runSession, seedSession, STORAGE_KEY, study } from "./rateFlow";
+import { ENGINE_IN_URL, expectNoOverflow, expectReadable, leaks, runSession, seedSession, STORAGE_KEY, study } from "./rateFlow";
+
+
 
 const SESSION = "5d1e7a2c-3b4f-4a6d-8e9f-0c1b2a3d4e5f";
 
@@ -11,7 +13,8 @@ async function mockApi(page: Page) {
     posts.push(r.request().postDataJSON());
     await r.fulfill({ status: 200, json: { ok: true } });
   });
-  await page.route("**/api/tally", (r) => r.fulfill({ status: 200, json: { study: study.id, n_sessions: 0, items: {} } }));
+  // the edge cache's copy (plain URL) lags; a fresh key reaches the function
+  await page.route((u) => u.pathname === "/api/tally", (r) => r.fulfill({ status: 200, json: { study: study.id, n_sessions: new URL(r.request().url()).searchParams.has("fresh") ? 1 : 0, items: {} } }));
   return posts;
 }
 
@@ -22,6 +25,7 @@ async function toResults(page: Page, keyboard = false) {
   await page.goto("/rate");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Rate it yourself");
   await expectNoOverflow(page);
+  await expectReadable(page);
   await runSession(page, { keyboard });
   await expectNoOverflow(page);
   // blinding: nothing on the page or in any request so far names a model or a cell
@@ -37,6 +41,7 @@ async function toResults(page: Page, keyboard = false) {
   }
   await expect(page.getByRole("heading", { name: "Where you land" })).toBeVisible();
   await expectNoOverflow(page);
+  await expectReadable(page);
 }
 
 test("the leak check itself catches model names", () => {
@@ -62,6 +67,8 @@ test("blinded session, then results whose reveal links open the clip in Explore 
 test("opt-in sends exactly one submission, with this session's id", async ({ page }) => {
   test.setTimeout(120_000);
   const posts = await mockApi(page);
+  const tallies: string[] = [];
+  page.on("request", (r) => { if (r.url().includes("/api/tally")) tallies.push(r.url().replace(/^https?:\/\/[^/]+/, "")); });
   await toResults(page);
   const add = page.getByRole("button", { name: "Add my ratings to the public tally" });
   await add.click();
@@ -70,6 +77,9 @@ test("opt-in sends exactly one submission, with this session's id", async ({ pag
   await page.waitForTimeout(300);
   expect(posts).toHaveLength(1);
   expect(posts[0]).toMatchObject({ study: study.id, session: SESSION });
+  expect(tallies).toEqual(["/api/tally", expect.stringMatching(/^\/api\/tally\?fresh=[0-9a-f-]{36}$/)]);
+  // after opting in, the crowd box counts this visitor instead of showing the cached count
+  await expect(page.locator(".bp-crowd p").first()).toHaveText(/^1 visitor has added/);
 });
 
 test("a whole session by keyboard only", async ({ page }) => {

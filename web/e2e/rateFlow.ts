@@ -57,10 +57,12 @@ export async function runSession(page: Page, { keyboard = false } = {}) {
       keys = [panelMean("register", code), panelMean("sameness", code)];
     }
     const sets = session.locator("fieldset");
+    if (h.startsWith("Clip 1 ")) await expectReadable(page);
     for (const [i, k] of keys.entries()) {
       if (keyboard) await page.keyboard.press(String(k));
       else await sets.nth(i).getByRole("radio", { name: new RegExp(`^${k},`) }).check();
     }
+    if (h.startsWith("Clip 1 ")) await expectReadable(page);
     if (keyboard) await page.keyboard.press("Enter");
     else await session.getByRole("button", { name: "Next" }).click();
     await expect(heading).not.toHaveText(h);
@@ -73,3 +75,30 @@ export async function expectNoOverflow(page: Page) {
   const doc = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(doc, `page is ${doc}px wide in a ${view}px viewport`).toBeLessThanOrEqual(view);
 }
+
+/** Every visible, enabled kit button: text against its own (or nearest opaque) background, WCAG contrast. */
+async function buttonContrast(page: Page) {
+  return page.locator(".bp button:visible:not(:disabled)").evaluateAll((bs) => {
+    const rgb = (c: string) => (c.match(/[\d.]+/g) ?? []).map(Number);
+    const lum = ([r, g, b]: number[]) => {
+      const f = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+      return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+    };
+    const bg = (el: Element | null): number[] => {
+      for (; el; el = el.parentElement) {
+        const c = rgb(getComputedStyle(el).backgroundColor);
+        if (c.length === 3 || (c.length === 4 && c[3] > 0.5)) return c.slice(0, 3);
+      }
+      return [255, 255, 255];
+    };
+    return bs.map((b) => {
+      const a = lum(rgb(getComputedStyle(b).color).slice(0, 3)), c = lum(bg(b));
+      return { name: b.textContent?.trim(), ratio: Math.round(((Math.max(a, c) + 0.05) / (Math.min(a, c) + 0.05)) * 10) / 10 };
+    });
+  });
+}
+export const expectReadable = async (page: Page) => {
+  // measure settled colours, not a state change's transition in flight
+  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+  for (const b of await buttonContrast(page)) expect(b.ratio, `"${b.name}" contrast`).toBeGreaterThanOrEqual(4.5);
+};

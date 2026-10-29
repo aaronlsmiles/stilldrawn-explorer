@@ -1,3 +1,6 @@
+/* Layer order, declared first: the base reset loses to blindpanel's layer; unlayered rules win over both. */
+@layer reset, blindpanel;
+
 /* Achromatic ledger on paper (docs/DESIGN.md). Gold marks only the selection. */
 :root {
   color-scheme: light;
