@@ -35,4 +35,6 @@ cd ../web && npm ci && npm run dev                 # http://localhost:5173, medi
 npm test && npm run e2e                            # Vitest (incl. Python parity) and Playwright at 1440/390, light/dark
 ```
 
+"Rate it yourself" (`/rate`) runs [blindpanel](../blindpanel), vendored as a tarball in `web/vendor/` with a lock file; `tools/vendor-blindpanel.sh` refreshes it from a clean kit commit. Locally the API is mocked in the tests; on Vercel, `web/api/` runs the kit's handlers against Supabase (see REDEPLOY.md).
+
 Design direction: [docs/DESIGN.md](docs/DESIGN.md). Deploying: [REDEPLOY.md](REDEPLOY.md).

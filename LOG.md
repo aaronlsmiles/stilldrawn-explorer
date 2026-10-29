@@ -2,6 +2,14 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-29 — rate it yourself, wired up
+
+- The rating mode now runs inside the explorer. The rating kit arrives as a packed release file with its checksum and commit recorded beside it, so the site installs exactly what was tested, locally and on the host.
+- The kit was built to be themed by its host, and its rules sit in a cascade layer so the host's styles win. That cut both ways. The explorer's own reset (buttons inherit their text colour) also beat the kit, and the main buttons rendered ink on ink: "Start" was invisible. The tests had passed because they find buttons by name, not by sight. The reset now sits in a layer below the kit's, the tests measure each button's contrast, and the kit's docs tell hosts to do the same.
+- In the explorer's font the results were 425 px wide on a 390 px phone: four columns of figures that refused to wrap. The kit's own phone tests could never have caught it, because under mobile emulation the browser widens its layout to fit the overflow. Both are fixed in the kit: the figures wrap between value, count and interval, and the check measures against the real screen width.
+- Opting in sends one row and nothing personal: a random session id, the answers, their order, whether autoplay and shortcuts were used, a duration rounded to ten seconds, and the day. The database refuses edits and deletes even to the site's own key. The public tally is cached for five minutes, so right after someone adds their ratings the page reads past the cache once, and the count includes them.
+- The live test sent one real submission from the page, plus four scripted ones so the tally's five-rater threshold could be seen working. Then all six test rows were deleted. The tally starts at zero.
+
 ## 2026-10-28 — the clips go up
 
 - All 373 clips are now on the studio's own media host, byte for byte as released, so the 288 with signed content credentials keep them. The upload hashes every clip against the release's published list before sending anything, and stops if one differs; a second run sends nothing because every object's size and hash already match. Spot checks through the public address get partial-content responses (so video can seek) and the exact released bytes.
