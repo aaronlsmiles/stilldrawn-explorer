@@ -6,7 +6,7 @@
 .sheet-top { display: grid; gap: 8px; margin-bottom: 12px; }
 .sheet-note { margin-top: 12px; }
 .keys-hint { margin-top: -8px; }
-@media (hover: none) { .keys-hint { display: none; } }
+@media (hover: none), (max-width: 760px) { .keys-hint { display: none; } }
 .sheet-links { font-size: var(--fs-body); }
 .sheet-links a { display: inline-block; padding: 4px 0; }
 
@@ -14,6 +14,7 @@
 .sheet [role="row"] { display: contents; }
 .sheet-head > * { position: sticky; top: var(--bar-h); z-index: 3; background: var(--ground); padding: 6px 0; font-size: var(--fs-small); color: var(--muted);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-eng { text-align: center; }   /* over its column of frames: "Gen-4 Turbo" no longer runs into "H3" */
 .sheet-eng.is-sel { color: var(--text); font-weight: 600; }
 .sheet-label { display: flex; flex-direction: column; justify-content: center; min-width: 0; font-size: var(--fs-small); line-height: 1.33; padding-right: 4px; }
 .sl-panel { font-size: var(--fs-body); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -91,7 +92,8 @@
 .rd-what { display: block; font-size: var(--fs-small); }
 .readouts td.num { white-space: nowrap; }
 .readouts .rank { display: block; font-size: var(--fs-small); }
-.flags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
+.verdict { display: grid; gap: 4px; }
+.flags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .flags-name { font-weight: 600; font-size: var(--fs-small); margin-right: 4px; }
 .flags a.pill { text-decoration: none; }
 @media (hover: hover) and (pointer: fine) { .flags a.pill:hover { background: var(--border); } }

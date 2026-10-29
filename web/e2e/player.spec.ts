@@ -35,6 +35,9 @@ test("speed control sets playbackRate", async ({ page }) => {
 });
 
 test("difference at frame 0 is near-black", async ({ page }) => {
+  // reads pixels from a canvas, so it needs same-origin media: the dev server's /media/ (byte-identical
+  // to the media host); against a build that streams from the media host the canvas is tainted
+  test.skip(!!process.env.DIST_URL, "needs same-origin media");
   await page.goto(URL + "&diff=1");
   await ready(page);
   const mean = await page.evaluate(async () => {

@@ -19,8 +19,30 @@ function Value({ clip, m, core }: { clip: Clip; m: Metric; core: Core }) {
   );
 }
 
-export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
+/** The verdict on each clip: departed or not, and its hand tags (failure modes). It sits under the finding. */
+export function Verdict({ clips, core }: { clips: Clip[]; core: Core }) {
   const threshold = core.paper.departure_threshold_px.value;
+  const name = (c: Clip) => core.engine(c.engine).name;
+  return (
+    <div className="verdict" data-testid="verdict">
+      {clips.map((c) => (
+        <div key={c.id} className="flags">
+          {clips.length > 1 && <span className="flags-name">{name(c)}</span>}
+          {c.departed
+            ? <span className="pill-neg">Departed: line drift over {threshold} px</span>
+            : <span className="faint small">Stayed under the {threshold} px departure line</span>}
+          {c.tags.map((t) => (
+            <Link key={t} className="pill" href={`/explore/failures#${t}`} title={core.taxonomy[t]?.definition}>
+              {t} · {core.taxonomy[t]?.name}
+            </Link>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
   const name = (c: Clip) => core.engine(c.engine).name;
   return (
     <section className="panel readouts" data-testid="readouts" aria-labelledby="readouts-h">
@@ -45,19 +67,6 @@ export function Readouts({ clips, core }: { clips: Clip[]; core: Core }) {
         </tbody>
       </table>
       </div>
-      {clips.map((c) => (
-        <div key={c.id} className="flags">
-          {clips.length > 1 && <span className="flags-name">{name(c)}</span>}
-          {c.departed
-            ? <span className="pill-neg">Departed: line drift over {threshold} px</span>
-            : <span className="faint small">Stayed under the {threshold} px departure line</span>}
-          {c.tags.map((t) => (
-            <Link key={t} className="pill" href={`/explore/failures#${t}`} title={core.taxonomy[t]?.definition}>
-              {t} · {core.taxonomy[t]?.name}
-            </Link>
-          ))}
-        </div>
-      ))}
     </section>
   );
 }

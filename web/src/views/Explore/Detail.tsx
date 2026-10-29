@@ -12,7 +12,7 @@ import { Link } from "../../ui/Link";
 import { usePlayer, type Player } from "./useFrameClock";
 import { Media, Toolbar } from "./Player";
 import { DriftCurve, SeriesTable, valueAtFrame, type CurveLine } from "./DriftCurve";
-import { Readouts } from "./Readouts";
+import { Readouts, Verdict } from "./Readouts";
 import { Provenance } from "./Provenance";
 
 type Sel = { row: string; engine: string; vs: string | null; draw: string | null };
@@ -129,6 +129,7 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
       <p className="finding">
         <Finding a={a} b={b} core={core} />
       </p>
+      <Verdict clips={b ? [a, b] : [a]} core={core} />
       <div className="detail-controls">
         <Segmented label="Engine" value={sel.engine} options={engines.map((e) => ({ value: e, label: core.engine(e).name }))}
           onChange={(e) => set({ e, vs: sel.vs === e ? null : sel.vs, draw: null })} />
