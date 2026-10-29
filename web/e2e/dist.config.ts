@@ -6,4 +6,4 @@ import base from "./playwright.config";
 
 if (!process.env.DIST_URL) throw new Error("DIST_URL must be set");
 
-export default defineConfig({ ...base, webServer: undefined, testIgnore: /rate-live\.spec\.ts/, use: { ...base.use, baseURL: process.env.DIST_URL } });
+export default defineConfig({ ...base, webServer: undefined, testIgnore: /rate-live\.spec\.ts|film\.spec\.ts/, use: { ...base.use, baseURL: process.env.DIST_URL } });

@@ -1,0 +1,116 @@
+{
+ "command": "npm run setup",
+ "cwd": "~/blindpanel",
+ "commit": "97326a1",
+ "node": "v24.22.0",
+ "chunks": [
+  {
+   "t": 0.327,
+   "text": "\n> blindpanel@0.1.0 setup\n> node scripts/setup.mjs\n\n"
+  },
+  {
+   "t": 0.35,
+   "text": "\n▸ Install exact dependencies\n  $ npm ci --no-audit --no-fund\n"
+  },
+  {
+   "t": 1.596,
+   "text": "\nadded 83 packages in 1s\n"
+  },
+  {
+   "t": 1.597,
+   "text": "npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:\nnpm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))\nnpm warn install-scripts\nnpm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.\n"
+  },
+  {
+   "t": 1.791,
+   "text": "\n▸ Build the kit\n  $ npm run build\n"
+  },
+  {
+   "t": 1.862,
+   "text": "\n> blindpanel@0.1.0 build\n> tsc -p tsconfig.build.json && node scripts/copy-assets.mjs\n\n"
+  },
+  {
+   "t": 2.555,
+   "text": "\n▸ Build the synthetic example\n  $ node bin/blindpanel.mjs build examples/synthetic/study.yaml\n"
+  },
+  {
+   "t": 2.629,
+   "text": "built synthetic -> ~/blindpanel/.blindpanel/build/synthetic\n"
+  },
+  {
+   "t": 2.631,
+   "text": "\n▸ Verify the synthetic example\n  $ node bin/blindpanel.mjs verify examples/synthetic/study.yaml --dist .blindpanel/build/synthetic\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ study.lock.json exists\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ wording matches study.lock.json\n  ✓ instrument matches study.lock.json\n  ✓ clip codes unique\n  ✓ panel codes unique\n  ✓ every clip's reference panel exists\n  ✓ reference ratings cover every question\n  ✓ every clip has reference ratings\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ orders are deterministic per session\n  ✓ orders differ across sessions\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ each clip's still is rated before the clip\n  ✓ banned terms are declared\n  ✓ no banned term in media URLs\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ no banned term in study.json\n  ✓ built site exists\n  ✓ no banned term in the built site (reveal.json exempt)\n  ✓ no secrets or secret-like files in the built site\n  ✓ no URLs outside media.origins in the built site\n  ✓ reveal.json is present (fetched only after completion)\n  ✓ media sha256: media/box-still.mp4\n"
+  },
+  {
+   "t": 2.747,
+   "text": "  ✓ media sha256: media/box-drift.mp4\n  ✓ media sha256: media/grid-blur.mp4\n  ✓ media sha256: media/panel-box.png\n  ✓ media sha256: media/panel-grid.png\n\nall 24 checks passed\n"
+  },
+  {
+   "t": 2.749,
+   "text": "\n▸ Build the stilldrawn example\n  $ node bin/blindpanel.mjs build examples/stilldrawn/study.yaml\n"
+  },
+  {
+   "t": 2.832,
+   "text": "built stilldrawn -> ~/blindpanel/.blindpanel/build/stilldrawn\n"
+  },
+  {
+   "t": 2.835,
+   "text": "\n▸ Verify the stilldrawn example\n  $ node bin/blindpanel.mjs verify examples/stilldrawn/study.yaml --dist .blindpanel/build/stilldrawn\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ study.lock.json exists\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ wording matches study.lock.json\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ instrument matches study.lock.json\n  ✓ clip codes unique\n  ✓ panel codes unique\n  ✓ every clip's reference panel exists\n  ✓ reference ratings cover every question\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ every clip has reference ratings\n  ✓ orders are deterministic per session\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ orders differ across sessions\n  ✓ each clip's still is rated before the clip\n  ✓ banned terms are declared\n  ✓ no banned term in media URLs\n  ✓ no banned term in study.json\n"
+  },
+  {
+   "t": 2.92,
+   "text": "  ✓ built site exists\n  ✓ no banned term in the built site (reveal.json exempt)\n  ✓ no secrets or secret-like files in the built site\n  ✓ no URLs outside media.origins in the built site\n  ✓ reveal.json is present (fetched only after completion)\n\nall 19 checks passed\n"
+  },
+  {
+   "t": 2.923,
+   "text": "\n✓ Set up. Starting the synthetic study (memory store; Ctrl+C to stop).\n"
+  },
+  {
+   "t": 2.923,
+   "text": "  For StillDrawn (needs the network for media): node bin/blindpanel.mjs dev examples/stilldrawn/study.yaml\n\n"
+  },
+  {
+   "t": 3.005,
+   "text": "blindpanel dev: A three-clip test study\n  http://localhost:5173/\n  store: memory (forgotten on exit)\n  Ctrl+C to stop\n"
+  }
+ ]
+}

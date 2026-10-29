@@ -2,6 +2,17 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-29 — the films, scripted
+
+- **Two films, cut from a script, not a screen recording.** A browser test drives the real site, beat by beat, and saves every frame with the time it was taken. A short list says which stretch of each beat goes in, how fast, and what the caption says. When the site changes, the same commands cut the film again. Both films come in 16:9 and in 9:16, and the tall version is a separate run on the phone layout, not a crop.
+- **Every number on screen comes from the data.** Caption figures are read from the same data files the site uses, and the build fails if a caption carries a figure that isn't one of them. It caught its first case at once: "frame 0" isn't a figure, so it is now on the short list of words with digits that are allowed.
+- **Fast enough to film.** A full-resolution screenshot takes just over three screen refreshes, so with clips playing the capture got 7 to 15 frames a second. The capture now runs the page slowed down (the clips, the page's animations and the script's own pauses), and the edit plays it back at normal speed. That gives about 30 frames a second on desktop and 55 on a phone.
+- **Credits follow the screen.** Each clip on screen is credited with its model. The credits come from the clips actually in view during the capture, not from what the script meant to show. The first take proved why: picking a new panel keeps the engine it is compared with, so a second model was on screen that the script hadn't named.
+- **The film found a wrong sentence.** The rating page said "Score eight stills, then eight clips". But the stills are the distinct panels behind a visitor's eight clips, and the session being filmed had six. It now says "Score the source stills, then eight clips made from them", and a test holds it there.
+- **The rating film never sends anything.** Its visitor is scripted: each answer is the panel's rounded mean, nudged by a fixed seed, and a caption says so. Any request to submit ratings fails the capture.
+- **The setup in the terminal is real.** The blindpanel film shows `npm run setup` from a fresh clone, recorded with its timing on the Node version the project supports and replayed as it happened. The first recording ran on a newer Node and printed version warnings; it was re-run on Node 24 rather than trimmed.
+- **No sound.** Neither film has an audio track.
+
 ## 2026-10-29 — rate it yourself, wired up
 
 - The rating mode now runs inside the explorer. The rating kit arrives as a packed release file with its checksum and commit recorded beside it, so the site installs exactly what was tested, locally and on the host.

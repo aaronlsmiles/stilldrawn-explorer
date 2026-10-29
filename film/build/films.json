@@ -1,0 +1,78 @@
+{
+ "_doc": [
+  "The edit decision list for film/build/edit.py. Captions are templates filled from facts.json ({key}); a caption",
+  "with a figure that isn't a fact fails the build. Times are seconds of film time. A time may name a mark in the",
+  "beat's events.json instead: 'name', 'name=value' (any data field), '#n' for the nth match (1-based), then an",
+  "optional offset ('scrub-start+0.4', 'end'). Caption times are relative to the beat's output; segment in/out",
+  "are capture times. A value given as {\"16x9\": …, \"9x16\": …} differs by aspect. Speed ≠ 1 shows a ×N badge.",
+  "'band': 'top-right' moves a beat's caption box off the UI it would cover (16:9 only; 9:16 captions sit below the app).",
+  "Credit chips come from the capture's 'clip' marks (the engines whose clips are in view). The loop has no",
+  "overlays, so it must come from a stretch with no clip playing (P01: the Tax drag; P10: the results, which name the models)."
+ ],
+ "credit": { "Gen-4.5": "Runway Gen-4.5", "Gen-4 Turbo": "Runway Gen-4 Turbo", "Wan 2.2": "Wan 2.2", "LTX-2.3": "Lightricks LTX-2.3", "H3": "MiniMax H3" },
+ "films": {
+  "p01": {
+   "title": "StillDrawn Explorer",
+   "target": [60, 90],
+   "poster": { "beat": "hook", "at": 2.5 },
+   "loop": { "beat": "tax", "from": "drag-start-0.5", "seconds": 8 },
+   "beats": [
+    { "name": "hook", "capture": "hook", "segments": [{ "in": { "16x9": 0.4, "9x16": 0.2 }, "out": { "16x9": 7.4, "9x16": 7.9 } }],
+      "captions": [
+       { "from": 0, "to": 3.6, "text": "Same panel, same camera push. Line drift from frame 0: Wan 2.2 {hook_wan_line} px, Gen-4.5 {hook_g45_line} px." },
+       { "from": 3.6, "to": "end", "text": "Wan 2.2 wins on stability. It also barely moved: {hook_wan_flow} px of median optical flow, against {hook_g45_flow}." }
+      ] },
+    { "name": "question", "card": { "eyebrow": "StillDrawn Explorer", "title": "Is the stability score measuring stability, or stillness?", "sub": "{n_clips_total} generated clips, each beside the hand-drawn still it was made from." }, "seconds": 5.5 },
+    { "name": "interaction", "capture": "interaction", "segments": [{ "in": 0.3, "out": "end-0.1" }],
+      "captions": [
+       { "from": 0, "to": "pick", "text": "Pick a panel and an engine on the contact sheet." },
+       { "from": "pick", "to": "scrub-start", "text": { "16x9": "est-line-1, asked to stay idle. Line drift: Gen-4.5 {pick_line} px, Wan 2.2 {pick_wan_line} px.", "9x16": "est-line-1, asked to stay idle. Gen-4.5's line drift: {pick_line} px." } },
+       { "from": "scrub-start", "to": "diff-on-0.3", "text": "Scrub the curve and the clips follow, frame by frame. The curve is the line art's chamfer distance to frame 0." },
+       { "from": "diff-on-0.3", "to": "end", "text": "The difference view: each clip minus its own first frame. Black means unchanged." }
+      ] },
+    { "name": "scatter", "capture": "scatter", "segments": [{ "in": 0.2, "out": "end-0.1" }],
+      "captions": [
+       { "from": 0, "to": { "16x9": "highlight#1+1.4", "9x16": 3.8 }, "text": "Across the {n_engines} engines, the ones that move more drift more: ρ {rho}, exact p {p_exact}." },
+       { "from": { "16x9": "highlight#1+1.4", "9x16": 3.8 }, "to": "end", "text": { "16x9": "In gold: Gen-4.5, which moves most, then Wan 2.2, which moves least.", "9x16": "Gen-4.5 moves most and Wan 2.2 least." } }
+      ] },
+    { "name": "tax", "capture": "tax", "band": { "16x9": "top-right" }, "segments": [{ "in": 0.3, "out": "end-1.0" }],
+      "captions": [
+       { "from": 0, "to": "drag-start+0.4", "text": "The Stillness Tax, an exploratory lens: charge each engine for its motion." },
+       { "from": "drag-start+0.4", "to": "leader=ltx23-0.4", "text": "At price 0 it is the paper's ranking, and Wan 2.2 leads. Raise the price per doubling of motion…" },
+       { "from": "leader=ltx23-0.4", "to": "leader=ltx23+4.2", "text": "LTX-2.3 leads only from {x_ltx} to {x_g45} px. From {x_g45} px per doubling of motion, Gen-4.5 leads." },
+       { "from": "leader=ltx23+4.2", "to": "end", "text": "Gen-4.5's rank changes because it moves more, not because it looks better." }
+      ] },
+    { "name": "suggests", "card": { "eyebrow": "What it suggests", "title": "Price the motion in, and the ranking becomes a choice you can see.", "sub": "A case for evaluating world models with motion priced in, not on stability alone." }, "seconds": 6.5 },
+    { "name": "end", "end": { "title": "StillDrawn Explorer", "url": "stilldrawn.studionephele.com", "lines": ["Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3", "The Stillness Tax is exploratory (pre-registration amendment A6)", "Data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"] }, "seconds": 5.5 }
+   ]
+  },
+  "p10": {
+   "title": "blindpanel",
+   "target": [43, 47],
+   "poster": { "beat": "results", "at": 3 },
+   "loop": { "beat": "results", "from": "results+0.5", "seconds": 8 },
+   "chip_note": "hidden from raters on the page",
+   "beats": [
+    { "name": "hook", "capture": "session", "segments": [{ "in": "screen=clip#3+0.5", "out": "screen=clip#3+4.5" }],
+      "captions": [{ "from": 0, "to": "end", "text": "{n_raters} raters scored {n_study_clips} generated clips, blind to the model. Your turn." }] },
+    { "name": "session", "capture": "session",
+      "segments": { "16x9": [{ "in": 0, "out": "screen=clip#1", "speed": 4 }, { "in": "screen=clip#1", "out": "end", "speed": 3 }],
+                    "9x16": [{ "in": 0, "out": "screen=clip#1", "speed": 2 }, { "in": "screen=clip#1", "out": "end", "speed": 2 }] },
+      "captions": [
+       { "from": 0, "to": { "16x9": 3.6, "9x16": 4.2 }, "text": "First the source stills on their own, then each clip beside its still." },
+       { "from": { "16x9": 3.6, "9x16": 4.2 }, "to": { "16x9": 10, "9x16": 10.2 }, "text": "Two questions per clip: does it still look hand-drawn, and is it still the same picture?" },
+       { "from": { "16x9": 10, "9x16": 10.2 }, "to": "end", "text": "A scripted run for the film: each answer is the panel's rounded mean, nudged by a fixed seed." }
+      ] },
+    { "name": "results", "capture": "results", "segments": [{ "in": "results-0.6", "out": "end-0.2", "speed": 1.25 }],
+      "captions": [
+       { "from": 0, "to": 3.6, "text": "Where you land: your agreement with the panel's average, beside each rater's." },
+       { "from": 3.6, "to": 7.4, "text": "The panel itself agrees only modestly: α {alpha_register} on register, {alpha_sameness} on sameness." },
+       { "from": 7.4, "to": "end", "text": "It is all computed in your browser. Nothing is sent unless you opt in." }
+      ] },
+    { "name": "terminal", "capture": "terminal", "segments": [{ "in": 0.2, "out": "end-0.3" }],
+      "captions": [{ "from": 0, "to": "end", "text": "The kit behind it: one study file, one command. A fresh clone installs, builds, checks both example studies and serves one." }] },
+    { "name": "end", "end": { "title": "blindpanel", "url": "github.com/aaronlsmiles/blindpanel", "lines": ["MIT licence · Live demo: stilldrawn.studionephele.com/rate", "Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3", "StillDrawn data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"] }, "seconds": 4 }
+   ]
+  }
+ }
+}

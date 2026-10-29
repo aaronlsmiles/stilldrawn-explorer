@@ -13,10 +13,11 @@ OUT = Path(__file__).resolve().parent / "out"
 
 # The clips the films show by name (spec, P01 beats 1 and 3)
 HOOK = {"g45": "act-tone-2_campush_gen45", "wan": "act-tone-2_campush_wan22"}
-PICK = "est-line-1_idle_gen45"
+PICK = {"g45": "est-line-1_idle_gen45", "wan": "est-line-1_idle_wan22"}
 
-# Text with digits that is not a figure: licence, year of the data's attribution, the rating scale
-ALLOWED = ["CC BY 4.0", "2026", "1–5"]
+# Text with digits that is not a figure: licence, year of the data's attribution, the rating scale, the amendment,
+# the reference frame and the slider's zero
+ALLOWED = ["CC BY 4.0", "2026", "1–5", "A6", "frame 0", "price 0"]
 
 
 def _load(p):
@@ -40,7 +41,8 @@ def build():
         "hook_wan_line": px(clips[HOOK["wan"]]["h"]["line"]),
         "hook_g45_flow": px(clips[HOOK["g45"]]["motion"]["median_px"]),
         "hook_wan_flow": px(clips[HOOK["wan"]]["motion"]["median_px"]),
-        "pick_line": px(clips[PICK]["h"]["line"]),
+        "pick_line": px(clips[PICK["g45"]]["h"]["line"]),
+        "pick_wan_line": px(clips[PICK["wan"]]["h"]["line"]),
         "rho": f"{er['rho']:.2f}",
         "p_exact": f"{er['p_exact_two_sided']:.3f}",
         "n_engines": str(er["n_engines"]),

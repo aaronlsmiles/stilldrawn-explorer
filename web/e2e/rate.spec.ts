@@ -111,6 +111,22 @@ test("the kit is themed by the explorer's own tokens, in either theme", async ({
   for (const [b, r] of pairs) expect(b).toBe(r);
 });
 
+test("the lede never states a count of stills the session doesn't have", async ({ page }) => {
+  // the baseline holds the distinct panels behind the session's clips, so its length varies by session
+  // (this one has 6); the film capture showed the lede saying "eight stills" over "Still 2 of 6"
+  await mockApi(page);
+  await seedSession(page, "0b6f3c2e-9a41-4d7e-b5c8-2f1e6a9d4c37");
+  await page.goto("/rate");
+  const lede = (await page.locator(".rate-lede").textContent()) ?? "";
+  const session = page.locator('[data-bp="session"]');
+  await session.getByRole("button", { name: "Start" }).click();
+  const n = Number(/of (\d+)/.exec((await session.locator(".bp-progress, [data-bp=progress]").or(session.getByText(/^\d+ of \d+$/)).first().textContent()) ?? "")?.[1]);
+  expect(n).toBeGreaterThan(0);
+  const words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+  const stated = /\b(\w+) stills\b/.exec(lede)?.[1];
+  if (stated && (words.includes(stated) || /^\d+$/.test(stated))) expect(stated === String(n) || stated === words[n], `lede says "${stated} stills"; the session has ${n}`).toBe(true);
+});
+
 test("Rate it yourself is in the nav and marked current", async ({ page }) => {
   await mockApi(page);
   await page.goto("/rate");

@@ -16,7 +16,7 @@ export default function Rate() {
   return (
     <main id="main" className="page rate">
       <h1 tabIndex={-1}>Rate it yourself</h1>
-      <p className="muted rate-lede">Score eight stills, then eight clips, blind, as the paper's six raters did; then see where you land against them and against the automatic metrics.</p>
+      <p className="muted rate-lede">Score the source stills, then eight clips made from them, blind, as the paper's six raters did; then see where you land against them and against the automatic metrics.</p>
       <RatingPanel study={study} studyUrl={STUDY_URL} />
     </main>
   );
