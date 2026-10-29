@@ -56,5 +56,5 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 ## Next
 
-- Phase 3: blindpanel (sub-plan C), reconciling the kit design pass first.
+- Phase 3 done 29 Oct (see `../blindpanel/STATUS.md`). Phase 4 (sub-plan D) runs in a fresh session. Settled: the kit comes in as a vendored tarball in the staged deploy folder, and the React wrapper lives here.
 - Defended inspector warnings to revisit in Phase 5: Explore readouts beside provenance end apart at 1440 (provenance is a disclosure); Tax board and chart heights differ by lens; the scatter carries no hue until an engine is chosen (engines are named, never coloured; see docs/DESIGN.md).
