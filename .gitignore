@@ -19,3 +19,6 @@ pipeline/.venv/
 deploy/
 .taste-skill/inspect*/
 .impeccable/
+film/capture/
+film/out/
+film/build/out/
