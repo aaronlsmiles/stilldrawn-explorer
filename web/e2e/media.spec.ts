@@ -20,6 +20,16 @@ test("Explore's source panel is fetched once, with the HTML, at the size its slo
   expect(fetched).toEqual([r.src]);
 });
 
+test.describe("on Lighthouse's phone (a real mobile viewport: 412 px at 1.75x, laid out at 980 until the viewport tag)", () => {
+  test.use({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75, isMobile: true, hasTouch: true });
+  test("the preload and the <img> still agree, so the panel is fetched once", async ({ page }) => {
+    await page.goto("/explore");
+    const r = await fit(page.locator(".frame-media img").first());
+    const fetched = await page.evaluate(() => performance.getEntriesByType("resource").map((e) => e.name).filter((n) => /\/panels\/act-tone-2[-.]/.test(n)));
+    expect(fetched).toEqual([r.src]);
+  });
+});
+
 test("a deep link without a second engine sizes the panel for the wider single slot", async ({ page }) => {
   await page.goto("/explore?cell=cip-act-tank-1_burst&e=gen4.5");
   const r = await fit(page.locator(".frame-media img").first());

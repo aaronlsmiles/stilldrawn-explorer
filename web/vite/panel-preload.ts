@@ -39,7 +39,9 @@ export function panelPreload(dataDir: string): Plugin {
       for (const p of panels) if (p.media.webp !== `panels/${p.id}.webp`) throw new Error(`panel-preload: ${p.id} is not at panels/<id>.webp`);
       const d: Data = { base: base || index.media_base, widths: index.variants.panels,
         own: Object.fromEntries(panels.map((p) => [p.id, p.width])), cell: DEFAULT.cell, sizes: PANEL_SIZES };
-      return [{ tag: "script", children: preloadScript(d), injectTo: "head-prepend" }];
+      // end of <head>, after <meta name="viewport">: before it, a phone lays the page out 980 px wide,
+      // and the preload would pick its copy for that width, not the one the <img> picks
+      return [{ tag: "script", children: preloadScript(d), injectTo: "head" }];
     },
   };
 }
