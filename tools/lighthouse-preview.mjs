@@ -45,8 +45,9 @@ for (const form of ["mobile", "desktop"]) {
         ...(form === "desktop" ? ["--preset=desktop"] : [])], { stdio: "inherit", env });
       const a = JSON.parse(readFileSync(file, "utf8")).audits;
       lcp.push(a["largest-contentful-paint"].numericValue / 1000);
-      const node = a["largest-contentful-paint-element"]?.details?.items?.[0]?.items?.[0]?.node;
-      element = node ? `${node.nodeLabel ?? ""} <${(node.snippet ?? "").slice(1, 60)}…` : element;
+      // Lighthouse 13 names the element in the LCP breakdown insight
+      const node = a["lcp-breakdown-insight"]?.details?.items?.find((x) => x.type === "node");
+      element = node ? `${node.selector} (${node.nodeLabel.slice(0, 40)})` : element;
     }
     const m = median(lcp);
     console.log(`${name.padEnd(10)}${form.padEnd(9)}${`${m.toFixed(1)} s ${m <= 2.5 ? "ok " : "MISS"} (${lcp.map((x) => x.toFixed(1)).join(", ")})`.padEnd(32)}${element}`);
