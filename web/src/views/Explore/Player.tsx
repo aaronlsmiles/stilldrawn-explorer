@@ -8,9 +8,9 @@ import type { Player } from "./useFrameClock";
 
 const BIG = 10e6;
 
-function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig }: {
+function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig, deferred }: {
   clip: Clip; engine: Engine; url: (p: string) => string; videoRef: Ref<HTMLVideoElement>;
-  diff: boolean; testid: string; pinned?: boolean; lazyBig: boolean;
+  diff: boolean; testid: string; pinned?: boolean; lazyBig: boolean; deferred: boolean;
 }) {
   const big = lazyBig && clip.bytes > BIG;
   const [failed, setFailed] = useState(false);
@@ -24,8 +24,8 @@ function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig 
         {failed ? (
           <img src={url(clip.media.poster)} alt={`${engine.name}, frame 96 of ${clip.id}`} width={clip.width} height={clip.height} />
         ) : (
-          <video key={clip.id} ref={videoRef} data-testid="clip-video" src={url(clip.media.mp4)} poster={url(clip.media.poster)}
-            muted loop playsInline preload={big ? "none" : "auto"} width={clip.width} height={clip.height}
+          <video key={clip.id} ref={videoRef} data-testid="clip-video" src={url(clip.media.mp4)} poster={deferred ? undefined : url(clip.media.poster)}
+            muted loop playsInline preload={big || deferred ? "none" : lazyBig ? "metadata" : "auto"} width={clip.width} height={clip.height}
             aria-label={`${engine.name} clip ${clip.id}, muted`} onError={() => setFailed(true)} />
         )}
       </div>
@@ -38,23 +38,24 @@ function ClipFrame({ clip, engine, url, videoRef, diff, testid, pinned, lazyBig 
   );
 }
 
-export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, lazyBig }: {
+/** `deferred`: on phones the clips' posters and data wait until the source panel (the largest paint) has loaded. */
+export function Media({ panel, a, b, engines, url, player, diff, panelOriginal, lazyBig, deferred = false, onPanelLoad }: {
   panel: Panel | undefined; a: Clip; b?: Clip; engines: (id: string) => Engine; url: (p: string) => string;
-  player: Player; diff: boolean; panelOriginal: string | null; lazyBig: boolean;
+  player: Player; diff: boolean; panelOriginal: string | null; lazyBig: boolean; deferred?: boolean; onPanelLoad?: () => void;
 }) {
   return (
     <div className={`media ${b ? "media-3" : "media-2"}`}>
       <figure className="frame">
         <div className="frame-media" style={{ aspectRatio: panel ? `${panel.width} / ${panel.height}` : "16 / 9" }}>
-          {panel && <img src={url(panel.media.webp)} alt={panel.alt} width={panel.width} height={panel.height} decoding="async" />}
+          {panel && <img src={url(panel.media.webp)} alt={panel.alt} width={panel.width} height={panel.height} decoding="async" fetchPriority="high" onLoad={onPanelLoad} onError={onPanelLoad} />}
         </div>
         <figcaption className="cap">
           <span className="cap-name">Source panel</span>
           {panelOriginal && <a className="faint" href={panelOriginal}>PNG original</a>}
         </figcaption>
       </figure>
-      <ClipFrame clip={a} engine={engines(a.engine)} url={url} videoRef={player.a} diff={diff} testid="clip-a" lazyBig={lazyBig} />
-      {b && <ClipFrame clip={b} engine={engines(b.engine)} url={url} videoRef={player.b} diff={diff} testid="clip-b" pinned lazyBig={lazyBig} />}
+      <ClipFrame clip={a} engine={engines(a.engine)} url={url} videoRef={player.a} diff={diff} testid="clip-a" lazyBig={lazyBig} deferred={deferred} />
+      {b && <ClipFrame clip={b} engine={engines(b.engine)} url={url} videoRef={player.b} diff={diff} testid="clip-b" pinned lazyBig={lazyBig} deferred={deferred} />}
     </div>
   );
 }

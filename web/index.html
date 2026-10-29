@@ -10,6 +10,14 @@
     <title>StillDrawn Explorer</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- the data every view waits for (src/data/load.ts), fetched alongside the app's script -->
+    <link rel="preload" href="/data/v1/index.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/engines.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/panels.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/clips.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/paper.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/taxonomy.json" as="fetch" crossorigin />
+    <link rel="preload" href="/data/v1/basis.json" as="fetch" crossorigin />
     <script>
       try { const t = localStorage.getItem("sd-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
     </script>

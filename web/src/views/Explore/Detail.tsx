@@ -1,4 +1,4 @@
-import { Suspense, use, useState, type KeyboardEvent } from "react";
+import { Suspense, use, useEffect, useState, type KeyboardEvent } from "react";
 import type { Clip, Core, SeriesKey } from "../../data/types";
 import { loadSeries, retrySeries } from "../../data/load";
 import { Boundary } from "../../ui/Boundary";
@@ -90,9 +90,20 @@ function Curve({ a, b, core, series, player, set }: {
   );
 }
 
+const CurveWaiting = () => <section className="panel curve-panel" aria-busy="true"><h2>Per frame</h2><div className="curve-skeleton" /></section>;
+
 function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide }: DetailProps & { a: Clip }) {
   const big = !wide && a.bytes > 10e6;   // phones: large clips wait for an explicit play
-  const player = usePlayer({ fps: a.fps, nFrames: a.n_frames, clipKey: a.id + (b?.id ?? ""), autoplay: !big && !reducedMotion() });
+  // phones: the source panel is the largest paint; the clips (autoplay, posters) and the curve's data
+  // wait for it, or 2.5 s at most, so they don't share a slow connection with it
+  const [painted, setPainted] = useState(wide);
+  useEffect(() => {
+    if (wide) return setPainted(true);
+    setPainted(false);
+    const t = setTimeout(() => setPainted(true), 2500);
+    return () => clearTimeout(t);
+  }, [a.panel, wide]);
+  const player = usePlayer({ fps: a.fps, nFrames: a.n_frames, clipKey: a.id + (b?.id ?? ""), autoplay: !big && !reducedMotion() && painted });
   const draws = drawsOf(core.clips, a.cell);
   const others = engines.filter((e) => e !== sel.engine);
   const onKey = (e: KeyboardEvent) => {
@@ -136,6 +147,7 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
         )}
       </div>
       <Media panel={panel} a={a} b={b} engines={core.engine} url={url} player={player} diff={diff} lazyBig={!wide}
+        deferred={!painted} onPanelLoad={() => setPainted(true)}
         panelOriginal={live && panel ? url(panel.media.png) : null} />
       <Toolbar player={player} nFrames={a.n_frames} diff={diff} setDiff={(d) => set({ diff: d ? "1" : null })} big={big} bytes={a.bytes} />
       <p className="faint small keys-hint">With the player focused: K or Space plays and pauses, comma and full stop step a frame, D shows the difference.</p>
@@ -146,8 +158,8 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
             <p className="muted" role="alert">Couldn't load the per-frame series. <button type="button" className="btn-text" onClick={retry}>Retry</button></p>
           </section>
         )}>
-        <Suspense fallback={<section className="panel curve-panel" aria-busy="true"><h2>Per frame</h2><div className="curve-skeleton" /></section>}>
-          <Curve a={a} b={b} core={core} series={series} player={player} set={set} />
+        <Suspense fallback={<CurveWaiting />}>
+          {painted ? <Curve a={a} b={b} core={core} series={series} player={player} set={set} /> : <CurveWaiting />}
         </Suspense>
       </Boundary>
       <div className="detail-foot">
