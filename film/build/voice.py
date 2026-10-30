@@ -4,8 +4,9 @@ Run under op run so the key never sits in a file (it reads HUME_API_KEY):
     op run --env-file=$HOME/projects/studio/tools/hume.env.op -- python3 film/build/voice.py <command>
 
 Commands (each prints the characters it would send and stops unless --yes is given; characters are what Hume bills):
-    design [--n 3]          generate N candidate voices from films.json "voice.design", reading "voice.audition";
-                            writes film/vo/design/<k>.wav and design.json (generation ids)
+    design                  one candidate voice per "voice.variants" entry (shared "voice.design" + the variant), or
+                            --n N from "voice.design" alone; reads "voice.audition"; writes film/vo/design/<label>.wav
+                            and design.json (prompts, generation ids)
     save <generation_id>    save that candidate to the account's voice library as "voice.name"; records its id in
                             films.json
     lines [p01 p10]         read every narration line not yet read with the saved voice; writes
@@ -19,6 +20,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -37,11 +39,18 @@ def post(url, body):
         sys.exit("HUME_API_KEY is not set: run under op run with the studio's tools/hume.env.op")
     req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
                                  headers={"X-Hume-Api-Key": key, "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=180) as r:
-            return json.loads(r.read())
-    except urllib.error.HTTPError as e:
-        sys.exit(f"Hume {e.code}: {e.read().decode(errors='replace')[:500]}")
+    for attempt in range(7):
+        try:
+            with urllib.request.urlopen(req, timeout=180) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            # 429 is a per-minute request quota, not a character limit: wait and try again
+            if e.code == 429 and attempt < 6:
+                wait = 15 * (attempt + 1)
+                print(f"  rate-limited by Hume; waiting {wait} s", flush=True)
+                time.sleep(wait)
+                continue
+            sys.exit(f"Hume {e.code}: {e.read().decode(errors='replace')[:500]}")
 
 
 def wav_of(gen):
@@ -80,19 +89,21 @@ def gate(chars, what):
 
 
 def design(cfg):
-    n = int(sys.argv[sys.argv.index("--n") + 1]) if "--n" in sys.argv else 3
+    """One candidate per variant in "voice.variants" (the shared "voice.design" plus the variant's own line), or N
+    candidates from "voice.design" alone when there are no variants."""
     v = cfg["voice"]
-    gate(len(v["audition"]) * n, f"design: {n} candidate voices reading the audition line")
+    variants = v.get("variants") or [{"label": str(k), "description": ""} for k in range(1, 1 + (int(sys.argv[sys.argv.index("--n") + 1]) if "--n" in sys.argv else 3))]
+    gate(len(v["audition"]) * len(variants), f"design: {len(variants)} candidate voices reading the audition line")
     out = VO / "design"
     out.mkdir(parents=True, exist_ok=True)
-    r = post(API, {"utterances": [{"text": v["audition"], "description": v["design"]}], "num_generations": n,
-                   "format": {"type": "wav"}})
     log = []
-    for k, g in enumerate(r["generations"], 1):
-        (out / f"{k}.wav").write_bytes(wav_of(g))
-        log.append({"candidate": k, "generation_id": g["generation_id"], "duration": g["duration"]})
-        print(f"candidate {k}: film/vo/design/{k}.wav ({g['duration']:.1f} s) generation {g['generation_id']}")
-    (out / "design.json").write_text(json.dumps({"design": v["design"], "audition": v["audition"], "candidates": log}, indent=1) + "\n")
+    for var in variants:
+        prompt = " ".join(x for x in (var["description"], v["design"]) if x)
+        g = post(API, {"utterances": [{"text": v["audition"], "description": prompt}], "format": {"type": "wav"}})["generations"][0]
+        (out / f"{var['label']}.wav").write_bytes(wav_of(g))
+        log.append({"label": var["label"], "prompt": prompt, "generation_id": g["generation_id"], "duration": g["duration"]})
+        print(f"{var['label']}: film/vo/design/{var['label']}.wav ({g['duration']:.1f} s) generation {g['generation_id']}")
+    (out / "design.json").write_text(json.dumps({"audition": v["audition"], "candidates": log}, indent=1) + "\n")
 
 
 def save(cfg, gen_id):
@@ -127,7 +138,8 @@ def lines(cfg, ids):
         if v.get("speed"):
             utt["speed"] = v["speed"]
         body = {"utterances": [utt], "format": {"type": "wav"}}
-        first = context.get(fid) or next((x["generation_id"] for x in log.values()), None)
+        # the picked candidate's audition sets the delivery for every line (else the film's first read does)
+        first = v.get("context_generation") or context.get(fid) or next((x["generation_id"] for x in log.values()), None)
         if first:  # the film's first read sets the delivery the rest follow
             body["context"] = {"generation_id": first}
         g = post(API, body)["generations"][0]

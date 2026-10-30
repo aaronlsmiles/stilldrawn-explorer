@@ -2,14 +2,14 @@
 
 Generated from `film/build/films.json` by `film/build/transcript.py`; edit the list, not this file. Each line is read by the film's voice and, unless marked *spoken only*, shown as the subtitle. Every figure comes from the data contract (`film/build/facts.py`). Lines play in order from their marks; the picture runs on if a line needs longer.
 
-**Voice:** StillDrawn narrator (not yet designed). Design prompt: "A thoughtful researcher in their thirties with a soft, neutral British accent. Calm, dry and unhurried, mid-low pitch, little vibrato, no upward inflection at the ends of sentences. Sounds like someone showing a colleague a measurement on their screen, not an advert or an audiobook." Acting direction: "Calm, dry and unhurried; showing a colleague something on screen."
+**Voice:** studio narrator (saved, id in films.json). Design prompt: "Someone who builds things, showing a friend what surprised them. Conversational, quick-witted, curious and a little wry; confident without selling. Grounded and direct with some texture in the voice, never soft, breathy or announcer-polished. Natural rhythm, a smile you can hear, no upward inflection at the ends of lines." Acting direction: "Conversational and quick, a wry smile; showing a friend something surprising."
 
 ## StillDrawn Explorer (P01)
 
 | Beat | Spoken | Subtitle |
 |---|---|---|
-| hook | Same panel. Same camera push. | Same panel. Same camera push. |
-| hook | Wan two point two drifts 0.96 of a pixel. Gen four point five: 7.58. | Wan 2.2 drifts 0.96 of a pixel. Gen-4.5: 7.58. |
+| hook | Same panel, same camera push. | Same panel, same camera push. |
+| hook | Wan two point two drifts 0.96 of a pixel. Gen four point five? 7.58. | Wan 2.2 drifts 0.96 of a pixel. Gen-4.5? 7.58. |
 | question | Wan wins on stability. But it barely moved. | Wan 2.2 wins on stability. But it barely moved. |
 | question | So is the score measuring stability, or stillness? | *spoken only* |
 | interaction | Pick a panel and an engine. | Pick a panel and an engine. |
@@ -30,10 +30,10 @@ About 926 characters (16:9 wording).
 
 | Beat | Spoken | Subtitle |
 |---|---|---|
-| hook | 6 raters scored 20 clips, blind to the model. Your turn. | 6 raters scored 20 clips, blind to the model. Your turn. |
+| hook | 6 raters, 20 clips, scored blind. Your turn. | 6 raters, 20 clips, scored blind. Your turn. |
 | session | First, each source still on its own. | First, each source still on its own. |
 | session | Then each clip beside its still. Still hand-drawn? Still the same picture? | Then each clip beside its still. Still hand-drawn? Still the same picture? |
-| session | These answers are scripted: the panel's mean, nudged by a fixed seed. | These answers are scripted: the panel's mean, nudged by a fixed seed. |
+| session | These answers are scripted. | These answers are scripted: the panel's mean, nudged by a fixed seed. |
 | session | 8 clips in all. | 8 clips in all. |
 | results | Then, where you land: how closely you agree with the panel, beside each rater. | Then, where you land: how closely you agree with the panel, beside each rater. |
 | results | The panel itself agrees only modestly. | The panel itself agrees only modestly: α 0.21 on register, 0.48 on sameness. |
@@ -41,4 +41,4 @@ About 926 characters (16:9 wording).
 | terminal | The kit behind it: one study file, one command. | The kit behind it: one study file, one command. |
 | end | blindpanel. Open source, MIT. | *spoken only* |
 
-About 513 characters (16:9 wording).
+About 459 characters (16:9 wording).

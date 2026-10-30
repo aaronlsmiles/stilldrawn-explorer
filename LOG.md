@@ -2,6 +2,13 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-30 — a voice for the studio
+
+- **The voice came from the identity, as the typeface did.** The first candidates, briefed as "a calm, dry researcher", came out too formal and too soft. So the studio's character went into words first: sharp, hands-on, candid, ink and machine. The voice brief came from those: someone who builds things, showing a friend what surprised them; quick, a little wry, grounded, never announcer-polished. Four candidates, two women and two men, came from that brief, and one was kept and saved as the studio's narrator.
+- **One delivery across every line.** Each line is read with the chosen audition as its reference, so the narration sounds like one take, not twenty-five.
+- **The script bends to the picture, and the picture to the script.** Two lines in the rating film were shortened so it keeps to its 45 seconds, and a subtitle may carry detail the voice leaves out ("These answers are scripted", then how). Speech starts within a few hundredths of a second of each subtitle.
+- **A quota, not a limit.** The voice service refused requests after seventeen lines in a minute. The script now waits and retries, and skips lines it already has.
+
 ## 2026-10-29 — the films, second cut: a calmer opening, a new face, a voice
 
 - **Captions you can see.** On the site's paper-coloured pages, paper-coloured caption boxes blended in. The caption band is now ink with paper text, the site's own dark-theme pair.

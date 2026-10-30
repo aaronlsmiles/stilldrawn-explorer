@@ -53,13 +53,13 @@
       {
        "from": 0,
        "to": 3.0,
-       "text": "Same panel. Same camera push."
+       "text": "Same panel, same camera push."
       },
       {
        "from": 3.0,
        "to": "end",
-       "text": "Wan 2.2 drifts {hook_wan_line} of a pixel. Gen-4.5: {hook_g45_line}.",
-       "say": "Wan two point two drifts {hook_wan_line} of a pixel. Gen four point five: {hook_g45_line}."
+       "text": "Wan 2.2 drifts {hook_wan_line} of a pixel. Gen-4.5? {hook_g45_line}.",
+       "say": "Wan two point two drifts {hook_wan_line} of a pixel. Gen four point five? {hook_g45_line}."
       }
      ]
     },
@@ -247,7 +247,7 @@
       {
        "from": 0,
        "to": "end",
-       "text": "{n_raters} raters scored {n_study_clips} clips, blind to the model. Your turn."
+       "text": "{n_raters} raters, {n_study_clips} clips, scored blind. Your turn."
       }
      ]
     },
@@ -256,7 +256,10 @@
      "capture": "session",
      "segments": [
       {
-       "in": 0.5,
+       "in": {
+        "16x9": 1.5,
+        "9x16": 0.5
+       },
        "out": "leave=still#1"
       },
       {
@@ -286,7 +289,8 @@
       {
        "from": "ready=clip#3",
        "to": "screen=done",
-       "text": "These answers are scripted: the panel's mean, nudged by a fixed seed."
+       "text": "These answers are scripted: the panel's mean, nudged by a fixed seed.",
+       "say": "These answers are scripted."
       },
       {
        "from": "screen=done",
@@ -368,11 +372,32 @@
   }
  },
  "voice": {
-  "name": "StillDrawn narrator",
-  "design": "A thoughtful researcher in their thirties with a soft, neutral British accent. Calm, dry and unhurried, mid-low pitch, little vibrato, no upward inflection at the ends of sentences. Sounds like someone showing a colleague a measurement on their screen, not an advert or an audiobook.",
-  "audition": "Same panel. Same camera push. Wan 2.2 drifts 0.96 of a pixel. Gen-4.5: 7.58.",
-  "acting": "Calm, dry and unhurried; showing a colleague something on screen.",
+  "name": "studio narrator",
+  "design": "Someone who builds things, showing a friend what surprised them. Conversational, quick-witted, curious and a little wry; confident without selling. Grounded and direct with some texture in the voice, never soft, breathy or announcer-polished. Natural rhythm, a smile you can hear, no upward inflection at the ends of lines.",
+  "audition": "Same panel, same camera push. Wan two point two drifts 0.96 of a pixel. Gen four point five? 7.58.",
+  "acting": "Conversational and quick, a wry smile; showing a friend something surprising.",
   "speed": 1.0,
-  "id": null
+  "id": "318c59ab-d934-4bd4-86c5-272965b8d2f0",
+  "identity": "the studio identity (hub docs): sharp, hands-on, candid, ink and machine",
+  "variants": [
+   {
+    "label": "f-london",
+    "description": "A woman in her early thirties from London, a clear, slightly low voice with a bit of grit; modern creative-studio energy."
+   },
+   {
+    "label": "f-north",
+    "description": "A woman in her late twenties with a Northern English accent, bright and direct, with a dry sense of humour."
+   },
+   {
+    "label": "m-london",
+    "description": "A man in his thirties from London, a mid-low voice with a little texture; relaxed, sharp and modern."
+   },
+   {
+    "label": "m-north",
+    "description": "A man in his thirties with a Northern English accent, warm grit in the voice, direct and playful."
+   }
+  ],
+  "picked": "m-london",
+  "context_generation": "bd4b264a-422a-4f8e-b01e-7d017ddc5763"
  }
 }
