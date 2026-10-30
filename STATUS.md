@@ -65,7 +65,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 
 - **Phase 6 closed (30 Oct).** Films on R2 under `films/v1/` (round 13). The voice is v1 and will be refined on planner card F6 (Studio Nephele voice ID); a re-voiced cut goes to `films/v2/`, never over v1. Hume Creator plan before commercial use (Aaron, in the next few days).
 - **Next: Phase 7** (master plan): `THESIS.md` "Stability ranks stillness", the blindpanel README, the Runway touchpoints check, `publish-clearance` on both repos, the page, the films and the thesis, then G5 (repos, tag, production deploy, portfolio) with Aaron's word for each public step.
-- **Offered, waiting on Aaron:** WebP display copies of `/rate`'s stills (1.2–3 MB PNGs today).
+- **Approved by Aaron (30 Oct), first job of Phase 7:** WebP display copies of `/rate`'s stills (1.2–3 MB PNGs today): (1) public WebP copies on the media host under the same blinded codes; (2) visitors see a near-lossless WebP, not the PNG the six raters saw, said in the kit's README; (3) the kit's study config lists display copies for the page to pick from, in v0.1.0 (untagged), test-first with a CHANGELOG line, then re-vendored.
 - **The P10 film is 45 s by the card**, under the case-study skill's 60–180 s standard; recorded here and in blindpanel's STATUS. With narration the cuts run about 45–47 s.
 - Then Phase 7 (thesis, clearance, G5). Phase 5 closed 29 Oct; Explore's 3.6 s mobile LCP accepted.
 - Production at `stilldrawn.studionephele.com` waits for G5: the three env vars for production, the custom domain and the cron.
