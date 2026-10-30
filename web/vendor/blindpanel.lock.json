@@ -1,10 +1,11 @@
 {
   "package": "blindpanel",
   "version": "0.1.0",
-  "tag": null,
-  "commit": "29dac010fb3eb521d5f75656bef989e452e76c84",
+  "tag": "v0.1.0",
+  "commit": "f7a227aea3a4dc557c845ec83547eb5a923d7ec2",
   "tarball": "blindpanel-0.1.0.tgz",
-  "tarball_sha256": "cb4754182f691b0b551a511f7e1fafd43733366d10064ce72cf053d015d34bae",
+  "release": "https://github.com/aaronlsmiles/blindpanel/releases/tag/v0.1.0",
+  "tarball_sha256": "e0e764c773508344bc4a5bcd4d0faaecfb17865057bfc7dd5b9abcd5e8f7589c",
   "study": {
     "source": "examples/stilldrawn/study.yaml",
     "study_sha256": "9d1fb8a9009b4087d9ba6cb826847f38d90e95d62d7f70c675b20c365753c957",
