@@ -372,13 +372,13 @@
   }
  },
  "voice": {
-  "name": "studio narrator",
+  "name": "Studio Nephele narrator",
   "design": "Someone who builds things, showing a friend what surprised them. Conversational, quick-witted, curious and a little wry; confident without selling. Grounded and direct with some texture in the voice, never soft, breathy or announcer-polished. Natural rhythm, a smile you can hear, no upward inflection at the ends of lines.",
   "audition": "Same panel, same camera push. Wan two point two drifts 0.96 of a pixel. Gen four point five? 7.58.",
   "acting": "Conversational and quick, a wry smile; showing a friend something surprising.",
   "speed": 1.0,
   "id": "318c59ab-d934-4bd4-86c5-272965b8d2f0",
-  "identity": "the studio identity (hub docs): sharp, hands-on, candid, ink and machine",
+  "identity": "studio/docs/studio-nephele-identity.md (sharp, hands-on, candid, ink and machine)",
   "variants": [
    {
     "label": "f-london",
@@ -398,6 +398,7 @@
    }
   ],
   "picked": "m-london",
-  "context_generation": "bd4b264a-422a-4f8e-b01e-7d017ddc5763"
+  "context_generation": "bd4b264a-422a-4f8e-b01e-7d017ddc5763",
+  "version": null
  }
 }

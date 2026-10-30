@@ -99,7 +99,8 @@ def design(cfg):
     log = []
     for var in variants:
         prompt = " ".join(x for x in (var["description"], v["design"]) if x)
-        g = post(API, {"utterances": [{"text": v["audition"], "description": prompt}], "format": {"type": "wav"}})["generations"][0]
+        # voice design (no voice given) needs Octave 1; voices designed there also work with Octave 2
+        g = post(API, {"utterances": [{"text": v["audition"], "description": prompt}], "format": {"type": "wav"}, "version": "1"})["generations"][0]
         (out / f"{var['label']}.wav").write_bytes(wav_of(g))
         log.append({"label": var["label"], "prompt": prompt, "generation_id": g["generation_id"], "duration": g["duration"]})
         print(f"{var['label']}: film/vo/design/{var['label']}.wav ({g['duration']:.1f} s) generation {g['generation_id']}")
@@ -138,6 +139,8 @@ def lines(cfg, ids):
         if v.get("speed"):
             utt["speed"] = v["speed"]
         body = {"utterances": [utt], "format": {"type": "wav"}}
+        if v.get("version"):  # pin the Octave model; unset, Hume routes each request itself (the 30 Oct baseline did)
+            body["version"] = str(v["version"])
         # the picked candidate's audition sets the delivery for every line (else the film's first read does)
         first = v.get("context_generation") or context.get(fid) or next((x["generation_id"] for x in log.values()), None)
         if first:  # the film's first read sets the delivery the rest follow

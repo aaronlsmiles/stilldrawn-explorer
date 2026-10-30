@@ -2,7 +2,7 @@
 
 Generated from `film/build/films.json` by `film/build/transcript.py`; edit the list, not this file. Each line is read by the film's voice and, unless marked *spoken only*, shown as the subtitle. Every figure comes from the data contract (`film/build/facts.py`). Lines play in order from their marks; the picture runs on if a line needs longer.
 
-**Voice:** studio narrator (saved, id in films.json). Design prompt: "Someone who builds things, showing a friend what surprised them. Conversational, quick-witted, curious and a little wry; confident without selling. Grounded and direct with some texture in the voice, never soft, breathy or announcer-polished. Natural rhythm, a smile you can hear, no upward inflection at the ends of lines." Acting direction: "Conversational and quick, a wry smile; showing a friend something surprising."
+**Voice:** Studio Nephele narrator (saved, id in films.json). Design prompt: "Someone who builds things, showing a friend what surprised them. Conversational, quick-witted, curious and a little wry; confident without selling. Grounded and direct with some texture in the voice, never soft, breathy or announcer-polished. Natural rhythm, a smile you can hear, no upward inflection at the ends of lines." Acting direction: "Conversational and quick, a wry smile; showing a friend something surprising."
 
 ## StillDrawn Explorer (P01)
 

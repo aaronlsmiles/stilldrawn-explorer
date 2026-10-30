@@ -2,6 +2,12 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-30 — the films go up
+
+- Both films, StillDrawn Explorer (about 82 s) and blindpanel (about 46 s), in 16:9 and 9:16, are on the studio's media host under a versioned path (`films/v1/`), with captions as SRT and WebVTT, a poster and a short silent loop for each. Every file was checked through the public address against the local copy, byte for byte, and the videos answer ranged requests, so players can seek.
+- The narrator is version one. It will be refined on its own; a re-voiced cut will go up as `v2` beside this one, never over it.
+- The voice script now pins the speech model version for every read; the first round left it to the service, which picked the model itself.
+
 ## 2026-10-30 — a voice for the studio
 
 - **The voice came from the identity, as the typeface did.** The first candidates, briefed as "a calm, dry researcher", came out too formal and too soft. So the studio's character went into words first: sharp, hands-on, candid, ink and machine. The voice brief came from those: someone who builds things, showing a friend what surprised them; quick, a little wry, grounded, never announcer-polished. Four candidates, two women and two men, came from that brief, and one was kept and saved as the studio's narrator.
