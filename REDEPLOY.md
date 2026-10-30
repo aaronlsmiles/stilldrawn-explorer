@@ -47,6 +47,16 @@ uv run python -m stilldrawn_web.media verify
 
 Uploads everything under `pipeline/out/media` (run `uv run python -m stilldrawn_web.media` first) to `stilldrawn-media/stilldrawn/v1.0.0/` with `Cache-Control: public, max-age=31536000, immutable`, the content type and each object's sha256 as metadata, plus `robots.txt` (AI crawlers disallowed) at the bucket root. Clips are hashed against `CLIP-HASHES.csv` first; any mismatch stops the run before anything is sent. Re-runs skip objects whose size and hash match. The R2 key is object read/write on this bucket only; it cannot change bucket settings (CORS is not needed: the player loads media without `crossOrigin`).
 
-## Production
+## Production (gate G5: every step needs Aaron's word at the time)
 
-After G5 (go-live): a production deploy to `stilldrawn.studionephele.com`. Recipe lands with Phase 4.
+Public. `tools/stage-preview.sh production` stages `deploy/production/`: the same layout as a preview, without the noindex header (`check-stage.mjs` demands noindex on a preview and forbids it in production).
+
+1. **Env vars, production environment:** `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `CRON_SECRET`. Each value is piped from `op read` into `vercel env add <NAME> production`, as for the preview; never typed or echoed.
+2. **Domain:** `vercel domains add stilldrawn.studionephele.com stilldrawn-explorer --scope "$VERCEL_SCOPE"`, then in Cloudflare (Aaron) a CNAME `stilldrawn` → `cname.vercel-dns.com`, DNS only (grey cloud), so Vercel issues the certificate.
+3. **Deploy:** `G5_GO_LIVE=yes tools/deploy-production.sh` (it refuses without the variable). Vercel registers the daily cron from `vercel.json` on production deploys only.
+4. **Aliases:** a production deploy also gets Vercel's default `stilldrawn-explorer.vercel.app`, which is public. Share only `stilldrawn.studionephele.com`.
+5. **Check, live:**
+   - `curl -sIL https://stilldrawn.studionephele.com` → 200, and no `x-robots-tag`; `/about` and `/og.png` → 200
+   - a ranged GET of one clip on the media host → 206, and its sha256 matches `CLIP-HASHES.csv`
+   - `curl -sI https://stilldrawn.studionephele.com/api/tally` → 200 with `s-maxage`
+   - Lighthouse (`tools/lighthouse-preview.mjs` against the public URL; no bypass cookie needed)

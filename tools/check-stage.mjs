@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 // Asserts the staged deploy folder's layout: the built app under public/, the API
 // functions with the vendored kit, and a vercel.json with rewrites, cron and headers.
-// Usage: node tools/check-stage.mjs deploy/preview   (exit 1 on any failure)
+// Usage: node tools/check-stage.mjs deploy/<mode> [preview|production]   (exit 1 on any failure)
+// A preview must carry noindex; production must not (it is meant to be found).
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const dir = process.argv[2];
-if (!dir) { console.error("usage: check-stage.mjs <staged dir>"); process.exit(2); }
+const mode = process.argv[3] ?? "preview";
+if (!dir || !["preview", "production"].includes(mode)) { console.error("usage: check-stage.mjs <staged dir> [preview|production]"); process.exit(2); }
 const repo = fileURLToPath(new URL("..", import.meta.url));
 const fails = [];
 const check = (ok, what) => { if (!ok) fails.push(what); };
@@ -39,7 +41,8 @@ if (existsSync(at("vercel.json"))) {
   const rw = v.rewrites?.[0]?.source ?? "";
   for (const p of ["api/", "assets/", "data/", "fonts/", "thesis/", "favicon"]) check(rw.includes(p), `SPA rewrite must exclude ${p}`);
   const robots = (v.headers ?? []).flatMap((h) => h.headers).find((h) => h.key === "X-Robots-Tag");
-  check(robots?.value === "noindex, nofollow", "noindex header");
+  if (mode === "preview") check(robots?.value === "noindex, nofollow", "a preview needs the noindex header");
+  else check(!robots, "production must not send X-Robots-Tag");
 }
 
 function* walk(d) {
