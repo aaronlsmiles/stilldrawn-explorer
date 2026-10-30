@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Clip, Core } from "../../data/types";
 import { mb } from "../../lib/format";
+import { panelSource } from "../../data/panelSource";
 
 const NOTICE = "https://github.com/aaronlsmiles/stilldrawn/blob/main/NOTICE-PROVIDERS.md";
 
@@ -21,6 +22,7 @@ export function Provenance({ clip, core, open }: { clip: Clip; core: Core; open:
         <dt>Integrity</dt>
         <dd>Byte-identical to the release{clip.c2pa ? "; C2PA Content Credentials intact" : ""}</dd>
         <dt>Model</dt><dd>{engine.model_version ?? engine.name}</dd>
+        {panel && <><dt>Panel</dt><dd>{panelSource(panel, core.panel)}</dd></>}
         <dt>Archive</dt><dd><a href={`https://doi.org/${doi}`}>{doi}</a> · {engine.zip}</dd>
         <dt>Licence</dt><dd>CC BY 4.0, StillDrawn dataset (Aaron Smiles, 2026)</dd>
       </dl>

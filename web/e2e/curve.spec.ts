@@ -29,12 +29,14 @@ test("readouts show basis rank and provenance from the contract", async ({ page 
   await expect(page.getByTestId("readouts")).toContainText(/lowest of 33/);
   await expect(page.getByTestId("provenance").first()).toContainText(clip.sha256);
   await expect(page.getByTestId("provenance").first()).toContainText("stilldrawn-clips-gen4.5-v1.0.0.zip");
+  await expect(page.getByTestId("provenance").first()).toContainText("PanelIllustrious-XL v0.1, run locally");
   await expect(page.getByTestId("notice-badge").first()).toBeAttached();
 });
 
 test("a local engine's clip carries no provider notice", async ({ page }) => {
   await page.goto("/explore?cell=act-black-1_campush&e=wan22");
   await expect(page.getByTestId("provenance")).toBeAttached();
-  // act-black-1 is a hosted-generated panel, so the panel notice still applies
+  // act-black-1 is a hosted-generated panel, so the panel notice still applies, and the panel's model is named
   await expect(page.getByTestId("notice-badge")).toContainText("panel");
+  await expect(page.getByTestId("provenance")).toContainText("PanelGoogle Gemini 2.5 Flash Image, via the Runway API");
 });

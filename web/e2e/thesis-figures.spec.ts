@@ -33,3 +33,12 @@ test("figure 2: the Stillness Tax past the last crossover", async ({ page }, inf
     clip: { x, y: top.y - pad, width: Math.min(body.width + 2 * pad, page.viewportSize()!.width - x), height: body.y + body.height - top.y + 2 * pad },
   });
 });
+
+test("link preview: public/og.png, 1200x630", async ({ page }, info) => {
+  test.skip(info.project.name !== "light", "one preview image, light");
+  await page.setViewportSize({ width: 1200, height: 630 });
+  await page.goto("/tax?lens=price&p=2");
+  await expect(page.locator(".board-panel tbody tr").first()).toContainText("Gen-4.5");
+  await settle(page);
+  await page.screenshot({ path: "public/og.png", scale: "css" });
+});
