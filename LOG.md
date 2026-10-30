@@ -2,6 +2,16 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-30 — live, with its thesis
+
+- The explorer is public at stilldrawn.studionephele.com, and so are both repos. The rating kit, blindpanel, is released as v0.1.0; the explorer vendors that exact release, and its lock records the release's own checksum. A tarball packed on this Mac differed from the release's only in its compression bytes; the file lists and contents were identical.
+- The thesis, "Stability ranks stillness", is on the site in two tellings of one argument: the finding first, or the explorer first. A switch picks one. Both come from Markdown files in the repo, and a test holds every number in them to the data the site itself shows. Changing one figure by a hundredth fails it.
+- The figures in the thesis are exported from the running app: the desktop layout for wide screens and the app's own phone layout for phones. A chart 1,400 px wide shrunk onto a phone had text 3–5 px tall.
+- The rating page's stills now arrive as WebP copies about a sixth of the size of the PNGs the six raters rated. The page says so. The copies are lossy but close (43–51 dB PSNR); WebP's own "near-lossless" mode only halved the files.
+- Each clip's provenance now names the model that made its source panel too. The panels are generated, and until today only the clips were credited.
+- A link-preview description for the site named one of the engines. The head of the page also ships on the blind rating page, and the rating tests caught the name there before anything went out.
+- Runway's robot-policy evaluation is cited in the kit's README in its own words: over 16,000 human ratings, ranking eight policies much as real-world trials did. An earlier note of ours said "validated on 16k", which the post never says.
+
 ## 2026-10-30 — the films go up
 
 - Both films, StillDrawn Explorer (about 82 s) and blindpanel (about 46 s), in 16:9 and 9:16, are on the studio's media host under a versioned path (`films/v1/`), with captions as SRT and WebVTT, a poster and a short silent loop for each. Every file was checked through the public address against the local copy, byte for byte, and the videos answer ranged requests, so players can seek.

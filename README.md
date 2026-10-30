@@ -2,7 +2,7 @@
 
 A benchmark you can hold. Pick an inked panel and an image-to-video engine, then watch the clip beside its source and read its per-frame drift. Then move a slider that puts a price on motion and watch the leaderboard reshuffle.
 
-Live: `stilldrawn.studionephele.com` (in progress)
+Live: [stilldrawn.studionephele.com](https://stilldrawn.studionephele.com) · Films: [the explorer](https://media.studionephele.com/films/v1/stilldrawn-explorer/16x9.mp4) and [the rating kit](https://media.studionephele.com/films/v1/blindpanel/16x9.mp4) (captions: `16x9.vtt` beside each)
 
 Thesis: [Stability ranks stillness](THESIS.md), about 800 words, also told [object first](THESIS-object-first.md). Both are on the site at `/about`, with a switch between them.
 
