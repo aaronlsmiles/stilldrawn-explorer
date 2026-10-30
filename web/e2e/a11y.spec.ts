@@ -6,7 +6,7 @@ import type { Page } from "@playwright/test";
 import { test, expect } from "./fixtures";
 import { buttonContrast, runSession, seedSession, study } from "./rateFlow";
 
-const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/tax", "/tax?lens=band", "/rate"];
+const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/tax", "/tax?lens=band", "/rate", "/about", "/about?read=object"];
 
 async function open(page: Page, u: string) {
   await page.route((url) => url.pathname === "/api/tally", (r) => r.fulfill({ json: { study: study.id, n_sessions: 0, items: {} } }));

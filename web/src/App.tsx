@@ -10,6 +10,7 @@ const FailureGallery = lazy(() => import("./views/Explore/FailureGallery"));
 const Scatter = lazy(() => import("./views/Scatter/Scatter"));
 const Tax = lazy(() => import("./views/Tax/Tax"));
 const Rate = lazy(() => import("./views/Rate/Rate"));
+const About = lazy(() => import("./views/About/About"));
 
 // Retry reloads: the data loaders keep a failed load cached (re-requesting it on every render looped).
 const LoadError = (error: Error) => (
@@ -23,7 +24,7 @@ const LoadError = (error: Error) => (
 function NotFound() {
   return (
     <main className="page"><h1 tabIndex={-1}>Not found</h1>
-      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link>, <Link href="/tax">Stillness Tax</Link> or <Link href="/rate">Rate it yourself</Link>.</p>
+      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link>, <Link href="/tax">Stillness Tax</Link>, <Link href="/rate">Rate it yourself</Link> or <Link href="/about">About</Link>.</p>
     </main>
   );
 }
@@ -45,6 +46,7 @@ function Routes() {
   if (path === "/scatter") return <Scatter />;
   if (path === "/tax") return <Tax />;
   if (path === "/rate") return <Rate />;
+  if (path === "/about") return <About />;
   return <NotFound />;
 }
 

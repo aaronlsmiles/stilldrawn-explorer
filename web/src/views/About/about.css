@@ -1,0 +1,25 @@
+/* The thesis: one reading column at the findings' measure (36em, ~75 characters), body 16. */
+.about h1:focus { outline: none; }
+.about-read { margin: 12px 0 24px; }
+.thesis { font-size: var(--fs-section); line-height: 1.6; }
+.thesis > h2, .thesis > p, .thesis > ul { max-width: 36em; }
+.thesis > * + * { margin-top: 16px; }
+.thesis h2 { margin-top: 32px; }
+.thesis p, .thesis li { text-wrap: pretty; }
+.thesis ul { padding-left: 1.2em; list-style: disc; }  /* the reset strips list styles */
+.thesis li + li { margin-top: 6px; }
+.thesis a { color: inherit; text-decoration-color: var(--gold-line); text-underline-offset: 3px; }
+
+/* figures may run wider than the text column, up to the chart's own width (set inline from the export) */
+.thesis > .thesis-fig { margin-block: 24px; width: 100%; }
+.thesis-fig picture { display: block; }
+.thesis-fig img { display: block; width: 100%; height: auto; border: 1px solid var(--border); background: var(--surface); }
+.thesis-fig figcaption { margin-top: 8px; font-size: var(--fs-body); line-height: 1.5; color: var(--muted); max-width: 34em; }  /* ~77 characters at 14 px */
+
+.fig-dark { display: none !important; }
+:root[data-theme="dark"] .fig-light { display: none !important; }
+:root[data-theme="dark"] .fig-dark { display: block !important; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fig-light { display: none !important; }
+  :root:not([data-theme="light"]) .fig-dark { display: block !important; }
+}

@@ -3,7 +3,7 @@ import { test, expect, isPhone } from "./fixtures";
 import type { Page } from "@playwright/test";
 import { seedSession } from "./rateFlow";
 
-const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/scatter?arms=repeat,hazard,ground,seedance", "/tax", "/tax?lens=band", "/tax?p=1.3", "/rate"];
+const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/scatter?arms=repeat,hazard,ground,seedance", "/tax", "/tax?lens=band", "/tax?p=1.3", "/rate", "/about", "/about?read=object"];
 const SCALE = [12, 14, 16, 24];
 
 async function open(page: Page, u: string) {

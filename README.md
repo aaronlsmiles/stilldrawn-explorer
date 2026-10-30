@@ -4,6 +4,8 @@ A benchmark you can hold. Pick an inked panel and an image-to-video engine, then
 
 Live: `stilldrawn.studionephele.com` (in progress)
 
+Thesis: [Stability ranks stillness](THESIS.md), about 800 words, also told [object first](THESIS-object-first.md). Both are on the site at `/about`, with a switch between them.
+
 ## What it explores
 
 When an image-to-video model animates an inked panel, does it still look drawn? [StillDrawn](https://doi.org/10.5281/zenodo.23072784) measured that for 373 clips across six engines. This explorer puts every clip, its source and its per-frame metrics in one place you can steer.

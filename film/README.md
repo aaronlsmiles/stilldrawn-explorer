@@ -34,6 +34,6 @@ python3 film/build/edit.py            # or: edit.py p01 --aspect 9x16
 | `film/build/edit.py` | Resamples the frames to 30 fps, overlays, concatenates and exports: films, SRT sidecars, a poster, a silent loop and contact sheets |
 | `film/build/record-setup.mjs`, `setup-transcript.json`, `terminal.html` | A real `npm run setup` from a fresh clone of blindpanel, recorded with its timing, replayed in a terminal window for the blindpanel film |
 
-Every clip on screen is credited with its model, taken from the videos actually in view during capture. The films have no audio track.
+Every clip on screen is credited with its model, taken from the videos actually in view during capture. The only audio is the narration (`film/build/voice.py`, read by a designed Hume Octave voice), set to −14 LUFS; there is no music.
 
 `film/capture/`, `film/out/` and `film/build/out/` are generated and not committed.

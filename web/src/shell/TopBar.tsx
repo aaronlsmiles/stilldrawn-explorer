@@ -9,6 +9,7 @@ const NAV = [
   { href: "/scatter", label: "Motion vs drift" },
   { href: "/tax", label: "Stillness Tax" },
   { href: "/rate", label: "Rate it yourself" },
+  { href: "/about", label: "About" },
 ];
 
 type Theme = "light" | "dark";
