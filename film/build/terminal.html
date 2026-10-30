@@ -5,14 +5,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  @font-face { font-family: "Schibsted Grotesk"; src: url("../../web/public/fonts/schibsted-grotesk-latin.woff2") format("woff2"); font-weight: 400 900; }
+  @font-face { font-family: "Geist"; src: url("../../web/public/fonts/geist-latin.woff2") format("woff2"); font-weight: 400 800; }
+  @font-face { font-family: "Geist Mono"; src: url("../../web/public/fonts/geist-mono-latin.woff2") format("woff2"); font-weight: 400 600; }
   :root { --ground: #e2e2de; --ink: #1c1915; --paper: #ecebe6; --dim: #9c9488; --gold: #d6a43c; }
   * { box-sizing: border-box; margin: 0; }
   html, body { height: 100%; background: var(--ground); }
-  body { display: grid; place-items: center; padding: 24px; font-family: "Schibsted Grotesk", system-ui, sans-serif; }
+  body { display: grid; place-items: center; padding: 24px; font-family: "Geist", system-ui, sans-serif; }
   .win { width: min(1240px, 100%); height: min(700px, 100%); background: var(--ink); color: var(--paper); display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
   .bar { padding: 10px 16px; font-size: 14px; color: var(--dim); border-bottom: 1px solid #37332d; display: flex; justify-content: space-between; gap: 12px; }
-  pre { margin: 0; padding: 18px 20px; overflow: hidden; font: 17px/1.45 ui-monospace, "SF Mono", Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  pre { margin: 0; padding: 18px 20px; overflow: hidden; font: 17px/1.45 "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
   .ok { color: var(--gold); }
   .cursor { display: inline-block; width: .6em; height: 1.1em; background: var(--paper); vertical-align: -.2em; }
   @media (max-width: 480px) {
@@ -50,7 +51,8 @@
     }
   };
   draw();
-  document.fonts.ready.then(() => document.body.setAttribute("data-ready", "1"));
+  // the window starts empty, so ask for both faces explicitly before the capture begins
+  Promise.all([document.fonts.load('17px "Geist Mono"'), document.fonts.load('14px "Geist"')]).then(() => document.body.setAttribute("data-ready", "1"));
 </script>
 </body>
 </html>

@@ -47,7 +47,7 @@ export function ParetoChart({ summ, front, dominatedBy, p, leader, name }: {
             const dom = dominatedBy[e]?.length ? ` (dominated by ${dominatedBy[e].map(name).join(", ")})` : "";
             const label = name(e) + dom;
             // a label that would run past the chart's right edge sits to the left of its mark
-            const left = x(L[e].x) + 9 + textWidth(label, front.includes(e) ? undefined : "400 12px 'Schibsted Grotesk'") > width;
+            const left = x(L[e].x) + 9 + textWidth(label, front.includes(e) ? undefined : "400 12px 'Geist'") > width;
             return (
               <g key={e} className={`eng${e === leader ? " is-leader" : ""}${front.includes(e) ? "" : " is-dominated"}`}>
                 <rect x={x(L[e].x) - 4.5} y={y(L[e].drift) - 4.5} width={9} height={9} />
@@ -99,7 +99,7 @@ export function StripChart({ basis, engines, lo, hi, name, scaleMin, scaleMax }:
           {ticks.map((t) => (
             <text key={t} className="tick" x={x(t)} y={h - m.b + 16} textAnchor="middle">{norm(t, 1)}</text>
           ))}
-          <text className="axis-label" x={x.range()[1]} y={h - 2} textAnchor="end">Motion, normalised (log)</text>
+          <text className="axis-label" x={x.range()[1]} y={h - 4} textAnchor="end">Motion, normalised (log)</text>
         </svg>
       )}
     </div>

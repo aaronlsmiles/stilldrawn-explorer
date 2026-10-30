@@ -2,6 +2,15 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-10-29 — the films, second cut: a calmer opening, a new face, a voice
+
+- **Captions you can see.** On the site's paper-coloured pages, paper-coloured caption boxes blended in. The caption band is now ink with paper text, the site's own dark-theme pair.
+- **An opening you can follow.** The rating film opened on a session played at three or four times speed, with the page scrolling on every screen. It now holds the first clip still for four seconds, then plays the session at real speed. It shows one still and two clips answered in full, cuts to "Done", and a caption says there were eight. Each shot starts once the screen's images and video have loaded, so the half-second of empty placeholders between screens never appears.
+- **A new typeface.** The site now sets Geist, with Geist Mono for the file hashes. Both are open-licensed and served from the site itself, built reproducibly from pinned upstream files. Geist's tabular figures already leave punctuation narrow, so the patch the old face needed now changes nothing; it stays as a guard. One chart's axis title sat 1.5 px below its chart in Geist's taller descenders; a layout test caught it.
+- **A narration pipeline.** The films' subtitles are now a script, one line per moment on screen, written to be read aloud. Figures are spelled from the same data either way. A line plays at its mark, the next waits for it, and the subtitle stays up until the next line. If a line needs longer than its shot, the picture runs on into footage the capture recorded past the cut point: every shot now keeps a few spare seconds.
+- **Loudness that lands.** The standard normaliser gave up on the narration: reaching the target needed 5 dB of gain with peaks already at full scale, and it stopped 1.3 dB short. The edit now sets the gain directly and limits peaks with an oversampled limiter, correcting until it is within 0.1 dB. Each delivered file is measured: about −14 LUFS, with true peaks under −1.5 dBTP.
+- **Credits that follow the cut.** A credit could carry across a cut onto a screen showing no clip at all. At every cut the credit is now recomputed from what was on screen at that moment.
+
 ## 2026-10-29 — the films, scripted
 
 - **Two films, cut from a script, not a screen recording.** A browser test drives the real site, beat by beat, and saves every frame with the time it was taken. A short list says which stretch of each beat goes in, how fast, and what the caption says. When the site changes, the same commands cut the film again. Both films come in 16:9 and in 9:16, and the tall version is a separate run on the phone layout, not a crop.

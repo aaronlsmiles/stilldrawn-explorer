@@ -18,8 +18,8 @@ for (const o of JSON.parse(readFileSync(list, "utf8"))) {
   const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });
   await page.goto(`${page_url}#${encodeURIComponent(JSON.stringify(o))}`);
   await page.waitForSelector("body[data-ready]");
-  const fam = await page.evaluate(() => [...document.fonts].some((f) => f.family.includes("Schibsted") && f.status === "loaded"));
-  if (!fam) throw new Error("Schibsted Grotesk did not load");
+  const fam = await page.evaluate(() => [...document.fonts].some((f) => f.family.includes("Geist") && f.status === "loaded"));
+  if (!fam) throw new Error("Geist did not load");
   await page.screenshot({ path, omitBackground: o.kind === "band" });
   await page.close();
   n++;

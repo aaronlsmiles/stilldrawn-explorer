@@ -7,72 +7,372 @@
   "are capture times. A value given as {\"16x9\": …, \"9x16\": …} differs by aspect. Speed ≠ 1 shows a ×N badge.",
   "'band': 'top-right' moves a beat's caption box off the UI it would cover (16:9 only; 9:16 captions sit below the app).",
   "Credit chips come from the capture's 'clip' marks (the engines whose clips are in view). The loop has no",
-  "overlays, so it must come from a stretch with no clip playing (P01: the Tax drag; P10: the results, which name the models)."
+  "overlays, so it must come from a stretch with no clip playing (P01: the Tax drag; P10: the results, which name the models).",
+  "Narration: each caption is also a spoken line ('say' if the spoken form differs; 'show': false for a line read over a card whose text is already on screen). With voice files in film/vo/, lines play in order from their 'from' time, never overlapping, and each subtitle stays up until the next line starts; 'to' is used only for a silent cut."
  ],
- "credit": { "Gen-4.5": "Runway Gen-4.5", "Gen-4 Turbo": "Runway Gen-4 Turbo", "Wan 2.2": "Wan 2.2", "LTX-2.3": "Lightricks LTX-2.3", "H3": "MiniMax H3" },
+ "credit": {
+  "Gen-4.5": "Runway Gen-4.5",
+  "Gen-4 Turbo": "Runway Gen-4 Turbo",
+  "Wan 2.2": "Wan 2.2",
+  "LTX-2.3": "Lightricks LTX-2.3",
+  "H3": "MiniMax H3"
+ },
  "films": {
   "p01": {
    "title": "StillDrawn Explorer",
-   "target": [60, 90],
-   "poster": { "beat": "hook", "at": 2.5 },
-   "loop": { "beat": "tax", "from": "drag-start-0.5", "seconds": 8 },
+   "target": [
+    60,
+    90
+   ],
+   "poster": {
+    "beat": "hook",
+    "at": 2.5
+   },
+   "loop": {
+    "beat": "tax",
+    "from": "drag-start-0.5",
+    "seconds": 8
+   },
    "beats": [
-    { "name": "hook", "capture": "hook", "segments": [{ "in": { "16x9": 0.4, "9x16": 0.2 }, "out": { "16x9": 7.4, "9x16": 7.9 } }],
-      "captions": [
-       { "from": 0, "to": 3.6, "text": "Same panel, same camera push. Line drift from frame 0: Wan 2.2 {hook_wan_line} px, Gen-4.5 {hook_g45_line} px." },
-       { "from": 3.6, "to": "end", "text": "Wan 2.2 wins on stability. It also barely moved: {hook_wan_flow} px of median optical flow, against {hook_g45_flow}." }
-      ] },
-    { "name": "question", "card": { "eyebrow": "StillDrawn Explorer", "title": "Is the stability score measuring stability, or stillness?", "sub": "{n_clips_total} generated clips, each beside the hand-drawn still it was made from." }, "seconds": 5.5 },
-    { "name": "interaction", "capture": "interaction", "segments": [{ "in": 0.3, "out": "end-0.1" }],
-      "captions": [
-       { "from": 0, "to": "pick", "text": "Pick a panel and an engine on the contact sheet." },
-       { "from": "pick", "to": "scrub-start", "text": { "16x9": "est-line-1, asked to stay idle. Line drift: Gen-4.5 {pick_line} px, Wan 2.2 {pick_wan_line} px.", "9x16": "est-line-1, asked to stay idle. Gen-4.5's line drift: {pick_line} px." } },
-       { "from": "scrub-start", "to": "diff-on-0.3", "text": "Scrub the curve and the clips follow, frame by frame. The curve is the line art's chamfer distance to frame 0." },
-       { "from": "diff-on-0.3", "to": "end", "text": "The difference view: each clip minus its own first frame. Black means unchanged." }
-      ] },
-    { "name": "scatter", "capture": "scatter", "segments": [{ "in": 0.2, "out": "end-0.1" }],
-      "captions": [
-       { "from": 0, "to": { "16x9": "highlight#1+1.4", "9x16": 3.8 }, "text": "Across the {n_engines} engines, the ones that move more drift more: ρ {rho}, exact p {p_exact}." },
-       { "from": { "16x9": "highlight#1+1.4", "9x16": 3.8 }, "to": "end", "text": { "16x9": "In gold: Gen-4.5, which moves most, then Wan 2.2, which moves least.", "9x16": "Gen-4.5 moves most and Wan 2.2 least." } }
-      ] },
-    { "name": "tax", "capture": "tax", "band": { "16x9": "top-right" }, "segments": [{ "in": 0.3, "out": "end-1.0" }],
-      "captions": [
-       { "from": 0, "to": "drag-start+0.4", "text": "The Stillness Tax, an exploratory lens: charge each engine for its motion." },
-       { "from": "drag-start+0.4", "to": "leader=ltx23-0.4", "text": "At price 0 it is the paper's ranking, and Wan 2.2 leads. Raise the price per doubling of motion…" },
-       { "from": "leader=ltx23-0.4", "to": "leader=ltx23+4.2", "text": "LTX-2.3 leads only from {x_ltx} to {x_g45} px. From {x_g45} px per doubling of motion, Gen-4.5 leads." },
-       { "from": "leader=ltx23+4.2", "to": "end", "text": "Gen-4.5's rank changes because it moves more, not because it looks better." }
-      ] },
-    { "name": "suggests", "card": { "eyebrow": "What it suggests", "title": "Price the motion in, and the ranking becomes a choice you can see.", "sub": "A case for evaluating world models with motion priced in, not on stability alone." }, "seconds": 6.5 },
-    { "name": "end", "end": { "title": "StillDrawn Explorer", "url": "stilldrawn.studionephele.com", "lines": ["Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3", "The Stillness Tax is exploratory (pre-registration amendment A6)", "Data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"] }, "seconds": 5.5 }
+    {
+     "name": "hook",
+     "capture": "hook",
+     "segments": [
+      {
+       "in": {
+        "16x9": 0.4,
+        "9x16": 0.2
+       },
+       "out": {
+        "16x9": 7.4,
+        "9x16": 7.9
+       }
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": 3.0,
+       "text": "Same panel. Same camera push."
+      },
+      {
+       "from": 3.0,
+       "to": "end",
+       "text": "Wan 2.2 drifts {hook_wan_line} of a pixel. Gen-4.5: {hook_g45_line}.",
+       "say": "Wan two point two drifts {hook_wan_line} of a pixel. Gen four point five: {hook_g45_line}."
+      }
+     ]
+    },
+    {
+     "name": "question",
+     "card": {
+      "eyebrow": "StillDrawn Explorer",
+      "title": "Is the stability score measuring stability, or stillness?",
+      "sub": "{n_clips_total} generated clips, each beside the hand-drawn still it was made from."
+     },
+     "seconds": 7,
+     "captions": [
+      {
+       "from": 0,
+       "to": 3.4,
+       "text": "Wan 2.2 wins on stability. But it barely moved.",
+       "say": "Wan wins on stability. But it barely moved."
+      },
+      {
+       "from": 3.4,
+       "to": "end",
+       "say": "So is the score measuring stability, or stillness?",
+       "show": false
+      }
+     ]
+    },
+    {
+     "name": "interaction",
+     "capture": "interaction",
+     "segments": [
+      {
+       "in": 0.3,
+       "out": "diff-on+3.8"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "pick",
+       "text": "Pick a panel and an engine."
+      },
+      {
+       "from": "pick",
+       "to": "scrub-start",
+       "text": "Asked to stay idle, its lines drift anyway."
+      },
+      {
+       "from": "scrub-start",
+       "to": "diff-on-0.3",
+       "text": "Scrub the curve and the clip follows. It plots how far the line art has moved from frame 0.",
+       "say": "Scrub the curve and the clip follows. It plots how far the line art has moved from the first frame."
+      },
+      {
+       "from": "diff-on-0.3",
+       "to": "end",
+       "text": "The difference view shows the change itself. Black means unchanged."
+      }
+     ]
+    },
+    {
+     "name": "scatter",
+     "capture": "scatter",
+     "segments": [
+      {
+       "in": 0.2,
+       "out": {
+        "16x9": "highlight#2+2.5",
+        "9x16": 7.7
+       }
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "end",
+       "text": "More motion goes with more drift: ρ {rho} across {n_engines} engines, p {p_exact}.",
+       "say": "More motion goes with more drift: rho {rho} across {n_engines} engines, p {p_exact}."
+      }
+     ]
+    },
+    {
+     "name": "tax",
+     "capture": "tax",
+     "band": {
+      "16x9": "top-right"
+     },
+     "segments": [
+      {
+       "in": 0.3,
+       "out": "drag-end+2.5"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "drag-start+0.4",
+       "text": "So try an exploratory lens: charge each engine for its motion."
+      },
+      {
+       "from": "drag-start+0.4",
+       "to": "leader=gen4.5-0.3",
+       "text": "At price 0, it's the paper's ranking: Wan 2.2 leads. Now raise the price.",
+       "say": "At zero, it's the paper's ranking: Wan leads. Now raise the price."
+      },
+      {
+       "from": "leader=gen4.5-0.3",
+       "to": "leader=gen4.5+4.0",
+       "text": "From {x_g45} px per doubling of motion, Gen-4.5 leads.",
+       "say": "From {x_g45} pixels per doubling of motion, Gen four point five leads."
+      },
+      {
+       "from": "leader=gen4.5+4.0",
+       "to": "end",
+       "text": "Its rank changes because it moves more, not because it looks better."
+      }
+     ]
+    },
+    {
+     "name": "suggests",
+     "card": {
+      "eyebrow": "What it suggests",
+      "title": "Price the motion in, and the ranking becomes a choice you can see.",
+      "sub": "A case for evaluating world models with motion priced in, not on stability alone."
+     },
+     "seconds": 8.5,
+     "captions": [
+      {
+       "from": 0.3,
+       "to": "end",
+       "say": "Price the motion in, and the ranking becomes a choice you can see. A case for evaluating world models with motion priced in, not on stability alone.",
+       "show": false
+      }
+     ]
+    },
+    {
+     "name": "end",
+     "end": {
+      "title": "StillDrawn Explorer",
+      "url": "stilldrawn.studionephele.com",
+      "lines": [
+       "Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3",
+       "The Stillness Tax is exploratory (pre-registration amendment A6)",
+       "Data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"
+      ]
+     },
+     "seconds": 5.5,
+     "captions": [
+      {
+       "from": 0.3,
+       "to": "end",
+       "say": "StillDrawn Explorer.",
+       "show": false
+      }
+     ]
+    }
    ]
   },
   "p10": {
    "title": "blindpanel",
-   "target": [43, 47],
-   "poster": { "beat": "results", "at": 3 },
-   "loop": { "beat": "results", "from": "results+0.5", "seconds": 8 },
+   "target": [
+    43,
+    47
+   ],
+   "poster": {
+    "beat": "results",
+    "at": 3
+   },
+   "loop": {
+    "beat": "results",
+    "from": "results+0.5",
+    "seconds": 8
+   },
    "chip_note": "hidden from raters on the page",
    "beats": [
-    { "name": "hook", "capture": "session", "segments": [{ "in": "screen=clip#3+0.5", "out": "screen=clip#3+4.5" }],
-      "captions": [{ "from": 0, "to": "end", "text": "{n_raters} raters scored {n_study_clips} generated clips, blind to the model. Your turn." }] },
-    { "name": "session", "capture": "session",
-      "segments": { "16x9": [{ "in": 0, "out": "screen=clip#1", "speed": 4 }, { "in": "screen=clip#1", "out": "end", "speed": 3 }],
-                    "9x16": [{ "in": 0, "out": "screen=clip#1", "speed": 2 }, { "in": "screen=clip#1", "out": "end", "speed": 2 }] },
-      "captions": [
-       { "from": 0, "to": { "16x9": 3.6, "9x16": 4.2 }, "text": "First the source stills on their own, then each clip beside its still." },
-       { "from": { "16x9": 3.6, "9x16": 4.2 }, "to": { "16x9": 10, "9x16": 10.2 }, "text": "Two questions per clip: does it still look hand-drawn, and is it still the same picture?" },
-       { "from": { "16x9": 10, "9x16": 10.2 }, "to": "end", "text": "A scripted run for the film: each answer is the panel's rounded mean, nudged by a fixed seed." }
-      ] },
-    { "name": "results", "capture": "results", "segments": [{ "in": "results-0.6", "out": "end-0.2", "speed": 1.25 }],
-      "captions": [
-       { "from": 0, "to": 3.6, "text": "Where you land: your agreement with the panel's average, beside each rater's." },
-       { "from": 3.6, "to": 7.4, "text": "The panel itself agrees only modestly: α {alpha_register} on register, {alpha_sameness} on sameness." },
-       { "from": 7.4, "to": "end", "text": "It is all computed in your browser. Nothing is sent unless you opt in." }
-      ] },
-    { "name": "terminal", "capture": "terminal", "segments": [{ "in": 0.2, "out": "end-0.3" }],
-      "captions": [{ "from": 0, "to": "end", "text": "The kit behind it: one study file, one command. A fresh clone installs, builds, checks both example studies and serves one." }] },
-    { "name": "end", "end": { "title": "blindpanel", "url": "github.com/aaronlsmiles/blindpanel", "lines": ["MIT licence · Live demo: stilldrawn.studionephele.com/rate", "Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3", "StillDrawn data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"] }, "seconds": 4 }
+    {
+     "name": "hook",
+     "capture": "session",
+     "segments": [
+      {
+       "in": "ready=clip#1+0.2",
+       "out": "ready=clip#1+4.4"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "end",
+       "text": "{n_raters} raters scored {n_study_clips} clips, blind to the model. Your turn."
+      }
+     ]
+    },
+    {
+     "name": "session",
+     "capture": "session",
+     "segments": [
+      {
+       "in": 0.5,
+       "out": "leave=still#1"
+      },
+      {
+       "in": "ready=clip#2",
+       "out": "leave=clip#2"
+      },
+      {
+       "in": "ready=clip#3",
+       "out": "leave=clip#3"
+      },
+      {
+       "in": "screen=done",
+       "out": "screen=done+1.2"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "ready=clip#2",
+       "text": "First, each source still on its own."
+      },
+      {
+       "from": "ready=clip#2",
+       "to": "ready=clip#3",
+       "text": "Then each clip beside its still. Still hand-drawn? Still the same picture?"
+      },
+      {
+       "from": "ready=clip#3",
+       "to": "screen=done",
+       "text": "These answers are scripted: the panel's mean, nudged by a fixed seed."
+      },
+      {
+       "from": "screen=done",
+       "to": "end",
+       "text": "{session_size} clips in all."
+      }
+     ]
+    },
+    {
+     "name": "results",
+     "capture": "results",
+     "segments": [
+      {
+       "in": "results-0.6",
+       "out": "end-0.2"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": 4.6,
+       "text": "Then, where you land: how closely you agree with the panel, beside each rater."
+      },
+      {
+       "from": 4.6,
+       "to": 9.6,
+       "text": "The panel itself agrees only modestly: α {alpha_register} on register, {alpha_sameness} on sameness.",
+       "say": "The panel itself agrees only modestly."
+      },
+      {
+       "from": 9.6,
+       "to": "end",
+       "text": "It's all worked out in your browser. Nothing is sent unless you opt in."
+      }
+     ]
+    },
+    {
+     "name": "terminal",
+     "capture": "terminal",
+     "segments": [
+      {
+       "in": 0.2,
+       "out": "done+3.2"
+      }
+     ],
+     "captions": [
+      {
+       "from": 0,
+       "to": "end",
+       "text": "The kit behind it: one study file, one command."
+      }
+     ]
+    },
+    {
+     "name": "end",
+     "end": {
+      "title": "blindpanel",
+      "url": "github.com/aaronlsmiles/blindpanel",
+      "lines": [
+       "MIT licence · Live demo: stilldrawn.studionephele.com/rate",
+       "Clips: Runway Gen-4.5 and Gen-4 Turbo, Wan 2.2, Lightricks LTX-2.3, MiniMax H3",
+       "StillDrawn data CC BY 4.0, Aaron Smiles 2026 · doi:{doi}"
+      ]
+     },
+     "seconds": {
+      "16x9": 3.5,
+      "9x16": 5.1
+     },
+     "captions": [
+      {
+       "from": 0.3,
+       "to": "end",
+       "say": "blindpanel. Open source, MIT.",
+       "show": false
+      }
+     ]
+    }
    ]
   }
+ },
+ "voice": {
+  "name": "StillDrawn narrator",
+  "design": "A thoughtful researcher in their thirties with a soft, neutral British accent. Calm, dry and unhurried, mid-low pitch, little vibrato, no upward inflection at the ends of sentences. Sounds like someone showing a colleague a measurement on their screen, not an advert or an audiobook.",
+  "audition": "Same panel. Same camera push. Wan 2.2 drifts 0.96 of a pixel. Gen-4.5: 7.58.",
+  "acting": "Calm, dry and unhurried; showing a colleague something on screen.",
+  "speed": 1.0,
+  "id": null
  }
 }

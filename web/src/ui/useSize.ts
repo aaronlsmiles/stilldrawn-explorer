@@ -25,7 +25,7 @@ export function useWidth<T extends HTMLElement>() {
 
 let ctx: CanvasRenderingContext2D | null | undefined;
 /** A label's drawn width in the app's face (an estimate where canvas is unavailable, as in tests). */
-export function textWidth(s: string, font = "600 12px 'Schibsted Grotesk'") {
+export function textWidth(s: string, font = "600 12px 'Geist'") {
   if (ctx === undefined) {
     try { ctx = document.createElement("canvas").getContext("2d"); } catch { ctx = null; }
   }

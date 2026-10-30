@@ -109,7 +109,7 @@
 .provenance dd { min-width: 0; overflow-wrap: anywhere; }
 .provenance .sha { display: flex; gap: 8px; align-items: baseline; }
 .provenance .sha button { white-space: nowrap; }
-.provenance code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.provenance code { font-family: var(--font-mono); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .notice { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-top: 12px; font-size: var(--fs-small); }
 .detail-empty { padding-top: 8px; }
 

@@ -1,5 +1,7 @@
 // The films' capture (spec: docs/superpowers/specs/2026-10-29-films-design.md). Each test records one or more
 // beats into film/capture/<film>/<aspect>/<beat>/ for film/build/edit.py. Run with e2e/film.config.ts.
+// Each beat keeps recording a few seconds past its cut point (edit.py's films.json), so the picture can run on
+// while a narration line finishes.
 // Marks in events.json say what is on screen ("clip": the engines whose clips play), so credits follow it.
 import { test, expect, type Page, type TestInfo, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
@@ -51,7 +53,7 @@ async function center(l: Locator) {
 async function press(page: Page, info: TestInfo, l: Locator, ms = 700) {
   // out of view: an eased scroll that brings it to the lower third (a jump would read as a cut)
   const b = (await l.boundingBox())!, vh = page.viewportSize()!.height;
-  if (b.y < 56 || b.y + b.height > vh - 8) await scrollGlide(page, (await page.evaluate(() => scrollY)) + b.y - vh * 0.62, 500);
+  if (b.y < 56 || b.y + b.height > vh - 8) await scrollGlide(page, (await page.evaluate(() => scrollY)) + b.y - vh * 0.62, 850);
   const [x, y] = await center(l);
   if (isPhone(info)) {
     await page.touchscreen.tap(x, y);
@@ -128,14 +130,14 @@ test("p01-hook", async ({ page }, info) => {
     await wait(page, 700);
     await press(page, info, page.getByRole("button", { name: /^Play/ }));
     await playing(page);
-    await wait(page, 7000);
+    await wait(page, 11000);
     await untrack();
   } else {
     await page.mouse.move(...pos);
     await playing(page);
     await r.start();
     const untrack = track(page, r);
-    await wait(page, 8000);
+    await wait(page, 12000);
     await untrack();
   }
   console.log(info.title, info.project.name, await r.stop());
@@ -188,7 +190,7 @@ test("p01-interaction", async ({ page }, info) => {
     await press(page, info, diff);
     r.mark("diff-on");
     if (await play.isVisible()) await press(page, info, play);
-    await wait(page, 3500);
+    await wait(page, 6500);
     await untrack();
   } else {
     await page.mouse.move(...pos);
@@ -219,7 +221,7 @@ test("p01-interaction", async ({ page }, info) => {
     await wait(page, 600);
     await press(page, info, page.getByRole("button", { name: "Difference" }));
     r.mark("diff-on");
-    await wait(page, 3800);
+    await wait(page, 6800);
     await untrack();
   }
   console.log(info.title, info.project.name, await r.stop());
@@ -239,7 +241,7 @@ test("p01-scatter", async ({ page }, info) => {
     await wait(page, 2500);
     const svg = page.locator("svg.plot, .scatter svg, svg").filter({ has: page.locator("circle") }).first();
     await smoothScroll(page, (await svg.boundingBox())!.y + (await page.evaluate(() => scrollY)) - 120, 1200);
-    await wait(page, 4000);
+    await wait(page, 8000);
   } else {
     await page.mouse.move(...pos);
     await r.start();
@@ -249,7 +251,7 @@ test("p01-scatter", async ({ page }, info) => {
     await wait(page, 2600);
     await press(page, info, page.getByRole("radio", { name: "Wan 2.2" }), 700);
     r.mark("highlight", { engine: "wan22" });
-    await wait(page, 2600);
+    await wait(page, 6600);
   }
   console.log(info.title, info.project.name, await r.stop());
   noApi();
@@ -280,7 +282,7 @@ test("p01-tax", async ({ page }, info) => {
   r.mark("drag-start");
   await drag(page, info, [[x0, y0, 0], [...at(1.1), 2200], [...at(1.42), 5200], [...at(1.42), 1200], [...at(2.2), 1600]], read);
   r.mark("drag-end", { p: Number(await slider.inputValue()) });
-  await wait(page, 3500);
+  await wait(page, 7500);
   console.log(info.title, info.project.name, await r.stop());
   noApi();
 });
@@ -315,6 +317,7 @@ test("p10-rate", async ({ page }, info) => {
   r.mark("screen", { kind: "intro" });
   await wait(page, 900);
   await press(page, info, session.getByRole("button", { name: "Start" }));
+  let clipN = 0;
   for (;;) {
     await expect(heading).not.toHaveText(study.title);
     const h = (await heading.textContent()) ?? "";
@@ -324,6 +327,7 @@ test("p10-rate", async ({ page }, info) => {
     if (h.startsWith("Still")) {
       await expect(session.locator(".bp-still img")).toHaveJSProperty("complete", true);
       r.mark("screen", { kind: "still", h });
+      r.mark("ready", { kind: "still" });
       keys = [v.still()];
       await wait(page, 250);
     } else {
@@ -332,7 +336,12 @@ test("p10-rate", async ({ page }, info) => {
       r.mark("screen", { kind: "clip", h, code });
       r.mark("clip", { names: [it.label] });
       await page.waitForFunction(() => { const x = document.querySelector('[data-bp="session"] video') as HTMLVideoElement | null; return !!x && x.readyState >= 3; }, null, { timeout: 60_000 });
-      await wait(page, 1300);
+      await expect(session.locator("img").first()).toHaveJSProperty("complete", true);
+      // the edit starts each screen here and ends it at "leave", so loading placeholders never show
+      r.mark("ready", { kind: "clip" });
+      // the first clip is the film's hook: held at the top, playing, before anything moves
+      clipN++;
+      await wait(page, clipN === 1 ? 5000 : 1600);
       keys = v.clip(code);
     }
     for (const [i, k] of keys.entries()) {
@@ -340,11 +349,12 @@ test("p10-rate", async ({ page }, info) => {
       await wait(page, 150);
     }
     await press(page, info, session.getByRole("button", { name: "Next" }), 380);
+    r.mark("leave", { kind: h.startsWith("Still") ? "still" : "clip" });
     await expect(heading).not.toHaveText(h);
     r.mark("clip", { names: [] });
   }
   r.mark("screen", { kind: "done" });
-  await wait(page, 1200);
+  await wait(page, 3200);
   console.log(info.title, "session", info.project.name, await r.stop());
 
   const r2 = rec(page, info, "p10", "results");
@@ -374,6 +384,6 @@ test("p10-terminal", async ({ page }, info) => {
   await r.start();
   await page.evaluate(([t, o]) => (window as unknown as { play: (t: unknown, o: unknown) => Promise<void> }).play(t, { scale: o }), [transcript, SLOW] as const);
   r.mark("done");
-  await wait(page, 3500);
+  await wait(page, 7500);
   console.log(info.title, info.project.name, await r.stop());
 });

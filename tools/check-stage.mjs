@@ -17,7 +17,7 @@ const json = (p) => JSON.parse(readFileSync(p, "utf8"));
 const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
 
 const STUDY = "public/data/blindpanel/stilldrawn/study.json";
-for (const p of ["public/index.html", "public/data/v1/index.json", "public/fonts/schibsted-grotesk-latin.woff2", "public/fonts/OFL.txt", STUDY, "api/_lib.ts", "api/submit.ts", "api/tally.ts", "api/keepwarm.ts", "package.json", "package-lock.json", "vercel.json"])
+for (const p of ["public/index.html", "public/data/v1/index.json", "public/fonts/geist-latin.woff2", "public/fonts/geist-mono-latin.woff2", "public/fonts/OFL.txt", STUDY, "api/_lib.ts", "api/submit.ts", "api/tally.ts", "api/keepwarm.ts", "package.json", "package-lock.json", "vercel.json"])
   check(existsSync(at(p)), `missing ${p}`);
 if (existsSync(at(STUDY))) check(sha(at(STUDY)) === sha(join(repo, "web", STUDY)), "staged study.json differs from web/public");
 

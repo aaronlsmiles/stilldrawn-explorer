@@ -37,7 +37,7 @@ The plan asked `dataviz` for an engine palette. Validated on 28 Oct:
 
 Gold is never text on paper (2.2:1). In light mode, a gold mark that must be seen on its own uses `--gold-line`.
 
-- **Type:** Schibsted Grotesk 400/600/800, one family. Scale 12 / 14 / 16 / 24 (wordmark 16/800, h1 24/600, card titles 16/600, body and cells 14/400, meta and ticks 12). Tabular figures on every number (`font-variant-numeric: tabular-nums`; checked in the browser on the first build). No figure over 32 px.
+- **Type:** Geist 400/600/800, with Geist Mono 400 for hashes and terminal text (Aaron's house faces from 29 Oct 2026, replacing Schibsted Grotesk; both OFL and self-hosted, `tools/font/build_font.py`). Scale 12 / 14 / 16 / 24 (wordmark 16/800, h1 24/600, card titles 16/600, body and cells 14/400, meta and ticks 12). Tabular figures on every number (`font-variant-numeric: tabular-nums`; checked in the browser on the first build). No figure over 32 px.
 - **Radius:** 0 on panels, media and controls (square, decided once).
 - **Space:** 4 px base; one gutter of 16 px between blocks; panel padding 16; page margin 24 at 1440 and 16 at 390; control height 32 (44 touch targets on phones).
 - **Motion:** feedback only, no entrances. `--ease: cubic-bezier(.2,.7,.2,1)`; 160 ms for press and hover, 240 ms for the leaderboard reorder. `prefers-reduced-motion` makes every change instant.
