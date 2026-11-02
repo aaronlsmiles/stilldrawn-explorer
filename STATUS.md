@@ -18,6 +18,22 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
   - If studionephele.com isn't live on Cloudflare by day 3, serve media from the bucket's `r2.dev` URL for now (never shared) and keep going.
 - **Budget:** 7 focused days for P01 (12 with P10), £20 cap.
 
+## Plain words (added 30 Oct; criteria frozen 2026-10-30, before any copy)
+
+An additive "In plain words" layer tells the explorer's story to a bright 10–12-year-old or a non-technical older reader (the hub's `docs/plain-words.md`). Aaron's choices: one voice for both readers, his own voice with no mascot, blue pencil, an invite on every page that turns the layer on, and a numbered chapter band per page with pinned notes and "Next →".
+
+- **Success:**
+  1. **Additive:** no existing copy, `THESIS*.md` or data file changes (checked in the diff). With the layer off, every existing unit and e2e suite passes unchanged.
+  2. **Followable:** chapters 1–5 (Explore → Motion vs drift → Stillness Tax → Rate it yourself → About) each have a band, and "Next" walks the whole trail at 1440 and 390 px.
+  3. **Readable:** Flesch–Kincaid grade ≤ 6 across the layer; average sentence ≤ 14 words, none over 25; jargon only inside quotes.
+  4. **Honest:** every digit in the layer comes from the data contract; a rounded figure says "about".
+  5. **Blind:** `/rate` with the layer on passes the leak scan.
+  6. **Accessible:** axe WCAG 2.2 AA with the layer on, 1440 and 390 px, light and dark; no overflow at 200% text zoom.
+  7. **The real-reader test:** a non-technical reader follows the trail unaided, then says in their own words what the project found and why it matters. Logged in `LOG.md`; the copy is revised before production.
+- **Changed after the freeze (Aaron, 2 Nov):** criterion 7 runs on the live site, after go-live, with his proofread; both are on his soft to-do list (Obsidian, `Studio/Soft to-dos.md`). The layer ships with criteria 1–6 met, and the copy is revised after the reader, in a later deploy.
+- **Kill rule:** a note the real reader skips or misreads twice is rewritten or cut, never left in.
+- **Budget:** 1 focused day, £0.
+
 ## Gates
 
 | Gate | What | Status |
@@ -58,6 +74,7 @@ Card: P01, with P10 (blindpanel) folded in on 28 Oct · Started: 2026-10-28 · P
 | 13 | 2026-10-30 | Aaron's yes: films to R2; the voice's refinement moved to its own card (F6); studio name cleared; baseline v1 recorded (hub `docs/sn-voice-baseline-v1.md`, paid reads archived) | 16 objects under `media.studionephele.com/films/v1/{stilldrawn-explorer,blindpanel}/` (both cuts, SRT + WebVTT, poster, loop): 200 through the public host, sha256 = local, ranged requests 206, immutable cache. `voice.py` now pins Octave versions (design 1; reads from `voice.version`). **Phase 6 closed** | yes | 0 |
 | 14 | 2026-10-30 | Phase 7 before G5: WebP stills for `/rate` (kit `29dac01`, re-vendored); Runway touchpoints checked; clearance (repos, histories, build, films); the thesis in two tellings on `/about` (`c1ebe00`); Provenance names each panel's model; Open Graph; the production recipe; a preview deploy | `/rate` stills 6.2× smaller (q92 WebP, 43–51 dB PSNR); every `/rate` test passes on the R2 build with parallel workers. Clearance: 0 scanner hits anywhere, no secrets in history. Thesis: A 799 words, B 743, plain-checked, every number held to the contract by a facts test. Caught by tests: a model name in the preview-image alt (the head ships on `/rate`); the figure export overwriting phone figures inside the full run. 99 unit, 434 e2e local; preview: `/about`, figures, `og.png`, tally 200, noindex | yes | 0 |
 | 15 | 2026-10-30 | G5, go-live (each step on Aaron's word): repos `aaronlsmiles/stilldrawn-explorer` and `aaronlsmiles/blindpanel` public; blindpanel v0.1.0 tagged and released, vendored from the release (lock sha = release SHA256SUMS); production env vars, domain (A record in Cloudflare), `G5_GO_LIVE=yes tools/deploy-production.sh`; the old site's Projects note links the explorer, thesis, films and blindpanel | Live: 200 with Let's Encrypt TLS, no `x-robots-tag`; a ranged clip GET 206, sha256 = CLIP-HASHES; `/api/tally` 200, edge-cached (HIT); daily keep-warm cron registered; Lighthouse cold, median of 3: phone 1.7 s on four views, Explore 3.2 s; desktop 0.4–0.8 s. Against production: 160 page e2e and 8 live `/rate` runs (no opt-in, 0 rows) | yes | 0 |
+| 16 | 2026-10-30 | Plain words (criteria above): `src/plainwords/` (words, state, band and notes, CSS), blue-pencil tokens, the top-bar switch, notes in six views, a story map on wide screens; `words.test.ts` (facts shared with the thesis test via `src/test/facts.ts`, jargon in quotes, reading level, blinding, placement); `e2e/plain.spec.ts`; design and a11y specs run again with the layer on; film and figure captures keep it off | Criteria 1–6 met locally. 108 unit; 568 e2e (56 skipped, 0 failed) on the dev server; 134 plain-words, design and a11y runs on the production build streaming from R2. Flesch–Kincaid grade 2.6, 0 jargon outside quotes, /rate leak scan clean with the layer on, reflow clean at 320 px. Criterion 7 (the real-reader test) is open. Nothing deployed | pending the reader | 0 |
 
 ## Spend: £0 of the £20 cap, inside budget · £ per keeper: n/a
 
@@ -73,4 +90,5 @@ Nothing was paid for. Every service ran on a free tier: Cloudflare R2 (media, we
   - Films v2 (card F6): the re-voice; the tax line "charge each engine for its motion" reads the wrong way round (the lens credits motion); per-aspect caption timings for 9:16; a panel-model credit on the end cards. v1 is immutable at `films/v1/`.
   - Option 2 for the thesis page, kept for later: the live scatter and Tax board embedded in the text (about a day).
   - The release's `TOS-REVIEW.md` open item closes in StillDrawn's next release build.
+  - Plain words: Aaron's proofread and the real-reader test (criterion 7), on the live site; his soft to-do list holds both. Log the reader's words here and in `LOG.md`, then revise the copy.
   - P46 "Drift where nothing should move" (planner, added 30 Oct) picks up the question the thesis ends on.

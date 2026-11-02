@@ -28,6 +28,7 @@ async function setup(page: Page, info: TestInfo, start: [number, number] = [720,
   const noApi = await guardApi(page);
   await addPointer(page, isPhone(info));
   await slowMedia(page);
+  await page.addInitScript(() => localStorage.setItem("sd-plain", "off")); // films show the page as it was cut, without the plain-words invite
   pos = start;
   return noApi;
 }

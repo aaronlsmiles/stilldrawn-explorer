@@ -12,6 +12,7 @@ import { ANALYSED, rowKeyOf } from "../../data/model";
 import type { BasisRow } from "../../lib/lenses";
 import { norm, pval, ratio, rho as fmtRho } from "../../lib/format";
 import { Segmented } from "../../ui/Segmented";
+import { PlainNote } from "../../plainwords/PlainWords";
 import { Link } from "../../ui/Link";
 import { points, medianCross, spreadLabels, type Pt, type Cross } from "./scatterModel";
 import { fmtHeadline } from "../Explore/Readouts";
@@ -131,6 +132,7 @@ export default function Scatter() {
         </fieldset>
         <button type="button" className="btn" aria-pressed={table} onClick={() => setTable(!table)}>{table ? "Show as chart" : "Show as table"}</button>
       </div>
+      <PlainNote id="scatter.chart" />
       <div className="sc-body">
         <section className="panel sc-plot" aria-label="Scatter">
           {table ? (

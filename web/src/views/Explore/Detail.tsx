@@ -14,6 +14,7 @@ import { Media, Toolbar } from "./Player";
 import { DriftCurve, SeriesTable, valueAtFrame, type CurveLine } from "./DriftCurve";
 import { Readouts, Verdict } from "./Readouts";
 import { Provenance } from "./Provenance";
+import { PlainNote } from "../../plainwords/PlainWords";
 
 type Sel = { row: string; engine: string; vs: string | null; draw: string | null };
 export type DetailProps = {
@@ -147,12 +148,14 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
             onChange={(d) => set({ draw: d === "r1" ? null : d })} />
         )}
       </div>
+      <PlainNote id="explore.player" />
       <Media panel={panel} a={a} b={b} engines={core.engine} url={url} variants={core.index.variants} player={player} diff={diff} lazyBig={!wide}
         deferred={!painted} onPanelLoad={() => setPainted(true)}
         panelOriginal={live && panel ? url(panel.media.png) : null} />
       <Toolbar player={player} nFrames={a.n_frames} diff={diff} setDiff={(d) => set({ diff: d ? "1" : null })} big={big} bytes={a.bytes} />
       <p className="faint small keys-hint">With the player focused: K or Space plays and pauses, comma and full stop step a frame, D shows the difference.</p>
       {diff && <p className="faint small diff-note">Each clip minus its own first frame. Black means unchanged; line drift measures this against frame 0.</p>}
+      <PlainNote id="explore.curve" />
       <Boundary key={`${a.id}|${b?.id ?? ""}`} onRetry={() => retrySeries(a.engine, ...(b ? [b.engine] : []))}
         fallback={(_, retry) => (
           <section className="panel curve-panel"><h2>Per frame</h2>
@@ -163,6 +166,7 @@ function Loaded({ core, url, a, b, sel, engines, series, diff, set, onBack, wide
           {painted ? <Curve a={a} b={b} core={core} series={series} player={player} set={set} /> : <CurveWaiting />}
         </Suspense>
       </Boundary>
+      <PlainNote id="explore.readouts" />
       <div className="detail-foot">
         <Readouts clips={b ? [a, b] : [a]} core={core} />
         <div className="prov-col">

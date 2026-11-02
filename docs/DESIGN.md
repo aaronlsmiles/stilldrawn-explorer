@@ -37,6 +37,16 @@ The plan asked `dataviz` for an engine palette. Validated on 28 Oct:
 
 Gold is never text on paper (2.2:1). In light mode, a gold mark that must be seen on its own uses `--gold-line`.
 
+**Blue pencil (added 30 Oct): the plain-words voice only** (`src/plainwords/`; the hub's `docs/plain-words.md`). Animators rough in blue pencil before they ink, so the plain telling is the sketch under the ink. Nothing else on the site is blue, and gold keeps its meaning. Since 2 Nov the layer shares one look with studionephele.com's: the same three tokens, pencil mark, hand-drawn rule and invite words. The wash alone sets it apart; there are no rules.
+
+| Role | Light | Dark | Notes |
+|---|---|---|---|
+| `--pencil-wash` | `#d9e4f2` | `#1f2b3b` | the band, the invite and the notes |
+| `--pencil` | `#4a82c4` | `#6a9fe0` | the hand-drawn rule, the pencil mark, the ring around the current chapter (3.09:1 / 5.21:1 on the wash) |
+| `--pencil-ink` | `#1b4a8a` | `#aecbf4` | labels, links and the invite button (6.82:1 / 8.62:1 on the wash; 6.76:1 / 10.55:1 on the ground). The invite button's hover is the pencil at 16 % over the wash, where the ink stays 5.81:1 / 6.58:1 |
+
+The voice's body text, chapter titles included, stays `--text` (13.6:1 / 12.0:1 on the wash) at 16 px, one step above the page's body, for older eyes. The layer adds no motion.
+
 - **Type:** Geist 400/600/800, with Geist Mono 400 for hashes and terminal text (Aaron's house faces from 29 Oct 2026, replacing Schibsted Grotesk; both OFL and self-hosted, `tools/font/build_font.py`). Scale 12 / 14 / 16 / 24 (wordmark 16/800, h1 24/600, card titles 16/600, body and cells 14/400, meta and ticks 12). Tabular figures on every number (`font-variant-numeric: tabular-nums`; checked in the browser on the first build). No figure over 32 px.
 - **Radius:** 0 on panels, media and controls (square, decided once).
 - **Space:** 4 px base; one gutter of 16 px between blocks; panel padding 16; page margin 24 at 1440 and 16 at 390; control height 32 (44 touch targets on phones).

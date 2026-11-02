@@ -26,6 +26,8 @@
   --gold: #c4922a; --gold-line: #9a6a12; --on-gold: #1c1915;
   --neg-bg: #f1dcd6; --neg-ink: #7d1f1a;
   --grid: #d6d5ce;
+  /* blue pencil: the plain-words voice only (src/plainwords/); the same values as studionephele.com's tokens.css */
+  --pencil: #4a82c4; --pencil-ink: #1b4a8a; --pencil-wash: #d9e4f2;
 
   --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -43,6 +45,7 @@
     --gold: #d6a43c; --gold-line: #d6a43c; --on-gold: #1c1915;
     --neg-bg: #3a1f1b; --neg-ink: #f0a69b;
     --grid: #33302a;
+    --pencil: #6a9fe0; --pencil-ink: #aecbf4; --pencil-wash: #1f2b3b;
   }
 }
 :root[data-theme="dark"] {
@@ -53,5 +56,6 @@
   --gold: #d6a43c; --gold-line: #d6a43c; --on-gold: #1c1915;
   --neg-bg: #3a1f1b; --neg-ink: #f0a69b;
   --grid: #33302a;
+  --pencil: #6a9fe0; --pencil-ink: #aecbf4; --pencil-wash: #1f2b3b;
 }
 @media (max-width: 640px) { :root { --margin: 16px; --control-h: 44px; } }

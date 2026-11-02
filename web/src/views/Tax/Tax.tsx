@@ -11,6 +11,7 @@ import { onLowerHull, pareto } from "../../lib/pareto";
 import { fixed, norm, px } from "../../lib/format";
 import { ANALYSED } from "../../data/model";
 import { Segmented } from "../../ui/Segmented";
+import { PlainNote } from "../../plainwords/PlainWords";
 import { Leaderboard } from "./Leaderboard";
 import { ParetoChart, StripChart } from "./TaxCharts";
 import { LENSES, P_MAX, boardFor, motionScale, parseState, stateToQuery, type LensId, type LensState } from "./taxModel";
@@ -136,6 +137,7 @@ function LensPanel({ s, set, d, name, paperCard }: {
   return (
     <section className="lens-panel" data-testid="lens-panel" aria-label={meta.name}>
       <p className="lens-sentence">{meta.sentence}</p>
+      {s.lens === "price" && <PlainNote id="tax.slider" />}
       {s.lens === "price" && <PriceControls s={s} d={d} set={set} name={name} />}
       {s.lens === "band" && <BandControls s={s} d={d} set={set} name={name} />}
       <p className="lens-finding" aria-live="off">{finding(s, d, rows, name)}</p>

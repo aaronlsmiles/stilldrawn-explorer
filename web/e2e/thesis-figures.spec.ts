@@ -3,6 +3,9 @@
 // light files; /about swaps in the dark ones and, under 761 px, the phone ones.
 import { test, expect, type Page } from "@playwright/test";
 
+// the figures show the page itself, without the plain-words invite or notes
+test.beforeEach(({ page }) => page.addInitScript(() => localStorage.setItem("sd-plain", "off")));
+
 const out = (name: string, scheme: string) => `public/thesis/${name}-${scheme}.png`;
 const settle = async (page: Page) => {
   await page.evaluate(() => document.fonts.ready);

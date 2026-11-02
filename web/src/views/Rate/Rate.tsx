@@ -3,6 +3,7 @@ import type { Study } from "blindpanel";
 import "./rate.css";
 import { RatingPanel } from "./RatingPanel";
 import { STUDY_URL } from "./rateModel";
+import { PlainNote } from "../../plainwords/PlainWords";
 
 let pending: Promise<Study> | null = null;
 const loadStudy = () => (pending ??= fetch(STUDY_URL).then((r) => {
@@ -17,6 +18,7 @@ export default function Rate() {
     <main id="main" className="page rate">
       <h1 tabIndex={-1}>Rate it yourself</h1>
       <p className="muted rate-lede">Score the source stills, then eight clips made from them, blind, as the paper's six raters did; then see where you land against them and against the automatic metrics.</p>
+      <PlainNote id="rate.blind" />
       <RatingPanel study={study} studyUrl={STUDY_URL} />
     </main>
   );

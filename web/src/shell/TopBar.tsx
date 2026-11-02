@@ -3,6 +3,9 @@ import { useRoute } from "../router";
 import { Link } from "../ui/Link";
 import { Mark } from "../ui/Keep";
 import { useCore } from "../data/core";
+import { usePlainWords } from "../plainwords/state";
+import { UI } from "../plainwords/words";
+import { Pencil } from "../plainwords/PlainWords";
 
 const NAV = [
   { href: "/explore", label: "Explore" },
@@ -37,6 +40,7 @@ export function TopBar() {
   const { path } = useRoute();
   const { paper } = useCore();
   const [theme, setTheme] = useTheme();
+  const plain = usePlainWords();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [path]);
   const doi = paper.doi_version.value;
@@ -55,6 +59,7 @@ export function TopBar() {
         </nav>
         <div className="bar-end">
           <a href={`https://doi.org/${doi}`} rel="noopener">Dataset<span className="visually-hidden"> on Zenodo (opens doi.org)</span></a>
+          <button type="button" className="theme-btn plain-btn" aria-pressed={plain.mode === "on"} onClick={() => { plain.set(plain.mode === "on" ? "off" : "on"); setOpen(false); }}><Pencil />{UI.toggle}</button>
           <button type="button" className="theme-btn" onClick={() => setTheme(next)}>{next === "dark" ? "Dark" : "Light"} theme</button>
         </div>
       </div>

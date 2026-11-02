@@ -6,6 +6,8 @@ Live: [stilldrawn.studionephele.com](https://stilldrawn.studionephele.com) · Fi
 
 Thesis: [Stability ranks stillness](THESIS.md), about 800 words, also told [object first](THESIS-object-first.md). Both are on the site at `/about`, with a switch between them.
 
+Plain words: the whole explorer, told for anyone (a curious 12-year-old, or someone who has never met the field), in blue pencil beside the technical page. It never edits that page. Start it from the line under the top bar, or open [stilldrawn.studionephele.com/explore?plain=1](https://stilldrawn.studionephele.com/explore?plain=1). The words are in [web/src/plainwords/words.ts](web/src/plainwords/words.ts), held by a test to the same numbers as the thesis.
+
 ## What it explores
 
 When an image-to-video model animates an inked panel, does it still look drawn? [StillDrawn](https://doi.org/10.5281/zenodo.23072784) measured that for 373 clips across six engines. This explorer puts every clip, its source and its per-frame metrics in one place you can steer.

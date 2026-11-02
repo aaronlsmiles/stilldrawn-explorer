@@ -1,12 +1,15 @@
 // /about: the thesis, "Stability ranks stillness", in two tellings of one argument.
 // Finding first is the default; ?read=object switches. The text is THESIS.md and
 // THESIS-object-first.md at the repo root, parsed at build time (vite/thesis.ts).
+import { Fragment } from "react";
 import { finding, object } from "virtual:thesis";
 import { useQuery } from "../../router";
 import { Link } from "../../ui/Link";
 import { Segmented } from "../../ui/Segmented";
 import { plain, type Block, type Inline } from "./thesisMd";
 import "./about.css";
+import { PlainNote } from "../../plainwords/PlainWords";
+import { ABOUT_NOTES } from "../../plainwords/words";
 
 type Read = "finding" | "object";
 const TELLINGS: Record<Read, Block[]> = { finding, object };
@@ -59,8 +62,12 @@ function Figure({ b }: { b: Extract<Block, { type: "figure" }> }) {
 }
 
 function Body({ blocks }: { blocks: Block[] }) {
+  let section = 0;
   return blocks.map((b, i) => {
-    if (b.type === "h2") return <h2 key={i}><Runs xs={b.inlines} /></h2>;
+    if (b.type === "h2") {
+      const note = ABOUT_NOTES[section++];
+      return <Fragment key={i}>{note && <PlainNote id={note} />}<h2><Runs xs={b.inlines} /></h2></Fragment>;
+    }
     if (b.type === "p") return <p key={i}><Runs xs={b.inlines} /></p>;
     if (b.type === "ul") return <ul key={i}>{b.items.map((it, k) => <li key={k}><Runs xs={it} /></li>)}</ul>;
     if (b.type === "figure") return <Figure key={i} b={b} />;

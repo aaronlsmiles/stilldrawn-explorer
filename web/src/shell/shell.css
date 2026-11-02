@@ -89,3 +89,7 @@ table.data .num, table.data .r { text-align: right; white-space: nowrap; }
 .dash { color: var(--faint); }
 .pill-neg { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; background: var(--neg-bg); color: var(--neg-ink); font-size: var(--fs-small); font-weight: 600; white-space: nowrap; flex: none; }
 .pill { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; background: var(--raised); color: var(--text); font-size: var(--fs-small); white-space: nowrap; flex: none; }
+
+/* The plain-words switch: it carries the pencil mark always, so a reader can find the way back; blue pencil when on (src/plainwords/). */
+.plain-btn { display: inline-flex; align-items: center; gap: 6px; }
+.plain-btn[aria-pressed="true"] { color: var(--pencil-ink); text-decoration: underline; text-decoration-color: var(--pencil); text-decoration-thickness: 2px; text-underline-offset: 6px; }

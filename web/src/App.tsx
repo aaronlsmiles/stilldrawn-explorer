@@ -4,6 +4,8 @@ import { navigate, useRoute } from "./router";
 import { TopBar } from "./shell/TopBar";
 import { Link } from "./ui/Link";
 import { Boundary } from "./ui/Boundary";
+import { PlainWordsProvider } from "./plainwords/state";
+import { PlainBand, SkipLink } from "./plainwords/PlainWords";
 
 const Explore = lazy(() => import("./views/Explore/Explore"));
 const FailureGallery = lazy(() => import("./views/Explore/FailureGallery"));
@@ -39,7 +41,8 @@ function Routes() {
     if (last.current === path) return;
     last.current = path;
     scrollTo(0, 0);
-    document.querySelector<HTMLElement>("main h1")?.focus({ preventScroll: true });
+    // with the plain-words layer on, its chapter band is where the page starts
+    document.querySelector<HTMLElement>(".pw-band, main h1")?.focus({ preventScroll: true });
   }, [path]);
   if (path === "/" || path === "/explore") return <Explore />;
   if (path === "/explore/failures") return <FailureGallery />;
@@ -57,11 +60,14 @@ export function App() {
     <Boundary fallback={LoadError}>
       <Suspense fallback={<Loading />}>
         <CoreProvider>
-          <a className="skip" href="#main">Skip to content</a>
-          <TopBar />
-          <Boundary fallback={LoadError}>
-            <Suspense fallback={<Loading />}><Routes /></Suspense>
-          </Boundary>
+          <PlainWordsProvider>
+            <SkipLink />
+            <TopBar />
+            <PlainBand />
+            <Boundary fallback={LoadError}>
+              <Suspense fallback={<Loading />}><Routes /></Suspense>
+            </Boundary>
+          </PlainWordsProvider>
         </CoreProvider>
       </Suspense>
     </Boundary>

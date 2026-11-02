@@ -11,6 +11,7 @@ import { Link } from "../../ui/Link";
 import { Grid, PanelList } from "./Grid";
 import { Detail, DetailEmpty } from "./Detail";
 import { DEFAULT } from "./defaults";
+import { PlainNote } from "../../plainwords/PlainWords";
 
 export function useMedia(q: string) {
   const [m, setM] = useState(() => matchMedia(q).matches);
@@ -69,6 +70,7 @@ export default function Explore() {
           onChange={(v) => set({ arm: v, cell: null, e: null, vs: null, draw: null })} />
         <p className="sheet-links"><Link href="/explore/failures">Failure modes and their exemplar clips</Link></p>
       </div>
+      <PlainNote id="explore.grid" />
       {phone ? <PanelList rows={rows} core={core} url={url} onPick={pick} />
         : <Grid rows={rows} core={core} url={url} sel={{ row, engine }} onPick={pick} />}
       {arm === "standard" && missing && (

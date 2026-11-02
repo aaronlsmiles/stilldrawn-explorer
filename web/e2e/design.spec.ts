@@ -28,8 +28,10 @@ const offScale = (page: Page) => page.evaluate((scale) => {
   return [...out];
 }, SCALE);
 
-for (const u of VIEWS) {
-  test(`${u}: fits the viewport, keeps to the type scale, and every chart label stays inside its chart`, async ({ page }) => {
+// each view as it ships, then again with the plain-words layer on (src/plainwords/)
+for (const plain of [false, true]) for (const u of VIEWS) {
+  test(`${u}${plain ? " (plain words on)" : ""}: fits the viewport, keeps to the type scale, and every chart label stays inside its chart`, async ({ page }) => {
+    if (plain) await page.addInitScript(() => localStorage.setItem("sd-plain", "on"));
     await open(page, u);
     const doc = await page.evaluate(() => document.documentElement.scrollWidth);
     expect.soft(doc, "page width").toBeLessThanOrEqual(page.viewportSize()!.width);

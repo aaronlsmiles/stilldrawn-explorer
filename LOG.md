@@ -2,6 +2,14 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-11-02 — in plain words
+
+- The explorer now tells its story a second time, for anyone: a curious 12-year-old, or someone who has never met the field. A line under the top bar offers it. Once it's on, each page opens with its chapter of the story (five in all, from "What this is" to "Why it matters"), and short notes sit just before the parts that puzzle people: the player, the curve, the scatter, the slider. "Next" walks the chapters in order.
+- It is drawn in blue pencil, the colour animators rough in before they ink. The rest of the site has no blue, and none of its own words changed. It is the same layer as the StillDrawn case study's on studionephele.com: the same blues, pencil mark and wording, and a link from one site opens the other in plain words when the layer is on.
+- A test holds the plain telling to the same numbers as the thesis. It also keeps field words like "median" or "engine" inside quotes, where a note is pointing at a label on screen, and checks the reading level: grade 2.6 on the Flesch–Kincaid scale. The rating page stays blind with the layer on.
+- A design review before launch scored it 28 out of 40. The band was too tall and pushed each page's evidence off the first screen; a small label sat above every chapter title; some notes came after the thing they explain; and on a phone the first chapter told readers to tap squares they couldn't see. All four are fixed: the band is about a third shorter on a wide screen.
+- Still to do: someone who isn't technical follows it unaided and tells it back.
+
 ## 2026-10-30 — live, with its thesis
 
 - The explorer is public at stilldrawn.studionephele.com, and so are both repos. The rating kit, blindpanel, is released as v0.1.0; the explorer vendors that exact release, and its lock records the release's own checksum. A tarball packed on this Mac differed from the release's only in its compression bytes; the file lists and contents were identical.

@@ -29,7 +29,9 @@ async function contrast(page: Page, what: string) {
 }
 
 for (const u of VIEWS) {
-  test(`${u}: axe, control contrast, and a keyboard walk with a visible focus ring at every stop`, async ({ page }) => {
+  // as it ships, then with the plain-words layer on (src/plainwords/)
+  for (const plain of [false, true]) test(`${u}${plain ? " (plain words on)" : ""}: axe, control contrast, and a keyboard walk with a visible focus ring at every stop`, async ({ page }) => {
+    if (plain) await page.addInitScript(() => localStorage.setItem("sd-plain", "on"));
     await open(page, u);
     await axe(page, u);
     await contrast(page, u);
