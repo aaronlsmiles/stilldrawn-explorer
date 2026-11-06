@@ -1,0 +1,93 @@
+/* /tax/masked (P46 sub-plan D). Ink for data, gold only for the selection; sizes 12 / 14 / 16 / 24. */
+.masked { display: grid; gap: 16px; align-content: start; }
+.masked-controls { align-items: end; }
+.masked .headline { color: var(--text); font-size: 16px; max-width: 46em; }
+.masked .sens { font-size: 14px; color: var(--muted); max-width: 46em; padding-left: 10px; border-left: 3px solid var(--control); }
+.verdict { display: grid; gap: 4px; max-width: 46em; }
+.verdict .panel-head { margin-bottom: 4px; }
+.verdict-line { font-size: 16px; }
+.masked-body { grid-template-columns: minmax(0, 520px) minmax(0, 1fr); }
+.league-table th { white-space: normal; vertical-align: bottom; }   /* "Whole-frame median" wraps on a phone */
+.league-table td.eng-cell { font-weight: 600; }
+.league-table td.eng-cell .btn-text { font-weight: 600; text-decoration: none; min-height: 32px; max-width: 100%; text-align: left; overflow-wrap: anywhere; }
+@media (hover: hover) and (pointer: fine) { .league-table td.eng-cell .btn-text:hover { text-decoration: underline; } }
+.league-table tr.is-selected td { box-shadow: inset 0 -2px 0 var(--gold-line); }
+.masked-chart { position: relative; flex: 1; min-height: 260px; }
+.masked-chart svg { position: absolute; inset: 0 auto auto 0; display: block; overflow: visible; }
+.masked-chart .col { stroke: var(--grid); }
+.masked-chart .axis-label { font-family: var(--font); font-size: 12px; fill: var(--muted); }
+.masked-chart .eng .slope { stroke: var(--text); stroke-width: 1.5; }
+.masked-chart .eng circle { fill: var(--text); }
+.masked-chart .eng text { font-family: var(--font); font-size: 12px; font-weight: 600; fill: var(--text); font-variant-numeric: tabular-nums;
+  paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.masked-chart .eng text.faint { font-weight: 400; fill: var(--faint); }
+.masked-chart .eng.is-selected .slope { stroke: var(--gold-line); stroke-width: 3; }
+.masked-chart .eng.is-selected circle { fill: var(--gold-line); }
+.grid-table td.num { white-space: nowrap; }
+@media (max-width: 1100px) { .masked-body { grid-template-columns: 1fr; } }
+
+/* the masks gallery and the row detail */
+.mk-section { display: grid; gap: 12px; }
+.mk-section .panel-head { margin-bottom: 0; justify-content: flex-start; flex-wrap: wrap; }
+.mk-gallery { display: grid; gap: 12px; }
+.mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+@media (min-width: 641px) { .mk-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } }
+.mk-tile { display: grid; gap: 6px; width: 100%; padding: 6px; text-align: left; background: var(--surface); border: 1px solid var(--border); cursor: pointer; align-content: start; }
+@media (hover: hover) and (pointer: fine) { .mk-tile:hover { background: var(--raised); } }
+.mk-tile[aria-pressed="true"] { border-color: var(--gold-line); box-shadow: inset 0 0 0 2px var(--gold-line); }   /* gold marks the selection */
+.mk-tile.is-out .mk-frame { opacity: .7; }   /* dim the picture only: dimmed text fails contrast */
+.mk-frame { position: relative; display: block; width: 100%; background: var(--raised); overflow: hidden; }
+.mk-frame img { display: block; width: 100%; height: auto; }
+.mk-overlay { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.mk-shade { fill: var(--text); fill-opacity: .38; }
+.mk-allowed { fill: none; stroke: var(--text); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; }
+.mk-cap { display: grid; gap: 2px; font-size: 12px; min-width: 0; }
+.mk-name { font-weight: 600; overflow-wrap: anywhere; }
+.mk-detail { display: grid; gap: 12px; }
+.mk-detail .panel-head { margin-bottom: 0; justify-content: flex-start; flex-wrap: wrap; }
+.mk-posters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+.mk-engine { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.mk-engine h3 { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.mk-vals { display: grid; gap: 2px; margin: 0; }
+.mk-vals > div { display: flex; justify-content: space-between; gap: 8px; }
+.mk-vals dt { color: var(--muted); font-size: 12px; }
+.mk-vals dd { margin: 0; font-size: 14px; }
+.mk-engine.is-missing { padding: 8px; border: 1px dashed var(--control); }
+
+/* Test 1 */
+.mk-test1 { display: grid; gap: 12px; }
+.mk-test1 .panel-head { margin-bottom: 0; justify-content: flex-start; flex-wrap: wrap; }
+.mk-test1 p { max-width: 46em; }
+.mk-raters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
+.mk-rater { display: grid; gap: 8px; align-content: start; min-width: 0; padding-top: 8px; border-top: 1px solid var(--rule); }
+.mk-rater-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.mk-rater h3 { font-size: 16px; font-weight: 600; }
+.mk-plot { position: relative; width: 100%; }
+.mk-plot svg { display: block; overflow: visible; }
+.mk-plot .col { stroke: var(--grid); }
+.mk-plot .axis-label { font-family: var(--font); font-size: 12px; fill: var(--muted); }
+.mk-plot .eng text { font-family: var(--font); font-size: 12px; fill: var(--text); }
+.mk-plot .eng .slope { stroke: var(--text); stroke-width: 2; }
+.mk-plot .eng circle { fill: var(--text); }
+.mk-more summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.mk-more-body { display: grid; gap: 6px; margin-top: 8px; }
+.mk-more-who { font-weight: 600; }
+.mk-auc { display: grid; gap: 4px; }
+
+/* one headline per mask set on the registered view, each under its set's label */
+.masked .headlines { display: grid; gap: 12px; }
+.masked .headline-row { display: grid; gap: 4px; justify-items: start; }
+
+/* The write-up reads like the thesis: one column at the findings' measure (36em), body 16, the thesis spacing.
+   about.css loads only with /about, so the rules the write-up needs are repeated here, scoped. */
+.mk-writeup .thesis { font-size: var(--fs-section); line-height: 1.6; }
+.mk-writeup .thesis > h3, .mk-writeup .thesis > p, .mk-writeup .thesis > ul { max-width: 36em; }
+.mk-writeup .thesis > * + * { margin-top: 16px; }
+.mk-writeup .thesis > h3 { margin-top: 32px; font-size: var(--fs-section); font-weight: 600; }
+.mk-writeup .thesis p, .mk-writeup .thesis li { text-wrap: pretty; }
+.mk-writeup .thesis ul { padding-left: 1.2em; list-style: disc; }
+.mk-writeup .thesis a { color: inherit; text-decoration-color: var(--gold-line); text-underline-offset: 3px; }
+.mk-writeup > .small { margin-top: 24px; }
+
+/* Narrow screens: a panel head with a chip and a button wraps instead of overlapping. */
+.masked .panel-head { flex-wrap: wrap; row-gap: 8px; }

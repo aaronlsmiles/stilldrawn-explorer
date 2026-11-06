@@ -1,0 +1,64 @@
+{
+ "synthetic": true,
+ "cell_id": "chain-est-cosmic-1_idle_wan22",
+ "panel": "chain-est-cosmic-1",
+ "motion": "idle",
+ "engine": "wan22",
+ "whole_frame": {
+  "chamfer_px": 1.007
+ },
+ "m_empty": {
+  "aaron": false,
+  "agent": false
+ },
+ "masked": {
+  "aaron": {
+   "m16": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  },
+  "agent": {
+   "m16": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 1.007,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  }
+ },
+ "clip": "clips/wan22/chain-est-cosmic-1_idle_wan22.mp4",
+ "mapping": "centre-crop"
+}

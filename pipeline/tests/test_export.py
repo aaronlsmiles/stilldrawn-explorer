@@ -1,10 +1,11 @@
 import json
+import math
 import re
 from collections import defaultdict
 
 import pytest
 
-from stilldrawn_web import export
+from stilldrawn_web import export, masked
 from stilldrawn_web.export import DEPART_PX, load_tags
 
 
@@ -60,7 +61,7 @@ def _load(p):
     return json.loads(p.read_text())
 
 
-def test_contract_files(contract):
+def test_contract_files(root, contract):
     out, web = contract
     for name in ("index.json", "engines.json", "panels.json", "clips.json", "taxonomy.json", "paper.json",
                  "study/stilldrawn.json"):
@@ -68,6 +69,37 @@ def test_contract_files(contract):
     assert (web / "src/lib/__fixtures__/lenses.json").exists()
     assert sorted(p.stem for p in (out / "series").glob("*.json")) == sorted(
         ["gen4.5", "gen4_turbo", "h3-fal", "wan22", "ltx23", "seedance"])
+    # export never builds masked.json (only tools/refresh-masked.sh's path does): a fresh web has none, and the index says so
+    assert not (out / "masked.json").exists()
+    assert _load(out / "index.json")["masked"] is False
+
+
+def _leaves(x):
+    if isinstance(x, bool):
+        return
+    if isinstance(x, (int, float)):
+        yield x
+    elif isinstance(x, dict):
+        for v in x.values():
+            yield from _leaves(v)
+    elif isinstance(x, list):
+        for v in x:
+            yield from _leaves(v)
+
+
+def test_masked_matches_the_release(root):
+    if not masked.available(root):
+        pytest.skip(f"the release at {root} has no A9 outputs yet (a9_masked_drift.json, a9_adherence.json)")
+    m = masked.build(root)
+    t2 = _load(root / "analysis/out/a9_masked_drift.json")
+    t1 = _load(root / "analysis/out/a9_adherence.json")
+    pool = list(_leaves(t1)) + list(_leaves(t2))
+    for block in (m["test1"], m["test2"]):
+        for v in _leaves({k: x for k, x in block.items() if k != "headline_md"}):
+            assert any(math.isclose(v, p, rel_tol=1e-12) for p in pool), v
+    assert m["provenance"]["synthetic"] is False
+    assert m["test2"]["verdict"] in ("not testable", "supported", "mask-dependent", "killed", "not supported")
+    assert len(json.dumps(m, separators=(",", ":"))) < 700_000, "lazy-load budget: cut region_frac and f0 for m16 and m64 and record it"
 
 
 def test_clips_contract(contract):
@@ -142,3 +174,38 @@ def test_basis_ships_at_full_precision(contract):
     fx = _load(web / "src/lib/__fixtures__/lenses.json")
     assert basis == fx["basis"]
     assert len(basis) == 164
+
+
+# ---------------------------------------------------------------- export never builds masked.json (the full-export guard)
+def _fake_web(tmp_path, with_masked, index_masked):
+    web = tmp_path / "web"
+    out = web / "public" / "data" / "v1"
+    out.mkdir(parents=True)
+    if with_masked:
+        (out / "masked.json").write_text('{"kept":"as it was"}\n')
+    (out / "index.json").write_text(json.dumps({"contract": "v1", "masked": index_masked}))
+    return web, out
+
+
+def test_export_never_builds_masked_json(root, tmp_path, monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("export.main must not build masked.json")
+    monkeypatch.setattr(masked, "build", boom)
+    web, out = _fake_web(tmp_path, with_masked=False, index_masked=True)       # a stale flag with no file behind it
+    export.main(root, web)
+    assert not (out / "masked.json").exists() and _load(out / "index.json")["masked"] is False
+
+
+def test_export_keeps_an_existing_masked_json_and_its_flag(root, tmp_path, monkeypatch):
+    monkeypatch.setattr(masked, "build", lambda *a, **k: (_ for _ in ()).throw(AssertionError("no build")))
+    web, out = _fake_web(tmp_path, with_masked=True, index_masked=True)
+    before = (out / "masked.json").read_bytes()
+    export.main(root, web)
+    assert (out / "masked.json").read_bytes() == before and _load(out / "index.json")["masked"] is True
+
+
+def test_export_does_not_invent_a_flag_for_a_masked_json_it_finds(root, tmp_path):
+    """A masked.json whose index flag is false stays false: the refresh path alone decides to publish it."""
+    web, out = _fake_web(tmp_path, with_masked=True, index_masked=False)
+    export.main(root, web)
+    assert (out / "masked.json").exists() and _load(out / "index.json")["masked"] is False

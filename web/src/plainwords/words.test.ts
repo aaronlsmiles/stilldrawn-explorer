@@ -93,3 +93,40 @@ describe("placement", () => {
     expect(Object.values(SIDE_ROOMS).filter((s) => !CHAPTERS.some((c) => c.path === s.next))).toEqual([]);
   });
 });
+
+describe("the masked-drift side room", () => {
+  // Task 9 of the P46 view: the method is told in plain words, with no digit (nothing can drift from
+  // the facts list) and no verdict word (the result belongs to the expert text above it). The two result
+  // lines (killed, and Test 1 not supported) carry no digit and no verdict word either.
+  const room = SIDE_ROOMS["/tax/masked"];
+  const notes = Object.entries(NOTES).filter(([id]) => id.startsWith("masked."));
+  const VERDICT = /\b(supported|not supported|killed|mask-dependent|not testable)\b/i;
+  test("it is a side room off the trail, with three method notes, a note for each unfinished state and a line for two outcomes", () => {
+    expect(room).toBeTruthy();
+    expect(room.next).toBe("/rate");
+    expect(notes.map(([id]) => id).sort()).toEqual(["masked.gallery", "masked.slope", "masked.test1", "masked.test1.fallback", "masked.test1.not-supported", "masked.test1.pending", "masked.verdict.killed"]);
+  });
+  test("it holds no digit and no verdict word", () => {
+    const all = [room.title, ...room.band, ...notes.flatMap(([, t]) => t)];
+    expect(all.filter((s) => /\d/.test(s))).toEqual([]);
+    expect(all.filter((s) => VERDICT.test(s))).toEqual([]);
+  });
+  test("the two result lines say what the registered wording gives them, once each, in the agreed words", () => {
+    expect(NOTES["masked.verdict.killed"]).toEqual(["The answer was no. Even in the still places, the shaky program wandered about as much more as before. So its wobble is real, not just the movement it was asked for."]);
+    expect(NOTES["masked.test1.not-supported"]).toEqual(["We both agreed the stillest program mostly didn't do the move. But the full pattern across all five programs only showed up for one of us. So the test says: not proven."]);
+  });
+  test("the slope note describes the dots and lines, not an order the data may not keep", () => {
+    const slope = NOTES["masked.slope"].join(" "), gallery = NOTES["masked.gallery"].join(" ");
+    expect(slope).toContain("Each program has a dot on each side; a line joins its two numbers.");
+    expect(slope).not.toMatch(/same order|Each line joins one program/);
+    expect(gallery).toContain("Some drawings may be left out.");
+    expect(gallery).not.toContain("A few drawings were left out");
+  });
+  test("it says what a mask is, and what the two tests ask", () => {
+    const text = [...room.band, ...notes.flatMap(([, t]) => t)].join(" ").toLowerCase();
+    expect(text).toMatch(/stencil/);
+    expect(text).toMatch(/still places/);
+    expect(text).toMatch(/did the .* move/);
+  });
+});
+

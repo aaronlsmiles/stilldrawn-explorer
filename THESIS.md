@@ -48,7 +48,7 @@ None of these prices is the right one, and that is the point. Generated video is
 - **Modest human agreement.** People agree only loosely on whether a clip still looks hand-drawn (Krippendorff's α 0.21).
 - **Motion came later.** The motion measure was added after the fact, so it qualifies the results rather than restating them.
 
-The next test is the obvious one: measure drift only where the requested motion shouldn't reach, and see whether the order survives.
+That test has now run, as an exploratory, post-hoc follow-up registered before any masked number existed: on the 21 drawings it could test, measured only where the requested motion shouldn't reach, Gen-4.5's gap to Wan 2.2 barely moves, from 3.8× to 3.3× under the author's masks (3.9× under blind ones), and the order survives ([drift where nothing should move](https://stilldrawn.studionephele.com/tax/masked)).
 
 Data: StillDrawn dataset (Aaron Smiles, 2026), CC BY 4.0, [doi:10.5281/zenodo.23072784](https://doi.org/10.5281/zenodo.23072784).
 

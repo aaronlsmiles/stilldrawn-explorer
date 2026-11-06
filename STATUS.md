@@ -54,6 +54,8 @@ An additive "In plain words" layer tells the explorer's story to a bright 10–1
 - The base name StillDrawn was cleared on 2026-09-30.
 - Alternates, also clear: `stilldrawn-viewer`, `stilldrawn-lab`.
 
+2026-11-06 P46 `/tax/masked` clearance (Opus 5.5 · high): identifier scan and recovery-aware private-terms scan over the branch; banned content (arXiv, GWM, doublings, log2, the 2.6 comparison, rank wording, fiction names, the rater's real name, which is absent from the tree, the history and the release); every write-up and thesis figure checked against release 62ec261; data provenance and per-clip values match. First pass FAIL on wording ("before any number existed", the stronger-result sentence) and private-repo pointers in this file; fixed, and the branch is squash-merged so they never enter public history.
+
 ## Rounds
 
 | # | Date | What was tried | Result | Kept? | £ |
@@ -93,3 +95,47 @@ Nothing was paid for. Every service ran on a free tier: Cloudflare R2 (media, we
   - The release's `TOS-REVIEW.md` open item closes in StillDrawn's next release build.
   - Plain words: Aaron's proofread and the real-reader test (criterion 7), on the live site; his soft to-do list holds both. Log the reader's words here and in `LOG.md`, then revise the copy.
   - P46 "Drift where nothing should move" (planner, added 30 Oct) picks up the question the thesis ends on.
+
+## P46 — Drift where nothing should move
+
+Card: P46 · Started: 2026-10-30 · Plan: studio hub `docs/p46/plan-2026-10-31.md` · Science in StillDrawn amendment A9 (private working repo, then in-place release refreshes)
+
+### Criteria (frozen 2026-10-30)
+
+- **Success:** A9 public (tag plus Software Heritage snapshot) before any rating or masked value exists; both tests run as registered and reported with their verdicts, null or not; `/tax/masked` live and linked from both thesis tellings; the write-up on the view; every number held by a facts test.
+- **Kill rule:** Test 2 "killed" (same order and s < 0.25 under both mask sets): record it and stop. No new masks, margins or classes; the view and write-up still ship with the null. Process kill: a reproduction gate failure that can't be explained stops the card before any mask is drawn.
+- **Budget:** 3 focused days, £0 (rating copies and runs are local).
+
+### Gates
+
+| Gate | What | Status |
+|---|---|---|
+| A | Line up the second rater; confirm the 14-day deadline | Revised 2026-11-03 (Aaron): R7, a new rater who had never seen StillDrawn, rating at Aaron's computer and signing a written declaration (R2 does not rate); deadline 2026-11-17 |
+| B | Draw the 22 masks (~45 min) | Done 2026-11-03 (one slip fixed before registration) |
+| C | Approve A9: text, predictions, verdict rules, dates | Done 2026-11-03 |
+| D | Push #1 (registration): public stilldrawn commit without force, tag `a9-registered`, Software Heritage "save code now" | Done 2026-11-03 (30a624d, 06:06:50Z) |
+| E | AARON's rating sittings: burst then push (≥ 1 h apart), a later calendar day than D | Done 2026-11-06; ratings public before Test 2 (f5fd0df) |
+| E2 | R7's sittings, same builds, any day before the deadline | Done 2026-11-06 |
+| F | Push #2 (results) | Done 2026-11-06 (62ec261): Test 2 killed, Test 1 not supported |
+| G | Design pass sign-off; thesis wording (a live public page changes) | Done 2026-11-06 (Aaron delegated; he reviews live) |
+| H | Merge and push the explorer; `G5_GO_LIVE=yes tools/deploy-production.sh`; planner republish | Approved 2026-11-06 (Aaron: deploy and go live, review after) |
+
+### Run log
+
+| Date | Task | From | To | Why |
+|---|---|---|---|---|
+| 2026-10-30 | 1.2 reproduction gate | — | — | PASS 109/109 (release analysis/out/a9_repro_gate.csv); about 3 h on mps with parallel CPU load |
+| 2026-11-03 | 2.3 Gate B (Aaron's masks) | — | — | 22/22 valid, sha256 9f8db769… |
+| 2026-11-03 | 2.4 blind drawer | subagent | fresh isolated `claude -p` (Opus 5.5 · high, Read only) | a subagent would load the hub memory naming P46 (call 43); attempt 1 malformed (text before the JSON), attempt 2 converted; sha256 96b6ccba… |
+| 2026-11-03 | 2.5 eligibility + sheet | subagent | main (inline) | two scripted runs; 21/22 eligible, IoU median 0.35 (registered: 0.3463 over 22 rows) |
+| 2026-11-03 | 5.6 Gate D | — | — | A9 registered: public 30a624d, tag a9-registered 06:06:50Z, SWH save 2609166; manifest 95291df0… |
+| 2026-11-03 | D0 merge main (plain-words layer) | — | — | clean merge, no conflicts; baseline: vitest 108 pass, pipeline pytest 56 pass, playwright tax+plain 106 pass / 2 skipped |
+| 2026-11-03 | D10 e2e for /tax/masked and /rate blindness | subagent (Sonnet 5.5 · medium) | same (bc2b760) | masked.spec 8 tests x 4 projects green; `/rate` and the other views never request masked.json |
+| 2026-11-03 | D11 list additions (a11y, design, motion, shots, lighthouse) | subagent (Haiku 5.5 · low) | Sonnet 5.5 · medium, same session as D10-D14 (22d6692) | the new lists found 4 real defects (slopegraph label overflow, dimmed tile contrast, tile name vs caption, ungated hover and unfocusable scroll frames); fixed in the same commit |
+| 2026-11-03 | D12 write-up hook, placeholder, maskedFacts | subagent (Sonnet 5.5 · high) | Sonnet 5.5 · medium, same session (0ee8942) | the view hides the write-up while MASKED-DRIFT.md is the placeholder; facts rules self-tested; vite plugin test added |
+| 2026-11-03 | D13 break-ui worst cases | subagent (Sonnet 5.5 · medium) | same (4b69f27) | 9 cases x 4 projects; fixed league table overflow at 320, long-name labels, tiny-median format (`pxr`), detail legend for nothing-to-move and nothing-to-measure |
+| 2026-11-03 | D14 refresh command, REDEPLOY, records | subagent (Sonnet 5.5 · medium) | same (the commit that adds this row) | `tools/refresh-masked.sh` rehearsed against the fixture release; guards tested; `masked.py` refuses a fixture release into this repo's web/ |
+
+Check counts after D14: vitest 224 pass (31 files), tsc clean, pipeline pytest 94 pass / 1 skipped, playwright (masked, worst, a11y, design, motion, about, plain, tax; 4 projects) 370 pass / 2 skipped.
+
+### Spend: £0 of £0

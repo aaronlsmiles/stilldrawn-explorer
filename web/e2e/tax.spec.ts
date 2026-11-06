@@ -71,11 +71,11 @@ test("a bare ?lens=band link lands where choosing the lens does, not on an empty
   await page.getByRole("radio", { name: "Matched-motion band" }).check();
   await expect(page).toHaveURL(/preset=/);
   const chosen = await page.getByTestId("board-row").allTextContents();
-  const finding = await page.locator(".lens-finding").textContent();
+  const finding = await page.locator(".lens-finding[aria-live]").textContent();
   await page.goto("/tax?lens=band");
   await expect(page.getByTestId("board-row").first()).toBeVisible();
   expect(await page.getByTestId("board-row").allTextContents()).toEqual(chosen);
-  expect(await page.locator(".lens-finding").textContent()).toBe(finding);
+  expect(await page.locator(".lens-finding[aria-live]").textContent()).toBe(finding);
 });
 
 test("the price line is drawn at a price of 0 too, flat through the leader", async ({ page }) => {

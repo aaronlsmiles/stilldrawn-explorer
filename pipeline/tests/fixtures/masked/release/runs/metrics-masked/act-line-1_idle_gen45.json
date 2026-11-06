@@ -1,0 +1,64 @@
+{
+ "synthetic": true,
+ "cell_id": "act-line-1_idle_gen45",
+ "panel": "act-line-1",
+ "motion": "idle",
+ "engine": "gen4.5",
+ "whole_frame": {
+  "chamfer_px": 8.016
+ },
+ "m_empty": {
+  "aaron": false,
+  "agent": false
+ },
+ "masked": {
+  "aaron": {
+   "m16": {
+    "chamfer_px": 2.004,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 2.004,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 2.004,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  },
+  "agent": {
+   "m16": {
+    "chamfer_px": 2.2044,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 2.2044,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 2.2044,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  }
+ },
+ "clip": "clips/gen4.5/act-line-1_idle_gen45.mp4",
+ "mapping": "centre-crop"
+}

@@ -37,6 +37,24 @@ It builds and packs the kit, builds the StillDrawn study into `web/public/data/b
 
 `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (the `sb_secret_…` key; server only) and `CRON_SECRET`. Each value is piped from `op read` into `vercel env add <NAME> preview`, never typed or echoed. Production gets the same three at G5.
 
+## Masked-drift results (Phases 6 and 12)
+
+`/tax/masked` is dark until the release has published A9's outputs. It needs `web/public/data/v1/masked.json` and `index.json` with `masked: true`; until both exist the route says "not published yet" and links to it do not show. The committed `index.json` has `masked: false`, and the synthetic fixtures under `web/src/views/Tax/__fixtures__/` never ship.
+
+After the results are public (A9's `analysis/out/a9_masked_drift.json` and `a9_adherence.json` on the release's `origin/main`), and again when the second rater's ratings land:
+
+```bash
+STILLDRAWN_ROOT=~/projects/stilldrawn tools/refresh-masked.sh
+```
+
+It refuses a release checkout that is dirty or not at `origin/main`, exports `masked.json` (a re-shape, no statistic computed), sets `index.masked`, runs the pipeline tests and the web tests, and prints a diff of what the page will say (verdicts, rho, p, s and its interval) against the previous file. Rehearse it any time with `STILLDRAWN_ROOT=pipeline/tests/fixtures/masked/release tools/refresh-masked.sh --allow-fixture`, which builds into a scratch folder and never touches `web/public/data/v1`.
+
+A plain `stilldrawn_web.export` never builds `masked.json`: it keeps an existing file and its `index.masked` as they are (no file, flag false), and `tools/check-stage.mjs` refuses any staged `masked.json` that is synthetic or carries the fixture mark.
+
+What to read in the diff: the Test 1 state (`pending`, `two-rater`, `fallback`; a `fallback` with R7's late files keeps R7's ratings and kappa, labelled author-rated, still with no verdict) and its verdict, the Test 2 verdict, and each figure that moved. The facts tests (`maskedFacts.test.ts`) fail on any figure in `MASKED-DRIFT.md` that `masked.json` no longer holds, and on a placeholder write-up while `index.masked` is true. Then update `MASKED-DRIFT.md` and the thesis sentence, run `cd web && npm run e2e`, preview, and wait for Aaron's word.
+
+`tools/check-stage.mjs` refuses a staged `masked.json` that is synthetic, or one that disagrees with `index.masked`, in a preview and in production.
+
 ## Media (R2)
 
 ```bash

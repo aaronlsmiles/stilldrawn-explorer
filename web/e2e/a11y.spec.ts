@@ -5,11 +5,13 @@ import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 import { test, expect } from "./fixtures";
 import { buttonContrast, runSession, seedSession, study } from "./rateFlow";
+import { withMasked } from "./maskedFixtures";
 
-const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/tax", "/tax?lens=band", "/rate", "/about", "/about?read=object"];
+const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/tax", "/tax?lens=band", "/tax/masked", "/rate", "/about", "/about?read=object"];
 
 async function open(page: Page, u: string) {
   await page.route((url) => url.pathname === "/api/tally", (r) => r.fulfill({ json: { study: study.id, n_sessions: 0, items: {} } }));
+  if (u.startsWith("/tax/masked")) await withMasked(page);
   await page.goto(u);
   await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
   await page.evaluate(() => document.fonts.ready);

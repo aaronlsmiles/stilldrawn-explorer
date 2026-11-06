@@ -1,6 +1,7 @@
 // Design-pass screenshots of every surface (not a test of behaviour): SHOTS_DIR=<dir> npx playwright test -c e2e/shots.config.ts
 import { test, expect } from "@playwright/test";
 import { runSession, seedSession } from "./rateFlow";
+import { withMasked } from "./maskedFixtures";
 
 const out = process.env.SHOTS_DIR ?? "shots";
 const settle = async (page: import("@playwright/test").Page) => {
@@ -19,10 +20,12 @@ const views: [string, string][] = [
   ["scatter", "/scatter"],
   ["tax", "/tax"],
   ["tax-band", "/tax?lens=band"],
+  ["masked", "/tax/masked"],
 ];
 
 for (const [name, path] of views) {
   test(name, async ({ page }, info) => {
+    if (path.startsWith("/tax/masked")) await withMasked(page);
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
     await shot(page, name, info.project.name);

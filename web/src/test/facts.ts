@@ -2,6 +2,7 @@
 // thesis's facts test (views/About/thesisFacts.test.ts) and the plain-words test (plainwords/words.test.ts);
 // the film's captions have the same rule (film/build/facts.py).
 import { readFileSync } from "node:fs";
+import { maskedAllowed } from "./maskedFacts";
 
 export const read = (rel: string) => readFileSync(new URL(rel, import.meta.url), "utf8");
 export const json = (rel: string) => JSON.parse(read(`../../public/data/v1/${rel}`));
@@ -40,3 +41,4 @@ export const ALLOWED = new Map<string, string>([
   ["0", "the price lens at zero"],
 ]);
 if (genIdle.slice(-12).some((v) => v > 8)) ALLOWED.set("8", "Gen-4.5's line drift passes 8 px late in act-tone-2, camera push");
+for (const [k, v] of maskedAllowed()) if (!ALLOWED.has(k)) ALLOWED.set(k, v);

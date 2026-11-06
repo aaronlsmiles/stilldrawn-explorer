@@ -1,5 +1,5 @@
 // Fetch the contract once per page; series per engine on demand.
-import type { BasisRow, Clip, Core, Engine, Index, Panel, Paper, Series, Taxonomy } from "./types";
+import type { BasisRow, Clip, Core, Engine, Index, Masked, Panel, Paper, Series, Taxonomy } from "./types";
 
 const BASE = "/data/v1/";
 const get = async <T,>(path: string): Promise<T> => {
@@ -21,6 +21,11 @@ export function loadCore(): Promise<Core> {
   // (1,779 requests in 3 s); the error screen's Retry reloads the page
   return core;
 }
+
+// masked.json (P46) is its own promise: never part of loadCore, so no other view ever asks for it.
+// A failure stays cached for the same reason as loadCore's.
+let masked: Promise<Masked> | null = null;
+export const loadMasked = () => (masked ??= get<Masked>("masked.json"));
 
 const series = new Map<string, Promise<Record<string, Series>>>();
 export function loadSeries(engine: string) {

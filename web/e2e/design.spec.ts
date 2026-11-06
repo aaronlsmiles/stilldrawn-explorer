@@ -2,12 +2,14 @@
 import { test, expect, isPhone } from "./fixtures";
 import type { Page } from "@playwright/test";
 import { seedSession } from "./rateFlow";
+import { withMasked } from "./maskedFixtures";
 
-const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/scatter?arms=repeat,hazard,ground,seedance", "/tax", "/tax?lens=band", "/tax?p=1.3", "/rate", "/about", "/about?read=object"];
+const VIEWS = ["/explore", "/explore?arm=standard", "/explore/failures", "/scatter", "/scatter?arms=repeat,hazard,ground,seedance", "/tax", "/tax?lens=band", "/tax?p=1.3", "/tax/masked", "/tax/masked?masks=agent&margin=64", "/rate", "/about", "/about?read=object"];
 const SCALE = [12, 14, 16, 24];
 
 async function open(page: Page, u: string) {
   await page.route((url) => url.pathname === "/api/tally", (r) => r.fulfill({ status: 200, json: { study: "x", n_sessions: 0, items: {} } }));
+  if (u.startsWith("/tax/masked")) await withMasked(page);
   await page.goto(u);
   await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
   await page.evaluate(() => document.fonts.ready);

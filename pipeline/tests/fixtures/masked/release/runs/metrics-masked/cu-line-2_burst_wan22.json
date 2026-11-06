@@ -1,0 +1,64 @@
+{
+ "synthetic": true,
+ "cell_id": "cu-line-2_burst_wan22",
+ "panel": "cu-line-2",
+ "motion": "burst",
+ "engine": "wan22",
+ "whole_frame": {
+  "chamfer_px": 1.013
+ },
+ "m_empty": {
+  "aaron": false,
+  "agent": false
+ },
+ "masked": {
+  "aaron": {
+   "m16": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  },
+  "agent": {
+   "m16": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m32": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   },
+   "m64": {
+    "chamfer_px": 1.013,
+    "no_scorable_frame": false,
+    "f0_line_px_in_R": 5000,
+    "region_frac": 0.5,
+    "chamfer_series": []
+   }
+  }
+ },
+ "clip": "clips/wan22/cu-line-2_burst_wan22.mp4",
+ "mapping": "centre-crop"
+}

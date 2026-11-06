@@ -3,6 +3,7 @@
 import type { Page } from "@playwright/test";
 import { test, expect, isPhone } from "./fixtures";
 import { seedSession } from "./rateFlow";
+import { withMasked } from "./maskedFixtures";
 
 /** Selectors of :hover rules that are not under (hover: hover): a tap would leave them on. */
 const ungatedHovers = (page: Page) => page.evaluate(() => {
@@ -29,10 +30,11 @@ const easingAtRest = (page: Page) => page.evaluate(() => {
   });
 });
 
-const VIEWS = ["/explore?cell=act-tone-2_campush&e=gen4.5", "/explore/failures", "/scatter", "/tax"];
+const VIEWS = ["/explore?cell=act-tone-2_campush&e=gen4.5", "/explore/failures", "/scatter", "/tax", "/tax/masked"];
 
 test("every hover waits for a hovering pointer, and no control eases a colour at rest", async ({ page }) => {
   for (const u of VIEWS) {
+    if (u.startsWith("/tax/masked")) await withMasked(page);
     await page.goto(u);
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
     await page.mouse.move(0, 0);

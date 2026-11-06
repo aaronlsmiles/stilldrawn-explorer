@@ -14,11 +14,16 @@ function pngSize(file: string) {
   return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
 }
 
+/** the one paragraph MASKED-DRIFT.md holds until Aaron writes the words (views/Tax/maskedFacts.test.ts holds the same string) */
+export const PLACEHOLDER = "Placeholder: the write-up is not written yet.";
 const ID = "virtual:thesis";
 const RESOLVED = "\0" + ID;
 
 export function thesis(repoRoot: string): Plugin {
-  const files = { finding: resolve(repoRoot, "THESIS.md"), object: resolve(repoRoot, "THESIS-object-first.md") };
+  const files = {
+    finding: resolve(repoRoot, "THESIS.md"), object: resolve(repoRoot, "THESIS-object-first.md"),
+    masked: resolve(repoRoot, "MASKED-DRIFT.md"),   // the /tax/masked write-up; null while it is the placeholder
+  };
   return {
     name: "sd-thesis",
     resolveId: (id) => (id === ID ? RESOLVED : undefined),
@@ -27,7 +32,9 @@ export function thesis(repoRoot: string): Plugin {
       const out: Record<string, unknown> = {};
       for (const [k, f] of Object.entries(files)) {
         this.addWatchFile(f);
-        out[k] = parseThesis(readFileSync(f, "utf8")).map((b: Block) =>
+        const text = readFileSync(f, "utf8");
+        if (k === "masked" && text.includes(PLACEHOLDER)) { out[k] = null; continue; }
+        out[k] = parseThesis(text).map((b: Block) =>
           b.type === "figure"
             ? { ...b, size: pngSize(resolve(repoRoot, b.src)), phone: pngSize(resolve(repoRoot, b.src.replace(/-light\.png$/, "-phone-light.png"))) }
             : b,

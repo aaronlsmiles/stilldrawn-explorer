@@ -4,40 +4,15 @@
 import { Fragment } from "react";
 import { finding, object } from "virtual:thesis";
 import { useQuery } from "../../router";
-import { Link } from "../../ui/Link";
 import { Segmented } from "../../ui/Segmented";
-import { plain, type Block, type Inline } from "./thesisMd";
+import { plain, type Block } from "./thesisMd";
+import { Runs } from "./Runs";
 import "./about.css";
 import { PlainNote } from "../../plainwords/PlainWords";
 import { ABOUT_NOTES } from "../../plainwords/words";
 
 type Read = "finding" | "object";
 const TELLINGS: Record<Read, Block[]> = { finding, object };
-const SITE = "https://stilldrawn.studionephele.com";
-
-/** The Markdown links work on GitHub; on the page, the explorer's own links stay in the app. */
-function route(href: string): { href: string; internal: boolean } {
-  if (href === "THESIS.md") return { href: "/about", internal: true };
-  if (href === "THESIS-object-first.md") return { href: "/about?read=object", internal: true };
-  if (href === SITE || href.startsWith(SITE + "/")) {
-    const path = href.slice(SITE.length);
-    return { href: path === "" || path === "/" ? "/explore" : path, internal: true };
-  }
-  return { href, internal: false };
-}
-
-function Runs({ xs }: { xs: Inline[] }) {
-  return xs.map((x, i) => {
-    if (x.t === "strong") return <strong key={i}>{x.v}</strong>;
-    if (x.t === "em") return <em key={i}>{x.v}</em>;
-    if (x.t === "link") {
-      const r = route(x.href);
-      return r.internal ? <Link key={i} href={r.href}>{x.v}</Link> : <a key={i} href={r.href} rel="noopener">{x.v}</a>;
-    }
-    return x.v;
-  });
-}
-
 /** One export per theme; CSS shows the one that matches (the reader's pick, else the system).
  *  Each has a phone version, the app's own 390 px layout, served under 761 px. The desktop
  *  exports are 2x, so a figure grows to half their pixel width (the chart at its own size). */

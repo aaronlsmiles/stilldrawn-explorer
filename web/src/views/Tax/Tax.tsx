@@ -10,6 +10,7 @@ import { MIN_N, pairwiseBands, priceCrossovers, summary, type BasisRow, type Pai
 import { onLowerHull, pareto } from "../../lib/pareto";
 import { fixed, norm, px } from "../../lib/format";
 import { ANALYSED } from "../../data/model";
+import { Link } from "../../ui/Link";
 import { Segmented } from "../../ui/Segmented";
 import { PlainNote } from "../../plainwords/PlainWords";
 import { Leaderboard } from "./Leaderboard";
@@ -185,6 +186,7 @@ export default function Tax() {
       </div>
       <p className="finding">The paper reports a Pareto front and declines to set an exchange rate between stability and motion. Set one here.
         Gen-4.5's rank changes because it moves more, not because it looks better.</p>
+      {core.index.masked && <p className="lens-finding">The next question: <Link href="/tax/masked">Drift where nothing should move</Link>.</p>}
       <div className="lens-switch">
         <Segmented label="Lens" value={s.lens} options={LENSES.map((l) => ({ value: l.id, label: l.name }))}
           onChange={(lens: LensId) => set({ ...stateToQuery(defaultFor(lens, d)) })} />

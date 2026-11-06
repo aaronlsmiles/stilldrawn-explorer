@@ -2,6 +2,12 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-11-03 — the masked-drift view meets its worst cases
+
+- Putting the new page through the same checks as every other view found four defects that unit tests had passed: chart labels ran past their charts because figures in tabular type are wider than the canvas estimate of their width; a dimmed gallery tile failed text contrast; a tile's accessible name left out the caption people can see; and two tables scrolled sideways with no way to reach them by keyboard.
+- The harsher cases (an engine with no value at all, a mask that leaves nothing to measure, a 41-character engine name, a median of a millionth of a pixel) found three more: the league table was wider than a 320 px phone, long names pushed labels out of the slopegraph and the rating plot, and a tiny median printed as "0.00 px". Each now has a test that failed first.
+- The write-up has its mechanism before its words: while the file is a placeholder the page hides the section, and a test refuses a placeholder if the page is ever switched on.
+
 ## 2026-11-02 — in plain words
 
 - The explorer now tells its story a second time, for anyone: a curious 12-year-old, or someone who has never met the field. A line under the top bar offers it. Once it's on, each page opens with its chapter of the story (five in all, from "What this is" to "Why it matters"), and short notes sit just before the parts that puzzle people: the player, the curve, the scatter, the slider. "Next" walks the chapters in order.

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef } from "react";
-import { CoreProvider } from "./data/core";
+import { CoreProvider, useCore } from "./data/core";
 import { navigate, useRoute } from "./router";
 import { TopBar } from "./shell/TopBar";
 import { Link } from "./ui/Link";
@@ -11,6 +11,7 @@ const Explore = lazy(() => import("./views/Explore/Explore"));
 const FailureGallery = lazy(() => import("./views/Explore/FailureGallery"));
 const Scatter = lazy(() => import("./views/Scatter/Scatter"));
 const Tax = lazy(() => import("./views/Tax/Tax"));
+const Masked = lazy(() => import("./views/Tax/Masked"));
 const Rate = lazy(() => import("./views/Rate/Rate"));
 const About = lazy(() => import("./views/About/About"));
 
@@ -24,9 +25,10 @@ const LoadError = (error: Error) => (
 );
 
 function NotFound() {
+  const masked = useCore().index.masked;
   return (
     <main className="page"><h1 tabIndex={-1}>Not found</h1>
-      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link>, <Link href="/tax">Stillness Tax</Link>, <Link href="/rate">Rate it yourself</Link> or <Link href="/about">About</Link>.</p>
+      <p className="muted">There's nothing at this address. Try <Link href="/explore">Explore</Link>, <Link href="/scatter">Motion vs drift</Link>, <Link href="/tax">Stillness Tax</Link>,{masked && <> <Link href="/tax/masked">Drift where nothing should move</Link>,</>} <Link href="/rate">Rate it yourself</Link> or <Link href="/about">About</Link>.</p>
     </main>
   );
 }
@@ -47,6 +49,7 @@ function Routes() {
   if (path === "/" || path === "/explore") return <Explore />;
   if (path === "/explore/failures") return <FailureGallery />;
   if (path === "/scatter") return <Scatter />;
+  if (path === "/tax/masked") return <Masked />;
   if (path === "/tax") return <Tax />;
   if (path === "/rate") return <Rate />;
   if (path === "/about") return <About />;

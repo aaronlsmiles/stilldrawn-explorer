@@ -7,6 +7,8 @@ import { ALLOWED } from "../../test/facts";
 const read = (rel: string) => readFileSync(new URL(rel, import.meta.url), "utf8");
 
 const HEADLINE = ["373", "288", "0.78", "2.64", "2.80", "4.79", "5.38", "9.2", "3.8", "0.90", "0.083", "1.23", "1.27", "0.21", "24"];
+/** the A9 closing line's two ratios (masked.json all.aaron.m32: ratio_whole, ratio_masked) */
+const NEW_FIGURES = ["3.8", "3.3"];
 
 /** numbers in the prose: names, figure numbers, the amendment, links, image paths and the data line removed first */
 function numbers(md: string) {
@@ -14,7 +16,7 @@ function numbers(md: string) {
     .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
     .replace(/\]\([^)]*\)/g, "]")
     .replace(/^Data:.*$/m, "")
-    .replace(/Gen-4\.5|Gen-4 Turbo|LTX-2\.3|Wan 2\.2|MiniMax H3|\bH3\b|\bA6\b|Figure \d/g, "");
+    .replace(/Gen-4\.5|Gen-4 Turbo|LTX-2\.3|Wan 2\.2|MiniMax H3|\bH3\b|\bA6\b|\bA9\b|Figure \d/g, "");
   return [...prose.matchAll(/−?\d+(?:\.\d+)?/g)].map((m) => m[0]);
 }
 
@@ -26,7 +28,13 @@ describe.each([["THESIS.md"], ["THESIS-object-first.md"]])("%s", (file) => {
   });
   test("it quotes every headline figure", () => {
     const have = new Set(numbers(md));
-    expect(HEADLINE.filter((n) => !have.has(n))).toEqual([]);
+    expect([...HEADLINE, ...NEW_FIGURES].filter((n) => !have.has(n))).toEqual([]);
+  });
+  test("the masked-drift paragraph is hedged and quotes no doubling", () => {
+    const para = md.split(/\n\s*\n/).find((p) => p.includes("/tax/masked"));
+    expect(para, `no paragraph links /tax/masked in ${file}`).toBeDefined();
+    expect(para).not.toMatch(/doubling|log2|log₂|2\.6/);
+    expect(para).toMatch(/exploratory|post-hoc/);
   });
   test("no arXiv ID, and no draft notes", () => {
     expect(md).not.toMatch(/arxiv|\b2[0-9]{3}\.[0-9]{4,5}\b/i);

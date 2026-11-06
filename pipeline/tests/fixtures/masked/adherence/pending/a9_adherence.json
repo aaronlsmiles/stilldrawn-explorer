@@ -1,0 +1,420 @@
+{
+ "synthetic": true,
+ "amendment": "A9",
+ "test": "Test 1: adherence",
+ "status": "exploratory, post-hoc",
+ "label": "author-rated; second rater pending",
+ "basis": "R7's export has not landed; AARON's statistic only",
+ "verdict": "no verdict (second rater pending)",
+ "verdict_status": "no verdict (second rater pending)",
+ "verdict_rule": "no verdict until R7's export lands by the deadline, when the two-rater rule applies; AARON's rho and p below are provisional (AARON only)",
+ "r7_blind_to_engine_styles": true,
+ "r7_declaration": "R7 is declared blind to engine styles: R7, a new rater who has never rated for StillDrawn, had not seen its explorer, release, clips or results as of 3 Nov 2026 (Gate A, revised).",
+ "registered_on": "2026-11-01",
+ "r7_deadline": "2026-11-15",
+ "r7_status_file": null,
+ "r7_partial_note": null,
+ "engine_order": [
+  "wan22",
+  "gen4_turbo",
+  "ltx23",
+  "gen4.5",
+  "h3-fal"
+ ],
+ "steadiness_px": {
+  "wan22": 0.84,
+  "gen4_turbo": 2.73,
+  "ltx23": 2.94,
+  "gen4.5": 5.04,
+  "h3-fal": 5.67
+ },
+ "attainable_p_no_ties": [
+  [
+   -1.0,
+   0.00833333333333
+  ],
+  [
+   -0.9,
+   0.0416666666667
+  ],
+  [
+   -0.8,
+   0.0666666666667
+  ],
+  [
+   -0.7,
+   0.116666666667
+  ],
+  [
+   -0.6,
+   0.175
+  ],
+  [
+   -0.5,
+   0.225
+  ],
+  [
+   -0.4,
+   0.258333333333
+  ],
+  [
+   -0.3,
+   0.341666666667
+  ],
+  [
+   -0.2,
+   0.391666666667
+  ],
+  [
+   -0.1,
+   0.475
+  ],
+  [
+   0.0,
+   0.525
+  ],
+  [
+   0.1,
+   0.608333333333
+  ],
+  [
+   0.2,
+   0.658333333333
+  ],
+  [
+   0.3,
+   0.741666666667
+  ],
+  [
+   0.4,
+   0.775
+  ],
+  [
+   0.5,
+   0.825
+  ],
+  [
+   0.6,
+   0.883333333333
+  ],
+  [
+   0.7,
+   0.933333333333
+  ],
+  [
+   0.8,
+   0.958333333333
+  ],
+  [
+   0.9,
+   0.991666666667
+  ],
+  [
+   1.0,
+   1.0
+  ]
+ ],
+ "raters": {
+  "AARON": {
+   "primary": {
+    "miss": "score <= 2",
+    "per_engine": {
+     "wan22": {
+      "n": 22,
+      "misses": 18,
+      "miss_rate": 0.818181818182,
+      "wilson95": [
+       0.614833925629,
+       0.926931154166
+      ]
+     },
+     "gen4_turbo": {
+      "n": 22,
+      "misses": 12,
+      "miss_rate": 0.545454545455,
+      "wilson95": [
+       0.346597953207,
+       0.730797058192
+      ]
+     },
+     "ltx23": {
+      "n": 22,
+      "misses": 8,
+      "miss_rate": 0.363636363636,
+      "wilson95": [
+       0.197332046704,
+       0.570482919099
+      ]
+     },
+     "gen4.5": {
+      "n": 22,
+      "misses": 4,
+      "miss_rate": 0.181818181818,
+      "wilson95": [
+       0.0730688458342,
+       0.385166074371
+      ]
+     },
+     "h3-fal": {
+      "n": 22,
+      "misses": 1,
+      "miss_rate": 0.0454545454545,
+      "wilson95": [
+       0.00806942762126,
+       0.217980458387
+      ]
+     }
+    },
+    "rho": -1.0,
+    "p_one_sided": 0.00833333333333,
+    "p_le_0_05": true
+   },
+   "sensitivity_miss_le_3": {
+    "miss": "score <= 3",
+    "per_engine": {
+     "wan22": {
+      "n": 22,
+      "misses": 18,
+      "miss_rate": 0.818181818182,
+      "wilson95": [
+       0.614833925629,
+       0.926931154166
+      ]
+     },
+     "gen4_turbo": {
+      "n": 22,
+      "misses": 12,
+      "miss_rate": 0.545454545455,
+      "wilson95": [
+       0.346597953207,
+       0.730797058192
+      ]
+     },
+     "ltx23": {
+      "n": 22,
+      "misses": 8,
+      "miss_rate": 0.363636363636,
+      "wilson95": [
+       0.197332046704,
+       0.570482919099
+      ]
+     },
+     "gen4.5": {
+      "n": 22,
+      "misses": 4,
+      "miss_rate": 0.181818181818,
+      "wilson95": [
+       0.0730688458342,
+       0.385166074371
+      ]
+     },
+     "h3-fal": {
+      "n": 22,
+      "misses": 1,
+      "miss_rate": 0.0454545454545,
+      "wilson95": [
+       0.00806942762126,
+       0.217980458387
+      ]
+     }
+    },
+    "rho": -1.0,
+    "p_one_sided": 0.00833333333333,
+    "p_le_0_05": true
+   },
+   "by_engine_and_class": {
+    "wan22": {
+     "burst": {
+      "n": 11,
+      "misses": 11,
+      "miss_rate": 1.0,
+      "wilson95": [
+       0.741167033032,
+       1.0
+      ]
+     },
+     "push": {
+      "n": 11,
+      "misses": 7,
+      "miss_rate": 0.636363636364,
+      "wilson95": [
+       0.353801174508,
+       0.848335289046
+      ]
+     }
+    },
+    "gen4_turbo": {
+     "burst": {
+      "n": 11,
+      "misses": 11,
+      "miss_rate": 1.0,
+      "wilson95": [
+       0.741167033032,
+       1.0
+      ]
+     },
+     "push": {
+      "n": 11,
+      "misses": 1,
+      "miss_rate": 0.0909090909091,
+      "wilson95": [
+       0.0162321728859,
+       0.377358436452
+      ]
+     }
+    },
+    "ltx23": {
+     "burst": {
+      "n": 11,
+      "misses": 8,
+      "miss_rate": 0.727272727273,
+      "wilson95": [
+       0.434354698824,
+       0.9025394071
+      ]
+     },
+     "push": {
+      "n": 11,
+      "misses": 0,
+      "miss_rate": 0.0,
+      "wilson95": [
+       0.0,
+       0.258832966968
+      ]
+     }
+    },
+    "gen4.5": {
+     "burst": {
+      "n": 11,
+      "misses": 4,
+      "miss_rate": 0.363636363636,
+      "wilson95": [
+       0.151664710954,
+       0.646198825492
+      ]
+     },
+     "push": {
+      "n": 11,
+      "misses": 0,
+      "miss_rate": 0.0,
+      "wilson95": [
+       0.0,
+       0.258832966968
+      ]
+     }
+    },
+    "h3-fal": {
+     "burst": {
+      "n": 11,
+      "misses": 1,
+      "miss_rate": 0.0909090909091,
+      "wilson95": [
+       0.0162321728859,
+       0.377358436452
+      ]
+     },
+     "push": {
+      "n": 11,
+      "misses": 0,
+      "miss_rate": 0.0,
+      "wilson95": [
+       0.0,
+       0.258832966968
+      ]
+     }
+    }
+   },
+   "within_row": {
+    "n_rows": 22,
+    "n_rows_defined": 17,
+    "mean_rho": 0.78189201535,
+    "draws": 10000,
+    "seed": 20261030,
+    "p_one_sided": 9.99900009999e-05
+   },
+   "motion_auc": {
+    "burst": {
+     "n_miss": 35,
+     "n_nonmiss": 20,
+     "auc": 0.930714285714,
+     "reading": "corroborates: the misses are under-animated"
+    },
+    "push": {
+     "n_miss": 8,
+     "n_nonmiss": 47,
+     "auc": 0.98670212766,
+     "reading": "corroborates: the misses are under-animated"
+    }
+   },
+   "engine_level_motion_vs_miss_rate": {
+    "rho": -1.0,
+    "note": "non-evidential: the engine ordering of motion was seen before registration"
+   },
+   "provisional": "provisional (AARON only)"
+  },
+  "R7": null
+ },
+ "agreement_quadratic_kappa": null,
+ "ratings_files": {
+  "AARON": {
+   "burst": {
+    "instrument": "A9",
+    "question": "burst",
+    "text_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "received_day": "2026-11-03",
+    "within_deadline": null,
+    "export_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "flags": [],
+    "delivery": {
+     "autoplay": true,
+     "keyboard": false,
+     "duration_s": 1230,
+     "ui": "blindpanel@0.1.0"
+    },
+    "n": 55
+   },
+   "push": {
+    "instrument": "A9",
+    "question": "push",
+    "text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "received_day": "2026-11-03",
+    "within_deadline": null,
+    "export_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "flags": [],
+    "delivery": {
+     "autoplay": true,
+     "keyboard": false,
+     "duration_s": 1230,
+     "ui": "blindpanel@0.1.0"
+    },
+    "n": 55
+   }
+  },
+  "R7": null
+ },
+ "environment": {
+  "python": "3.12.10",
+  "numpy": "2.5.2",
+  "matplotlib": "3.11.1",
+  "pillow": "12.3.0"
+ },
+ "inputs": {
+  "files": {
+   "analysis/adherence/a9-config.json": "08eeaf61a0f4426cbc59c5f869a670fa6e66da90140387c88d718dc298a00ad0",
+   "analysis/adherence/burst/study.lock.json": "f4117ffd9a8158ecaddec0507fd42b117e67f90e9712fcc8b4ebebf553289b0b",
+   "analysis/adherence/push/study.lock.json": "e3fe9a191fa5912b511cb9f16e1679d9bf8193bac88f329f92e5b720ab122c9c",
+   "analysis/adherence/ratings-burst-AARON.json": "5531fc7ebb9302dab9276387a00c5018789ebdd755b4a74671b7d0854786b754",
+   "analysis/adherence/ratings-push-AARON.json": "af326840bdaca16e19b92b72dd2877201a7fe908ce430616120d1d319c9b92f1"
+  },
+  "extracted": {
+   "results_table.line_chamfer_mean_px": {
+    "n": 110,
+    "sha256": "6a167589cdcbe34732f58f8ca94de454360ddf968a40fc9bbe87dca5ce4b042f"
+   },
+   "motion.headline_median_norm": {
+    "n": 110,
+    "sha256": "2d8384978d7f9d0f1b405bbe01a593306ad4d8e11709249a4e000bd9df59e2d5"
+   }
+  }
+ }
+}

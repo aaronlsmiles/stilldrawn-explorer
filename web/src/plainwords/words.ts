@@ -71,6 +71,18 @@ export const SIDE_ROOMS: Record<string, Chapter & { next: string }> = {
       "I sorted these by hand, watching films one frame at a time. Pick any picture to watch that film.",
     ],
   },
+  "/tax/masked": {
+    path: "/tax/masked",
+    title: "A fairer test of the test",
+    next: "/rate",
+    band: [
+      "Last time, we saw that a top score can just mean \"hardly moved\".",
+      "So here is a sharper question. Some parts of a drawing are meant to stay put, like the wall behind a waving hand.",
+      "This page checks the wandering only in those still places. I call it \"drift where nothing should move\".",
+      "Then it asks a second thing. Did the programs that stayed neatest really do the move they were asked for?",
+      "The answer to the first question is in the sentence above the chart. It is a first look, and the page says so.",
+    ],
+  },
 };
 
 /** Notes pinned beside the parts that need them, by id. Each id is placed in exactly one view. */
@@ -102,6 +114,35 @@ export const NOTES = {
     "Drag the slider. At zero, moving is worth nothing, and the stillest program comes top.",
     "Push it up, and moving starts to count. Watch the list below change places.",
     "There's no right price. That's the point: a ranking always has a price in it, whether or not anyone says so.",
+  ],
+  "masked.slope": [
+    "On the left is the wandering over the whole picture. On the right is the wandering in the still places only.",
+    "Each program has a dot on each side; a line joins its two numbers.",
+    "If two lines squeeze together on the right, then the gap between those programs came mostly from the parts allowed to move. If they stay far apart, it did not.",
+  ],
+  "masked.gallery": [
+    "These are the drawings. The shaded parts are what we measured. The clear patches are where the prompt let the picture move.",
+    "Think of a mask as a stencil. It covers the parts that are allowed to move, so we only look at the rest.",
+    "Two sets of stencils were drawn, each on its own. I drew one. A computer program that never saw the films drew the other.",
+    "Some drawings may be left out. There was too little ink in the measured part to judge.",
+  ],
+  "masked.test1": [
+    "Staying still only counts if the program still did the move it was asked for.",
+    "So two people watched the films without being told which program made which. They marked every film that did not do the move.",
+    "Then we ask: did the neatest programs miss the move most often?",
+  ],
+  "masked.test1.pending": [
+    "Only one person has finished so far. Until the second one does, this part is only half an answer.",
+  ],
+  "masked.test1.fallback": [
+    "The second person did not finish in time. So this part could not be tested properly, and I won't pretend it was.",
+  ],
+  // Result lines: shown only for the matching outcome, final, free of digits (the tests hold that).
+  "masked.test1.not-supported": [
+    "We both agreed the stillest program mostly didn't do the move. But the full pattern across all five programs only showed up for one of us. So the test says: not proven.",
+  ],
+  "masked.verdict.killed": [
+    "The answer was no. Even in the still places, the shaky program wandered about as much more as before. So its wobble is real, not just the movement it was asked for.",
   ],
   "rate.blind": [
     "Go with your eye. Nobody is marking you.",

@@ -26,10 +26,13 @@ const out = mkdtempSync(join(tmpdir(), "lh-")), profile = join(out, "chrome-prof
 const ctx = await chromium.launchPersistentContext(profile, { headless: true, channel: "chromium" });
 const r = await ctx.request.head(`${base}/?x-vercel-protection-bypass=${encodeURIComponent(process.env.VERCEL_BYPASS)}&x-vercel-set-bypass-cookie=true`);
 if (r.status() !== 200) throw new Error(`bypass cookie: HTTP ${r.status()}`);
+// /tax/masked exists only when the build says its file is real: read the flag with the bypass cookie, then drop the row
+const published = (await (await ctx.request.get(`${base}/data/v1/index.json`)).json()).masked === true;
 await ctx.close();
+if (!published) VIEWS.splice(VIEWS.findIndex(([n]) => n === "masked"), 1);
 const env = { ...process.env, CHROME_PATH: chromium.executablePath(), VERCEL_BYPASS: "" };
 
-const VIEWS = [["explore", "/explore"], ["failures", "/explore/failures"], ["scatter", "/scatter"], ["tax", "/tax"], ["rate", "/rate"]];
+const VIEWS = [["explore", "/explore"], ["failures", "/explore/failures"], ["scatter", "/scatter"], ["tax", "/tax"], ["masked", "/tax/masked"], ["rate", "/rate"]];
 const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
 console.log(`${"view".padEnd(10)}${"device".padEnd(9)}${"LCP median (runs)".padEnd(32)}LCP element`);
 for (const form of ["mobile", "desktop"]) {

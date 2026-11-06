@@ -8,6 +8,7 @@ export type Index = {
   built_at: string;
   source: { doi_version: string; doi_concept: string; repo: string; commit: string | null };
   media_base: string;
+  masked: boolean;
   counts: Record<Arm, number>;
   missing_cells: { cell: string; reason: string }[];
   variants: { panels: number[]; posters: number[]; poster_width: number; rule: string };
@@ -74,4 +75,55 @@ export type Core = {
   engine: (id: string) => Engine;
   panel: (id: string) => Panel | undefined;
   clip: (id: string) => Clip | undefined;
+};
+
+// masked.json (P46): the A9 outputs re-shaped by pipeline/stilldrawn_web/masked.py; shapes only.
+export type MaskSet = "aaron" | "agent";
+export type MarginKey = "m16" | "m32" | "m64";
+export type MaskedSplit = "all" | "idle" | "burst";
+export type MaskedVerdict = "not testable" | "supported" | "mask-dependent" | "killed" | "not supported";
+export type MaskedCondition = {
+  n_clips: Record<string, number>; D_whole_px: Record<string, number | null>; D_masked_px: Record<string, number | null>;
+  ratio_whole: number | null; ratio_masked: number | null; s: number | null; s_ci95: [number, number] | null;
+  kendall_tau_b: number | null; n_unscorable_masked: Record<string, number>; n_unscorable_whole: Record<string, number>;
+  n_m_empty: Record<string, number>; n_excluded: number; n_s_finite: number; n_g_whole_le_0: number;
+};
+export type MaskedCell = { px: number | null; unscorable: boolean; f0: number; region_frac: number };
+export type MaskedClip = {
+  clip: string; mapping: "stretch" | "centre-crop"; whole_px: number | null; whole_unscorable: boolean;
+  masked: Record<MaskSet, Record<MarginKey, MaskedCell>>;
+};
+export type MaskedRow = {
+  row: string; panel: string; motion: "idle" | "burst"; panel_px: [number, number]; eligible: boolean; iou: number;
+  status: Record<MaskSet, "drawn" | "nothing-allowed">;
+  polygons: Record<MaskSet, [number, number][][]>;
+  clips: Record<string, MaskedClip>;
+};
+export type Wilson = [number, number];
+export type RaterPrimary = {
+  miss?: string;
+  per_engine: Record<string, { n: number; misses: number; miss_rate: number; wilson95: Wilson }>;
+  rho: number | null; p_one_sided: number | null; p_le_0_05: boolean;
+};
+// the writer's other per-rater blocks pass through untyped here; the Test 1 panel narrows what it draws
+export type MaskedRater = { primary: RaterPrimary; provisional?: string | null; [block: string]: unknown };
+export type MaskedTest1 = {
+  state: "pending" | "two-rater" | "fallback"; label: string; basis: string; verdict: "supported" | "not supported" | null;
+  h1_reading: string | null; steadiness_px: Record<string, number>; attainable_p_no_ties: [number, number][];
+  raters: { AARON: MaskedRater; R7: MaskedRater | null };
+  kappa: Record<string, number | null> | null; r7_deadline: string; r7_blind_to_engine_styles: boolean | null; partial_note: string | null;
+};
+export type Masked = {
+  schema: "stilldrawn-explorer-masked/1";
+  provenance: { synthetic: boolean; release_commit: string | null; sources_sha256: Record<string, string> };
+  status: string; engine_order: string[];
+  test2: {
+    verdict: MaskedVerdict; n_eligible_rows: number; min_f0_line_px_in_R: number;
+    bootstrap: { B: number; seed: number; unit: string };
+    headline_md: Record<MaskSet, string>;
+    conditions: Record<MaskedSplit, Record<MaskSet, Record<MarginKey, MaskedCondition>>>;
+  };
+  test1: MaskedTest1;
+  masks: Record<MaskSet, { drawn_by: string; rule: string }>;
+  rows: MaskedRow[];
 };

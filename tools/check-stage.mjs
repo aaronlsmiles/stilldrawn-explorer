@@ -23,6 +23,20 @@ for (const p of ["public/index.html", "public/data/v1/index.json", "public/fonts
   check(existsSync(at(p)), `missing ${p}`);
 if (existsSync(at(STUDY))) check(sha(at(STUDY)) === sha(join(repo, "web", STUDY)), "staged study.json differs from web/public");
 
+// masked.json (P46) ships only when real: a synthetic file is refused in both modes, the file and index.masked agree.
+const MASKED = "public/data/v1/masked.json";
+const FIXTURE_MARK = "Synthetic shapes for the explorer's fixtures";
+const index = existsSync(at("public/data/v1/index.json")) ? json(at("public/data/v1/index.json")) : null;
+if (existsSync(at(MASKED))) {
+  const m = json(at(MASKED));
+  check(m.schema === "stilldrawn-explorer-masked/1", "masked.json: unexpected schema");
+  check(m.provenance?.synthetic === false, "masked.json is synthetic (fixtures never ship)");
+  // the mark the fixture masks carry in their `rule` (pipeline/stilldrawn_web/masked.py FIXTURE_MARK); no real set says this, and no field may
+  check(!JSON.stringify(m).includes(FIXTURE_MARK), "masked.json carries the fixture mark (a synthetic mask set; fixtures never ship)");
+  check(index?.masked === true, "masked.json is staged but index.masked is not true");
+}
+if (index?.masked === true) check(existsSync(at(MASKED)), "index.masked is true but masked.json is not staged");
+
 const lock = json(join(repo, "web/vendor/blindpanel.lock.json"));
 if (existsSync(at("package.json"))) {
   const pkg = json(at("package.json"));

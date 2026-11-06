@@ -233,10 +233,17 @@ def main(root: Path | None = None, web: Path = WEB) -> Path:
     mc = json.loads((root / "analysis" / "out" / "motion_confound.json").read_text())
     commit = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
 
+    # masked.json is never built here: only tools/refresh-masked.sh (stilldrawn_web.masked) writes it, after its fixture
+    # and clean-release checks. A full export leaves an existing file and its flag as they are; no file, no flag.
+    old = out / "index.json"
+    was = json.loads(old.read_text()).get("masked", True) if old.exists() else True
+    has_masked = (out / "masked.json").exists() and bool(was)
+
     _write(out / "index.json", {
         "contract": CONTRACT, "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source": {"doi_version": DOI_VERSION, "doi_concept": DOI_CONCEPT, "repo": REPO, "commit": commit or None},
         "media_base": os.environ.get("MEDIA_BASE", f"https://media.studionephele.com/stilldrawn/{MEDIA_VERSION}/"),
+        "masked": has_masked,
         "counts": dict(Counter(c.cid.arm for c in clips)),
         "missing_cells": [{"cell": "cu-tone-3_idle_gen4t", "reason": "Refused by the engine's moderation (runs/README.md)"}],
         "variants": {"panels": list(PANEL_WIDTHS), "posters": list(POSTER_WIDTHS), "poster_width": POSTER_WIDTH,
