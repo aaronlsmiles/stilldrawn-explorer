@@ -2,6 +2,12 @@
 
 Newest first. Written to be read in public: no account names, IDs or private repos.
 
+## 2026-11-06 — drift where nothing should move: the answer
+
+- The page now carries the real results. The test asked whether the league punishes engines for doing the motion they were asked for. Measured only where nothing in the drawing should move, the gap between Gen-4.5 and Wan 2.2 barely changed: 3.8× to 3.3× under one mask set, 3.9× under the other. The registered rule calls that killed: the gap is real drift.
+- The second test, whether the steadiest engines get there by not moving, was not supported: one rater found the pattern, the other did not. Both agreed on the steadiest engine, which missed the motion on 20 of its 22 clips.
+- A clearance pass caught two sentences that said more than the registration allows ("before any number existed" was true only of the masked numbers) before they went live. Both were fixed, and every A9 panel now says post-hoc as well as exploratory.
+
 ## 2026-11-03 — the masked-drift view meets its worst cases
 
 - Putting the new page through the same checks as every other view found four defects that unit tests had passed: chart labels ran past their charts because figures in tabular type are wider than the canvas estimate of their width; a dimmed gallery tile failed text contrast; a tile's accessible name left out the caption people can see; and two tables scrolled sideways with no way to reach them by keyboard.
